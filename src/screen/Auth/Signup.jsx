@@ -20,9 +20,9 @@ const Signup = ({ navigation }) => {
   const imgSrc = require("../../../assets/logo-text.png");
   const bot = require("../../../assets/profileicon.png");
   const [email, setEmail] = useState("");
-  const [username, setusername] = useState("");
-  const [Password, setPassword] = useState("");
-  const [imageUri, setimageUri] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [imageUri, setImageUri] = useState("");
   const [imgPreview, setImgPreview] = useState(null);
 
   const pickImage = async () => {
@@ -37,10 +37,43 @@ const Signup = ({ navigation }) => {
     // console.log("result", result);
 
     if (!result.canceled) {
-      setimageUri(result?.assets[0]?.uri);
+      setImageUri(result?.assets[0]?.uri);
       setImgPreview(result?.assets[0]?.uri);
     }
   };
+
+  const handleSignup = async ({navigation}) => {
+    if (!username || !email || !password) {
+      alert("Please fill in all the fields");
+      return;
+    }
+  
+    try {
+      const response = await fetch("https://ecotrack-dev.vercel.app/api/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: username,
+          email: email,
+          password: password,
+          image: imageUri
+        }),
+      });
+  
+      if (response.ok) {
+        alert("Signup successful!");
+        navigation.replace('Home')
+      } else {
+        const errorData = await response.json();
+        alert(`Signup failed: ${errorData.message}`);
+      }
+    } catch (error) {
+      alert("An error occurred. Please try again.");
+    }
+  };
+  
 
   return (
     <KeyboardAvoidingView
@@ -115,23 +148,23 @@ const Signup = ({ navigation }) => {
           </View>
           <TextInput
             style={styles.input}
-            onChangeText={setusername}
+            onChangeText={(value) => setUsername(value)}
             value={username}
             placeholder="Enter Your Username..."
           />
           <TextInput
             style={styles.input}
-            onChangeText={setEmail}
+            onChangeText={(value) => setEmail(value)}
             value={email}
             placeholder="Enter Your Email..."
           />
           <TextInput
             style={styles.input}
-            onChangeText={setPassword}
-            value={Password}
+            onChangeText={(value) => setPassword(value)}
+            value={password}
             placeholder="Enter Your Password..."
           />
-          <TouchableOpacity style={styles.loginBtn}>
+          <TouchableOpacity style={styles.loginBtn} onPress={handleSignup}>
             <Text style={styles.loginTExt}>SIGNUP</Text>
           </TouchableOpacity>
         </View>
@@ -179,19 +212,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   input: {
-    height: 56,
+    height: 50,
     margin: 12,
-    borderWidth: 3,
+    borderWidth: 1,
     padding: 10,
-    borderRadius: 12,
-    borderColor: "#033930",
+    borderRadius: 8,
+    borderColor: "#cacaca",
   },
   loginBtn: {
     // width: 393,
-    height: 54,
+    height: 50,
     margin: 12,
     backgroundColor: "#2DBAA0",
-    borderRadius: 12,
+    borderRadius: 8,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -221,11 +254,11 @@ const styles = StyleSheet.create({
     color: "black",
   },
   googleLoginBtn: {
-    height: 54,
+    height: 50,
     margin: 12,
     backgroundColor: "#2DBAA0",
     flexDirection: "row",
-    borderRadius: 12,
+    borderRadius: 8,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",

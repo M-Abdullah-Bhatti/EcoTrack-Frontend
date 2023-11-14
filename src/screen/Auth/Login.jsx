@@ -13,11 +13,47 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView, KeyboardAvoidingView } from "react-native";
+// import { useDispatch } from 'react-redux'
+import { loginStart } from "../../redux/userSlice";
 
 const Login = ({ navigation }) => {
   const imgSrc = require("../../../assets/logo-text.png");
   const [email, setEmail] = useState("");
-  const [Password, setPassword] = useState("");
+  const [password, setPassword] = useState("");
+  // const dispatch = useDispatch();
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      alert("Please enter both email and password");
+      return;
+    }
+  
+    try {
+      // dispatch(loginStart());
+      const response = await fetch("https://ecotrack-dev.vercel.app/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
+  
+      if (response.ok) {
+        alert("Login successful!");
+        navigation.replace('Home')
+      } else {
+        const errorData = await response.json();
+        alert(`Login failed: ${errorData.message}`);
+      }
+    } catch (error) {
+      alert("An error occurred. Please try again.");
+    }
+  };
+  
+  
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -48,17 +84,17 @@ const Login = ({ navigation }) => {
         <View>
           <TextInput
             style={styles.input}
-            onChangeText={setEmail}
+            onChangeText={(value) => setEmail(value)}
             value={email}
             placeholder="Enter Your Email..."
           />
           <TextInput
             style={styles.input}
-            onChangeText={setPassword}
-            value={Password}
+            onChangeText={(value) => setPassword(value)}
+            value={password}
             placeholder="Enter Your Password..."
           />
-          <TouchableOpacity style={styles.loginBtn}>
+          <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
             <Text style={styles.loginTExt}>LOGIN</Text>
           </TouchableOpacity>
         </View>
@@ -105,19 +141,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   input: {
-    height: 56,
+    height: 50,
     margin: 12,
-    borderWidth: 3,
+    borderWidth: 1,
     padding: 10,
-    borderRadius: 12,
-    borderColor: "#033930",
+    borderRadius: 8,
+    borderColor: "#acacac",
   },
   loginBtn: {
     // width: 393,
-    height: 54,
+    height: 50,
     margin: 12,
     backgroundColor: "#2DBAA0",
-    borderRadius: 12,
+    borderRadius: 8,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -147,11 +183,11 @@ const styles = StyleSheet.create({
     color: "black",
   },
   googleLoginBtn: {
-    height: 54,
+    height: 50,
     margin: 12,
     backgroundColor: "#2DBAA0",
     flexDirection: "row",
-    borderRadius: 12,
+    borderRadius: 8,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
