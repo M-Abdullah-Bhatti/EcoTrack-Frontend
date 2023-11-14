@@ -14,7 +14,7 @@ import {
 import React, { useState } from "react";
 import { SafeAreaView, KeyboardAvoidingView } from "react-native";
 
-const Login = () => {
+const Login = ({ navigation }) => {
   const imgSrc = require("../../../assets/logo-text.png");
   const [email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
@@ -82,7 +82,7 @@ const Login = () => {
           <Text style={{ fontSize: 18 }}>
             Don’t have an account?{" "}
             <Text
-              onPress={() => alert("hh")}
+              onPress={() => navigation.navigate("SignUp")}
               style={{ marginLeft: 3, color: "#096151", fontWeight: "700" }}
             >
               Signup
