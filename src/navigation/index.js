@@ -11,7 +11,7 @@ const Routes = () => {
 
   return (
     <>
-      <MainStackNavigator.Navigator initialRouteName="AuthNavigation">
+      <MainStackNavigator.Navigator initialRouteName="Home">
         <MainStackNavigator.Screen
           name="AuthNavigation"
           component={AuthStacks}
@@ -20,7 +20,10 @@ const Routes = () => {
         <MainStackNavigator.Screen
           name="Home"
           component={Home}
-          // options={navOptionHandler}
+          options={{
+            headerTransparent: true,
+            title: ''
+          }}
         />
       </MainStackNavigator.Navigator>
     </>
