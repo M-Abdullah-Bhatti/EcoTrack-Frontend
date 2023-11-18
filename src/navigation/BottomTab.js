@@ -14,12 +14,10 @@ function BottomTab() {
   return (
     <Tab.Navigator
       screenOptions={{
-        headerTransparent: true,
         headerTitleAlign: 'center',
         headerTitleStyle: {
           fontSize: 24,
           fontWeight: 'bold',
-          marginTop: StatusBar.currentHeight - 4,
         },
         tabBarActiveTintColor: '#46A667'
       }}
@@ -28,6 +26,9 @@ function BottomTab() {
         options={{
           title: 'Carbon Budget',
           tabBarIcon: ({color, size}) => (<Ionicons name="calculator" color={color} size={size}/>),
+          headerStyle: {
+            height: 100
+          },
       }}   
       />
       <Tab.Screen name="Emissions" component={EmissionsScreen} 

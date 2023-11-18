@@ -13,16 +13,16 @@ const BudgetScreen = ({navigation}) => {
   };
 
   return (
-    <View style={{flex: 1, marginTop: 70, alignItems: 'center'}}>
-      <View style={{width: '95%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 20}}>
+    <View style={{flex: 1, alignItems: 'center', backgroundColor: 'white'}}>
+      <View style={{width: '95%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20}}>
         <Entypo name="chevron-left" size={28} color="black" />
         <Text style={{fontSize: 24, fontWeight: 'bold'}}>February</Text>
         <Entypo name="chevron-right" size={28} color="black" />
       </View>
-      <View style={{width: '95%', alignItems: "center", justifyContent: "center", backgroundColor: '#FFF', borderRadius: 12, paddingBottom: 16}}>
+      <View style={{width: '95%', alignItems: "center", justifyContent: "center", backgroundColor: '#FFF', borderRadius: 12, paddingBottom: 16, borderWidth: 2, borderColor: '#46a667'}}>
         <ProgressChart
           data={data}
-          width={width*0.95}
+          width={width*0.94}
           height={250}
           strokeWidth={15}
           hasLegend={true}
