@@ -12,9 +12,20 @@ const Tab = createBottomTabNavigator();
 
 function BottomTab() {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        headerTransparent: true,
+        headerTitleAlign: 'center',
+        headerTitleStyle: {
+          fontSize: 24,
+          fontWeight: 'bold',
+        },
+        tabBarActiveTintColor: '#46A667'
+      }}
+    >
       <Tab.Screen name="Budget" component={BudgetScreen} 
         options={{
+          title: 'Carbon Budget',
         tabBarIcon: ({color, size}) => (<Ionicons name="calculator" color={color} size={size}/>),
       }}   
       />
