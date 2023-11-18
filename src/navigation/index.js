@@ -2,6 +2,7 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { AuthStacks } from "./AllStack";
 import Home from "../screen/Home";
+import BottomTab from "./BottomTab";
 
 const Routes = () => {
   const MainStackNavigator = createNativeStackNavigator();
@@ -19,7 +20,7 @@ const Routes = () => {
         />
         <MainStackNavigator.Screen
           name="Home"
-          component={Home}
+          component={BottomTab}
           options={{
             headerTransparent: true,
             title: ''

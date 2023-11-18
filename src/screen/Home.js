@@ -1,59 +1,23 @@
-import { View, Text, Dimensions } from 'react-native'
+import { View, Text, Dimensions, StyleSheet } from 'react-native'
 import React from 'react'
 import {
-  PieChart,
+  ProgressChart
 } from "react-native-chart-kit";
 
 const {width} = Dimensions.get('screen');
 
-const chartConfig = {
-  backgroundGradientFrom: "#1E2923",
-  backgroundGradientFromOpacity: 0,
-  backgroundGradientTo: "#08130D",
-  backgroundGradientToOpacity: 0.5,
-  color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-  strokeWidth: 2,
-  barPercentage: 0.5,
-  useShadowColorFromDataset: false
-};
-
-const data = [
-  {
-    name: "Purchase",
-    population: 215,
-    color: "#CE5A67",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15
-  },
-  {
-    name: "Petrol",
-    population: 280,
-    color: "#FF8080",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15
-  },
-  {
-    name: "Electricity",
-    population: 527,
-    color: "#0766AD",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15
-  },
-  {
-    name: "Food",
-    population: 453,
-    color: "#748E63",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15
-  },
-];
-
 const Home = () => {
+  const data = {
+    labels: ["Energy", "Transport", "Food"],
+    data: [0.6, 0.5, 0.4],
+    colors: ['rgba(70, 166, 103, 1)', 'rgba(242, 166, 73, 1)', '#F2937E']
+  };
+
   return (
     <View style={{marginTop: 50}}>
       <View style={{width: '100%', alignItems: "center", justifyContent: "center"}}>
         <Text style={{fontSize: 20, fontWeight: "bold"}}>Monthly Emissions</Text>
-        <PieChart
+        {/* <PieChart
           data={data}
           width={width}
           height={200}
@@ -62,23 +26,43 @@ const Home = () => {
           backgroundColor={"transparent"}
           center={[1, 5]}
           absolute
+        /> */}
+        <ProgressChart
+          data={data}
+          width={width}
+          height={170}
+          strokeWidth={7}
+          hasLegend={true}
+          withCustomBarColorFromData={true}
+          radius={35}
+          chartConfig={{
+            backgroundColor: "#fff",
+            backgroundGradientFrom: "#fff",
+            backgroundGradientTo: "#fff",
+            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+            strokeWidth: 2,
+            barPercentage: 0.5,
+            decimalPlaces: 2,
+            useShadowColorFromDataset: false
+          }}
+          style={{ marginVertical: 8, borderRadius: 10 }}
         />
       </View>
       <View style={{ backgroundColor: 'white', height: '100%', alignItems: 'center', borderTopLeftRadius: 20, borderTopRightRadius: 20, gap: 12 }}>
         <Text style={{fontSize: 20, fontWeight: 'bold', paddingVertical: 12}}>November 2023</Text>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between', width: width, paddingHorizontal: 36}}>
+        <View style={styles.row}>
           <Text style={{fontSize: 16}}>Purchase</Text>
           <Text style={{fontSize: 16, fontWeight: 'bold'}}>215 kg / yr</Text>
         </View>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between', width: width, paddingHorizontal: 36}}>
+        <View style={styles.row}>
           <Text style={{fontSize: 16}}>Petrol</Text>
           <Text style={{fontSize: 16, fontWeight: 'bold'}}>280 kg / yr</Text>
         </View>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between', width: width, paddingHorizontal: 36}}>
+        <View style={styles.row}>
           <Text style={{fontSize: 16}}>Electricity</Text>
           <Text style={{fontSize: 16, fontWeight: 'bold'}}>527 kg / yr</Text>
         </View>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between', width: width, paddingHorizontal: 36}}>
+        <View style={styles.row}>
           <Text style={{fontSize: 16}}>Food</Text>
           <Text style={{fontSize: 16, fontWeight: 'bold'}}>453 kg / yr</Text>
         </View>
@@ -86,5 +70,17 @@ const Home = () => {
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {},
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: width,
+    paddingHorizontal: 36
+  },
+  option: {},
+  emission: {}
+})
 
 export default Home
