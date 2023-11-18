@@ -5,7 +5,7 @@ import { ProgressChart } from "react-native-chart-kit";
 
 const {width} = Dimensions.get('screen');
 
-const BudgetScreen = () => {
+const BudgetScreen = ({navigation}) => {
   const data = {
     labels: ["Energy", "Transport", "Food"],
     data: [0.6, 0.5, 0.4],
@@ -13,7 +13,7 @@ const BudgetScreen = () => {
   };
 
   return (
-    <View style={{flex: 1, marginTop: 50, alignItems: 'center'}}>
+    <View style={{flex: 1, marginTop: 70, alignItems: 'center'}}>
       <View style={{width: '95%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginVertical: 20}}>
         <Entypo name="chevron-left" size={28} color="black" />
         <Text style={{fontSize: 24, fontWeight: 'bold'}}>February</Text>
@@ -46,7 +46,9 @@ const BudgetScreen = () => {
         </View>
       </View>
 
-      <TouchableOpacity style={{ width: width*0.95, display: 'flex', flexDirection: 'row', gap: 6, backgroundColor: '#46A667', paddingVertical: 14, alignItems: 'center', marginTop: 40, borderRadius: 12, justifyContent: 'center'}}>
+      <TouchableOpacity style={{ width: width*0.95, display: 'flex', flexDirection: 'row', gap: 6, backgroundColor: '#46A667', paddingVertical: 14, alignItems: 'center', marginTop: 40, borderRadius: 12, justifyContent: 'center'}}
+        onPress={() => navigation.navigate('SetBudget')}
+      >
         <Ionicons name="calculator" color="#FFF" size={24}/>
         <Text style={{fontSize: 18, fontWeight: 'bold', color: '#FFF'}}>Set monthly budget</Text>
       </TouchableOpacity>

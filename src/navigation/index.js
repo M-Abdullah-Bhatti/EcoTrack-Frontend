@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { AuthStacks } from "./AllStack";
 import Home from "../screen/Home";
 import BottomTab from "./BottomTab";
+import SetBudget from "../screen/SetBudget";
 
 const Routes = () => {
   const MainStackNavigator = createNativeStackNavigator();
@@ -24,6 +25,13 @@ const Routes = () => {
           options={{
             headerTransparent: true,
             title: ''
+          }}
+        />
+        <MainStackNavigator.Screen
+          name="SetBudget"
+          component={SetBudget}
+          options={{
+            title: 'Monthly Budget'
           }}
         />
       </MainStackNavigator.Navigator>

@@ -1,4 +1,4 @@
-import { Text } from 'react-native';
+import { StatusBar } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import BudgetScreen from '../screen/Home/BudgetScreen';
 import EmissionsScreen from '../screen/Home/EmissionsScreen';
@@ -19,6 +19,7 @@ function BottomTab() {
         headerTitleStyle: {
           fontSize: 24,
           fontWeight: 'bold',
+          marginTop: StatusBar.currentHeight - 4,
         },
         tabBarActiveTintColor: '#46A667'
       }}
@@ -26,7 +27,7 @@ function BottomTab() {
       <Tab.Screen name="Budget" component={BudgetScreen} 
         options={{
           title: 'Carbon Budget',
-        tabBarIcon: ({color, size}) => (<Ionicons name="calculator" color={color} size={size}/>),
+          tabBarIcon: ({color, size}) => (<Ionicons name="calculator" color={color} size={size}/>),
       }}   
       />
       <Tab.Screen name="Emissions" component={EmissionsScreen} 
