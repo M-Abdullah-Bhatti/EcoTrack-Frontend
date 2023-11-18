@@ -1,12 +1,12 @@
-import { StatusBar } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import BudgetScreen from '../screen/Home/BudgetScreen';
-import EmissionsScreen from '../screen/Home/EmissionsScreen';
-import ActScreen from '../screen/Home/ActScreen';
-import SettingsScreen from '../screen/Home/SettingsScreen';
-import AddScreen from '../screen/Home/AddScreen';
+import { StatusBar } from "react-native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import BudgetScreen from "../screen/Home/BudgetScreen";
+import EmissionsScreen from "../screen/Home/EmissionsScreen";
+import ActScreen from "../screen/Home/ActScreen";
+import SettingsScreen from "../screen/Home/SettingsScreen";
+import AddScreen from "../screen/Home/AddScreen";
 
-import { Ionicons, Foundation } from '@expo/vector-icons';
+import { Ionicons, Foundation } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 
@@ -14,45 +14,68 @@ function BottomTab() {
   return (
     <Tab.Navigator
       screenOptions={{
-        headerTitleAlign: 'center',
+        headerTitleAlign: "center",
         headerTitleStyle: {
           fontSize: 24,
-          fontWeight: 'bold',
+          fontWeight: "bold",
         },
-        tabBarActiveTintColor: '#46A667'
+        tabBarActiveTintColor: "#46A667",
       }}
     >
-      <Tab.Screen name="Budget" component={BudgetScreen} 
+      <Tab.Screen
+        name="Budget"
+        component={BudgetScreen}
         options={{
-          title: 'Carbon Budget',
-          tabBarIcon: ({color, size}) => (<Ionicons name="calculator" color={color} size={size}/>),
+          title: "Carbon Budget",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="calculator" color={color} size={size} />
+          ),
           headerStyle: {
-            height: 100
+            height: 100,
           },
-      }}   
-      />
-      <Tab.Screen name="Emissions" component={EmissionsScreen} 
-        options={{ 
-          tabBarIcon: ({color, size}) => (<Foundation name="graph-bar" color={color} size={size}/>) 
         }}
       />
-      <Tab.Screen name="Add" component={AddScreen} 
-        options={{ 
-          tabBarIcon: ({color, size}) => (<Ionicons name="add-circle-sharp" color={color} size={size}/>) 
+      <Tab.Screen
+        name="Emissions"
+        component={EmissionsScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Foundation name="graph-bar" color={color} size={size} />
+          ),
         }}
       />
-      <Tab.Screen name="Act" component={ActScreen} 
-        options={{ 
-          tabBarIcon: ({color, size}) => (<Ionicons name="hand-left" color={color} size={size}/>) 
+      <Tab.Screen
+        name="Add"
+        component={AddScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="add-circle-sharp" color={color} size={size} />
+          ),
+          headerStyle: {
+            height: 100,
+          },
         }}
       />
-      <Tab.Screen name="Community" component={SettingsScreen} 
-        options={{ 
-          tabBarIcon: ({color, size}) => (<Ionicons name="people" color={color} size={size}/>) 
+      <Tab.Screen
+        name="Act"
+        component={ActScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="hand-left" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Community"
+        component={SettingsScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="people" color={color} size={size} />
+          ),
         }}
       />
     </Tab.Navigator>
   );
 }
 
-export default BottomTab
+export default BottomTab;
