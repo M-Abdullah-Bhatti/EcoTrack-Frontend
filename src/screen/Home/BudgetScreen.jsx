@@ -1,5 +1,5 @@
 import { View, Text, Dimensions, TouchableOpacity } from 'react-native'
-import React from 'react'
+import {useState} from 'react'
 import { Ionicons, Entypo } from '@expo/vector-icons';
 import { ProgressChart } from "react-native-chart-kit";
 
@@ -11,6 +11,8 @@ const BudgetScreen = ({navigation}) => {
     data: [0.6, 0.5, 0.4],
     colors: ['rgba(70, 166, 103, 1)', 'rgba(242, 166, 73, 1)', '#F2937E']
   };
+
+  const [budget, SetBudget] = useState(167);
 
   return (
     <View style={{flex: 1, alignItems: 'center', backgroundColor: 'white'}}>
@@ -38,11 +40,11 @@ const BudgetScreen = ({navigation}) => {
             decimalPlaces: 2,
             useShadowColorFromDataset: false
           }}
-          style={{ paddingVertical: 8,  }}
+          style={{ paddingVertical: 8 }}
         />
         <View style={{display: 'flex', flexDirection: 'row', gap: 6, marginTop: 12}}>
           <Text style={{fontSize: 16, fontWeight: 'bold'}}>Budget for this month:</Text>
-          <Text style={{fontSize: 16, color: '#aaa', fontWeight: 'bold'}}>600 kg</Text>
+          <Text style={{fontSize: 16, color: '#aaa', fontWeight: 'bold'}}>{budget} kg</Text>
         </View>
       </View>
 

@@ -1,14 +1,26 @@
 import { StatusBar } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import BudgetScreen from "../screen/Home/BudgetScreen";
 import EmissionsScreen from "../screen/Home/EmissionsScreen";
-import ActScreen from "../screen/Home/ActScreen";
-import SettingsScreen from "../screen/Home/SettingsScreen";
+import CommunityScreen from "../screen/Home/CommunityScreen";
 import AddScreen from "../screen/Home/AddScreen";
 
 import { Ionicons, Foundation } from "@expo/vector-icons";
+import FoodGuide from "../screen/FoodGuide";
+import HabitsGuide from "../screen/HabitsGuide";
 
 const Tab = createBottomTabNavigator();
+const TopTab = createMaterialTopTabNavigator();
+
+function TopTabs() {
+  return (
+    <TopTab.Navigator>
+      <TopTab.Screen name="Food" component={FoodGuide} />
+      <TopTab.Screen name="Habits" component={HabitsGuide} />
+    </TopTab.Navigator>
+  );
+}
 
 function BottomTab() {
   return (
@@ -31,7 +43,7 @@ function BottomTab() {
             <Ionicons name="calculator" color={color} size={size} />
           ),
           headerStyle: {
-            height: 100,
+            height: 75,
           },
         }}
       />
@@ -52,26 +64,31 @@ function BottomTab() {
             <Ionicons name="add-circle-sharp" color={color} size={size} />
           ),
           headerStyle: {
-            height: 100,
+            height: 75,
           },
         }}
       />
       <Tab.Screen
         name="Act"
-        component={ActScreen}
+        component={TopTabs}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="hand-left" color={color} size={size} />
           ),
+          headerStyle: {
+            height: 75,
+          },
+          title: 'Sustainable Guide'
         }}
       />
       <Tab.Screen
         name="Community"
-        component={SettingsScreen}
+        component={CommunityScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="people" color={color} size={size} />
           ),
+          headerTransparent: true
         }}
       />
     </Tab.Navigator>
