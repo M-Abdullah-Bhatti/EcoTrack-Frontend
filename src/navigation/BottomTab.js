@@ -1,6 +1,6 @@
 import { StatusBar } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import BudgetScreen from "../screen/Home/BudgetScreen";
 import EmissionsScreen from "../screen/Home/EmissionsScreen";
 import CommunityScreen from "../screen/Home/CommunityScreen";
@@ -78,7 +78,7 @@ function BottomTab() {
           headerStyle: {
             height: 75,
           },
-          title: 'Sustainable Guide'
+          title: "Sustainable Guide",
         }}
       />
       <Tab.Screen
@@ -88,7 +88,7 @@ function BottomTab() {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="people" color={color} size={size} />
           ),
-          headerTransparent: true
+          headerTransparent: true,
         }}
       />
     </Tab.Navigator>

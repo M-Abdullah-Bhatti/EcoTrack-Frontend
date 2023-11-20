@@ -2,39 +2,31 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const AddScreen = ({ navigation }) => {
-  const categories = [
+const AddEmissionCategory = ({ navigation }) => {
+  const subCategories = [
     {
       image: "",
-      text: "Transportation",
+      text: "Train",
     },
     {
       image: "",
-      text: "Food",
+      text: "Car",
     },
     {
       image: "",
-      text: "Streaming",
+      text: "Bus",
     },
     {
       image: "",
-      text: "Electricity",
+      text: "Plane",
     },
     {
       image: "",
-      text: "Purchase",
+      text: "Boat",
     },
     {
       image: "",
-      text: "Fashion",
-    },
-    {
-      image: "",
-      text: "Scan Product",
-    },
-    {
-      image: "",
-      text: "Custom",
+      text: "MotorBike",
     },
   ];
 
@@ -43,7 +35,7 @@ const AddScreen = ({ navigation }) => {
     <SafeAreaView style={{ backgroundColor: "white", height: "100%" }}>
       <View style={{ paddingHorizontal: 20 }}>
         <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-          Select a category
+          Select a sub-category
         </Text>
 
         <View
@@ -54,7 +46,7 @@ const AddScreen = ({ navigation }) => {
             gap: 15,
           }}
         >
-          {categories.map((item, key) => (
+          {subCategories.map((item, key) => (
             <TouchableOpacity
               key={key}
               style={{
@@ -68,7 +60,7 @@ const AddScreen = ({ navigation }) => {
                 borderWidth: 1,
                 borderColor: "green",
               }}
-              onPress={() => navigation.navigate("AddEmissionCategory")}
+              onPress={() => navigation.navigate("AddEmission")}
             >
               <View>
                 <Text style={{ fontSize: 16, fontWeight: "600" }}>
@@ -86,4 +78,4 @@ const AddScreen = ({ navigation }) => {
   );
 };
 
-export default AddScreen;
+export default AddEmissionCategory;

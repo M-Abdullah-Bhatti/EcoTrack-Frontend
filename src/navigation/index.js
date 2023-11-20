@@ -4,6 +4,8 @@ import { AuthStacks } from "./AllStack";
 import Home from "../screen/Home";
 import BottomTab from "./BottomTab";
 import SetBudget from "../screen/SetBudget";
+import AddScreen from "../screen/Home/AddScreen";
+import AddEmissionCategory from "../screen/Home/AddEmissionCategory";
 import AddEmission from "../screen/Home/AddEmission";
 
 const Routes = () => {
@@ -35,6 +37,15 @@ const Routes = () => {
             title: "Monthly Budget",
           }}
         />
+
+        <MainStackNavigator.Screen
+          name="AddEmissionCategory"
+          component={AddEmissionCategory}
+          options={{
+            title: "Add Emission category",
+          }}
+        />
+
         <MainStackNavigator.Screen
           name="AddEmission"
           component={AddEmission}
