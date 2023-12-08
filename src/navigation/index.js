@@ -1,12 +1,13 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { AuthStacks } from "./AllStack";
+import { AuthStacks } from "./AuthStack";
 import Home from "../screen/Home";
 import BottomTab from "./BottomTab";
 import SetBudget from "../screen/SetBudget";
 import AddScreen from "../screen/Home/AddScreen";
 import AddEmissionCategory from "../screen/Home/AddEmissionCategory";
 import AddEmission from "../screen/Home/AddEmission";
+import SplashScreen from "../screen/SplashScreen";
 
 const Routes = () => {
   const MainStackNavigator = createNativeStackNavigator();
@@ -16,7 +17,12 @@ const Routes = () => {
 
   return (
     <>
-      <MainStackNavigator.Navigator initialRouteName="Home">
+      <MainStackNavigator.Navigator initialRouteName="Splash">
+        <MainStackNavigator.Screen 
+          name="Splash"
+          component={SplashScreen}
+          options={navOptionHandler}
+        />
         <MainStackNavigator.Screen
           name="AuthNavigation"
           component={AuthStacks}
