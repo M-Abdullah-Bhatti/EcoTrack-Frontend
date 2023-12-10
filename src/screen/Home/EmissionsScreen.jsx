@@ -8,19 +8,25 @@ import {
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
 
-const EmissionsScreen = () => {
+const EmissionsScreen = ({ navigation }) => {
   const [count, setCount] = useState(0);
   const onPress = () => setCount((prevCount) => prevCount + 1);
   const dummyData = [
     {
+      id: 1,
       category: "Train",
+      type: "Transport",
       carbon: "19.74kgCO2eq",
       icon: (
         <MaterialCommunityIcons name="train-variant" size={24} color="black" />
       ),
     },
     {
+      id: 2,
+
       category: "Train",
+      type: "Transport",
+
       carbon: "19.74kgCO2eq",
       icon: (
         <MaterialCommunityIcons name="train-variant" size={24} color="black" />
@@ -42,7 +48,11 @@ const EmissionsScreen = () => {
       </View>
       <View style={styles.emissionDataDiv}>
         {dummyData.map((data) => (
-          <TouchableOpacity style={styles.singleEmissionDiv} onPress={onPress}>
+          <TouchableOpacity
+            key={data.id}
+            style={styles.singleEmissionDiv}
+            onPress={() => navigation.navigate("EmissionDetail", { data })}
+          >
             <View
               style={{
                 display: "flex",

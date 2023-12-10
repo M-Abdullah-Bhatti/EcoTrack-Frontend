@@ -8,6 +8,7 @@ import AddScreen from "../screen/Home/AddScreen";
 import AddEmissionCategory from "../screen/Home/AddEmissionCategory";
 import AddEmission from "../screen/Home/AddEmission";
 import SplashScreen from "../screen/SplashScreen";
+import EmissionDetailScreen from "../screen/Home/EmissionDetailScreen";
 
 const Routes = () => {
   const MainStackNavigator = createNativeStackNavigator();
@@ -57,6 +58,15 @@ const Routes = () => {
           component={AddEmission}
           options={{
             title: "Add Emission",
+          }}
+        />
+        <MainStackNavigator.Screen
+          name="EmissionDetail"
+          component={EmissionDetailScreen}
+          options={{
+            title: "Add Emission",
+            headerShown: true,
+            headerStyle: {},
           }}
         />
       </MainStackNavigator.Navigator>
