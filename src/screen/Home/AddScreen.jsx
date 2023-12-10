@@ -1,25 +1,44 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
+import { SimpleLineIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const AddScreen = ({ navigation }) => {
   const categories = [
     {
       image: "",
       text: "Meal",
+      icon: <Ionicons name="md-fast-food-outline" size={30} color="white" />,
     },
     {
       image: "",
       text: "Transportation",
+      icon: <SimpleLineIcons name="plane" size={30} color="white" />,
     },
     {
       image: "",
       text: "Food",
+      icon: (
+        <MaterialCommunityIcons
+          name="food-drumstick-outline"
+          size={30}
+          color="white"
+        />
+      ),
     },
 
     {
       image: "",
       text: "Electricity",
+      icon: (
+        <MaterialCommunityIcons
+          name="power-plug-outline"
+          size={30}
+          color="white"
+        />
+      ),
     },
   ];
 
@@ -48,7 +67,8 @@ const AddScreen = ({ navigation }) => {
           style={{
             marginTop: 20,
             display: "flex",
-            flexDirection: "column",
+            flexDirection: "row",
+            flexWrap: "wrap",
             gap: 15,
           }}
         >
@@ -56,26 +76,34 @@ const AddScreen = ({ navigation }) => {
             <TouchableOpacity
               key={key}
               style={{
-                backgroundColor: "#bcf5bc",
+                backgroundColor: "#046958",
+                width: "47%",
                 display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
+                height: 160,
+                // flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-around",
                 paddingHorizontal: 10,
                 paddingVertical: 15,
                 borderRadius: 5,
                 borderWidth: 1,
-                borderColor: "green",
+                borderColor: "#2DBAA0",
+                borderStyle: "solid",
               }}
               onPress={() => handleNavigation(item.text)}
             >
               <View>
-                <Text style={{ fontSize: 16, fontWeight: "600" }}>
+                <Text
+                  style={{ fontSize: 19, fontWeight: "600", color: "white" }}
+                >
                   {item.text}
                 </Text>
               </View>
-              <View>
+              {/* <View>
                 <Text style={{ fontSize: 16, fontWeight: "600" }}>{arrow}</Text>
-              </View>
+              </View> */}
+              {/* <Ionicons name="chevron-forward" size={24} color="white" /> */}
+              <View>{item.icon}</View>
             </TouchableOpacity>
           ))}
         </View>
