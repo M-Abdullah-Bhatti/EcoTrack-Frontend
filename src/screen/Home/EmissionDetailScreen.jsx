@@ -75,7 +75,7 @@ const EmissionDetailScreen = () => {
             {d.switchBtn && (
               <Switch
                 trackColor={{ false: "#767577", true: "#048a73" }}
-                // thumbColor={isEnabled ? "#048a73" : "#f4f3f4"}
+                thumbColor={isEnabled ? "#f4f3f4" : "#f4f3f4"}
                 ios_backgroundColor="#3e3e3e"
                 onValueChange={toggleSwitch}
                 value={isEnabled}
