@@ -54,6 +54,7 @@ function BottomTab() {
           tabBarIcon: ({ color, size }) => (
             <Foundation name="graph-bar" color={color} size={size} />
           ),
+          headerShown: false,
         }}
       />
       <Tab.Screen
