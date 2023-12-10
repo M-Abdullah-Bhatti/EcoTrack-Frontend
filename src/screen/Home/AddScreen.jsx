@@ -6,37 +6,32 @@ const AddScreen = ({ navigation }) => {
   const categories = [
     {
       image: "",
+      text: "Meal",
+    },
+    {
+      image: "",
       text: "Transportation",
     },
     {
       image: "",
       text: "Food",
     },
-    {
-      image: "",
-      text: "Streaming",
-    },
+
     {
       image: "",
       text: "Electricity",
     },
-    {
-      image: "",
-      text: "Purchase",
-    },
-    {
-      image: "",
-      text: "Fashion",
-    },
-    {
-      image: "",
-      text: "Scan Product",
-    },
-    {
-      image: "",
-      text: "Custom",
-    },
   ];
+
+  const handleNavigation = (text) => {
+    if (text == "Electricity") {
+      navigation.navigate("AddEmission");
+    } else {
+      navigation.navigate("AddEmissionCategory", {
+        category: text,
+      });
+    }
+  };
 
   const arrow = ">";
   return (
@@ -68,7 +63,7 @@ const AddScreen = ({ navigation }) => {
                 borderWidth: 1,
                 borderColor: "green",
               }}
-              onPress={() => navigation.navigate("AddEmissionCategory")}
+              onPress={() => handleNavigation(item.text)}
             >
               <View>
                 <Text style={{ fontSize: 16, fontWeight: "600" }}>

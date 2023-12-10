@@ -17,8 +17,8 @@ const Routes = () => {
 
   return (
     <>
-      <MainStackNavigator.Navigator initialRouteName="Splash">
-        <MainStackNavigator.Screen 
+      <MainStackNavigator.Navigator initialRouteName="Home">
+        <MainStackNavigator.Screen
           name="Splash"
           component={SplashScreen}
           options={navOptionHandler}
