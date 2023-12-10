@@ -25,7 +25,10 @@ const AddScreen = ({ navigation }) => {
 
   const handleNavigation = (text) => {
     if (text == "Electricity") {
-      navigation.navigate("AddEmission");
+      navigation.navigate("AddEmission", {
+        category: "Electricity",
+        subCategory: "Electricity",
+      });
     } else {
       navigation.navigate("AddEmissionCategory", {
         category: text,

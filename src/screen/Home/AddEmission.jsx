@@ -7,46 +7,250 @@ import {
   StyleSheet,
 } from "react-native";
 import Slider from "@react-native-community/slider";
+import { useFocusEffect } from "@react-navigation/native";
 
 const { width } = Dimensions.get("screen");
 
-const AddEmission = ({ navigation }) => {
-  const [budget, setBudget] = useState(0);
+const AddEmission = ({ navigation, route }) => {
+  const [distance, setDistance] = useState(0);
+  const [electricity, setElectricity] = useState(0);
+  const [foodQuantity, setFoodQuantity] = useState(0);
+  const [mealQuantity, setMealQuantity] = useState(0);
+
+  const [category, setCategory] = useState("");
+  const [subCategory, setSubCategory] = useState("");
+  const [isCalculated, setIsCalculated] = useState(false);
+
+  const { params } = route;
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setSubCategory(params?.subCategory?.text);
+      setCategory(params?.category);
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Transport</Text>
-        <Text>Train</Text>
-      </View>
+      {category == "Transportation" && (
+        <>
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Transport</Text>
+            <Text>{subCategory}</Text>
+          </View>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Distance</Text>
-        <Text>150 Kilometer(s)</Text>
-      </View>
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Distance</Text>
+            <Text>{distance} Kilometer(s)</Text>
+          </View>
 
-      <View style={styles.sliderContainer}>
-        <Slider
-          style={styles.slider}
-          minimumValue={1}
-          maximumValue={750}
-          minimumTrackTintColor="#46A667"
-          maximumTrackTintColor="#000000"
-          thumbTintColor="#46A667"
-          onValueChange={(x) => setBudget(Math.ceil(x) / 150)}
-        />
-        <Text style={styles.totalText}>Total</Text>
-        <Text style={styles.totalValue}>{budget.toFixed(3)} kgCO2eq</Text>
-      </View>
+          <View style={styles.sliderContainer}>
+            <Slider
+              style={styles.slider}
+              minimumValue={1}
+              maximumValue={250}
+              minimumTrackTintColor="#46A667"
+              maximumTrackTintColor="#000000"
+              thumbTintColor="#46A667"
+              onValueChange={(x) => setDistance(Math.ceil(x))}
+            />
+          </View>
 
-      <View style={styles.addButtonContainer}>
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => navigation.navigate("SetBudget")}
-        >
-          <Text style={styles.addButtonText}>Add this emission</Text>
-        </TouchableOpacity>
-      </View>
+          {!isCalculated ? (
+            <View style={styles.addButtonContainer}>
+              <TouchableOpacity
+                style={styles.addButton}
+                onPress={() => {
+                  setIsCalculated(true);
+                }}
+              >
+                <Text style={styles.addButtonText}>Calculate Emission</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <>
+              <View style={{ marginBottom: 30 }}>
+                <Text style={styles.totalText}>Total</Text>
+                <Text style={styles.totalValue}>10.2 kgCO2eq</Text>
+              </View>
+
+              <View style={styles.addButtonContainer}>
+                <TouchableOpacity
+                  style={styles.addButton}
+                  onPress={() => navigation.navigate("SetBudget")}
+                >
+                  <Text style={styles.addButtonText}>Add this emission</Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
+        </>
+      )}
+
+      {category == "Electricity" && (
+        <>
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Electricity</Text>
+            <Text>Custom</Text>
+          </View>
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Electricity consumption</Text>
+            <Text>{electricity} kWh - WORLD</Text>
+          </View>
+
+          <View style={styles.sliderContainer}>
+            <Slider
+              style={styles.slider}
+              minimumValue={1}
+              maximumValue={250}
+              minimumTrackTintColor="#46A667"
+              maximumTrackTintColor="#000000"
+              thumbTintColor="#46A667"
+              onValueChange={(x) => setElectricity(Math.ceil(x))}
+            />
+          </View>
+
+          {!isCalculated ? (
+            <View style={styles.addButtonContainer}>
+              <TouchableOpacity
+                style={styles.addButton}
+                onPress={() => {
+                  setIsCalculated(true);
+                }}
+              >
+                <Text style={styles.addButtonText}>Calculate Emission</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <>
+              <View style={{ marginBottom: 30 }}>
+                <Text style={styles.totalText}>Total</Text>
+                <Text style={styles.totalValue}>10.2 kgCO2eq</Text>
+              </View>
+
+              <View style={styles.addButtonContainer}>
+                <TouchableOpacity
+                  style={styles.addButton}
+                  onPress={() => navigation.navigate("SetBudget")}
+                >
+                  <Text style={styles.addButtonText}>Add this emission</Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
+        </>
+      )}
+
+      {category == "Food" && (
+        <>
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Food</Text>
+            <Text>{subCategory}</Text>
+          </View>
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Quantity</Text>
+            <Text>{foodQuantity} (g)</Text>
+          </View>
+
+          <View style={styles.sliderContainer}>
+            <Slider
+              style={styles.slider}
+              minimumValue={1}
+              maximumValue={2000}
+              minimumTrackTintColor="#46A667"
+              maximumTrackTintColor="#000000"
+              thumbTintColor="#46A667"
+              onValueChange={(x) => setFoodQuantity(Math.ceil(x))}
+            />
+          </View>
+
+          {!isCalculated ? (
+            <View style={styles.addButtonContainer}>
+              <TouchableOpacity
+                style={styles.addButton}
+                onPress={() => {
+                  setIsCalculated(true);
+                }}
+              >
+                <Text style={styles.addButtonText}>Calculate Emission</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <>
+              <View style={{ marginBottom: 30 }}>
+                <Text style={styles.totalText}>Total</Text>
+                <Text style={styles.totalValue}>10.2 kgCO2eq</Text>
+              </View>
+
+              <View style={styles.addButtonContainer}>
+                <TouchableOpacity
+                  style={styles.addButton}
+                  onPress={() => navigation.navigate("SetBudget")}
+                >
+                  <Text style={styles.addButtonText}>Add this emission</Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
+        </>
+      )}
+
+      {category == "Meal" && (
+        <>
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Meal</Text>
+            <Text>{subCategory}</Text>
+          </View>
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Distance</Text>
+            <Text>{mealQuantity} meal(s)</Text>
+          </View>
+
+          <View style={styles.sliderContainer}>
+            <Slider
+              style={styles.slider}
+              minimumValue={0}
+              maximumValue={20}
+              minimumTrackTintColor="#46A667"
+              maximumTrackTintColor="#000000"
+              thumbTintColor="#46A667"
+              onValueChange={(x) => setMealQuantity(Math.ceil(x))}
+            />
+          </View>
+
+          {!isCalculated ? (
+            <View style={styles.addButtonContainer}>
+              <TouchableOpacity
+                style={styles.addButton}
+                onPress={() => {
+                  setIsCalculated(true);
+                }}
+              >
+                <Text style={styles.addButtonText}>Calculate Emission</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <>
+              <View style={{ marginBottom: 30 }}>
+                <Text style={styles.totalText}>Total</Text>
+                <Text style={styles.totalValue}>10.2 kgCO2eq</Text>
+              </View>
+
+              <View style={styles.addButtonContainer}>
+                <TouchableOpacity
+                  style={styles.addButton}
+                  onPress={() => navigation.navigate("SetBudget")}
+                >
+                  <Text style={styles.addButtonText}>Add this emission</Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
+        </>
+      )}
     </View>
   );
 };
@@ -75,9 +279,10 @@ const styles = StyleSheet.create({
     height: 40,
   },
   totalText: {
-    fontSize: 16,
-    color: "#aaa",
+    fontSize: 18,
+    color: "#000",
     marginTop: 10,
+    fontWeight: "bold",
   },
   totalValue: {
     fontSize: 20,

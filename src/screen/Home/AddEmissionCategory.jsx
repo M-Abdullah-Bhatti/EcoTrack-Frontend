@@ -85,8 +85,6 @@ const AddEmissionCategory = ({ navigation, route }) => {
     },
   ];
 
-  console.log("params: ", params.category);
-
   useFocusEffect(
     React.useCallback(() => {
       if (params.category == "Transportation") {
@@ -135,7 +133,12 @@ const AddEmissionCategory = ({ navigation, route }) => {
                   borderWidth: 1,
                   borderColor: "green",
                 }}
-                onPress={() => navigation.navigate("AddEmission")}
+                onPress={() =>
+                  navigation.navigate("AddEmission", {
+                    category: params.category,
+                    subCategory: item,
+                  })
+                }
               >
                 <View>
                   <Text style={{ fontSize: 16, fontWeight: "600" }}>
