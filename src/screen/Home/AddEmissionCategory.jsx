@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect } from "@react-navigation/native";
+import { Ionicons } from "@expo/vector-icons";
 
 const AddEmissionCategory = ({ navigation, route }) => {
   const { params } = route;
@@ -123,7 +124,7 @@ const AddEmissionCategory = ({ navigation, route }) => {
               <TouchableOpacity
                 key={key}
                 style={{
-                  backgroundColor: "#bcf5bc",
+                  backgroundColor: "#046958",
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "space-between",
@@ -141,14 +142,14 @@ const AddEmissionCategory = ({ navigation, route }) => {
                 }
               >
                 <View>
-                  <Text style={{ fontSize: 16, fontWeight: "600" }}>
+                  <Text
+                    style={{ fontSize: 16, fontWeight: "600", color: "white" }}
+                  >
                     {item.text}
                   </Text>
                 </View>
                 <View>
-                  <Text style={{ fontSize: 16, fontWeight: "600" }}>
-                    {arrow}
-                  </Text>
+                  <Ionicons name="chevron-forward" size={24} color="white" />
                 </View>
               </TouchableOpacity>
             ))}

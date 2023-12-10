@@ -64,9 +64,7 @@ function BottomTab() {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="add-circle-sharp" color={color} size={size} />
           ),
-          headerStyle: {
-            height: 75,
-          },
+          headerShown: false,
         }}
       />
       <Tab.Screen

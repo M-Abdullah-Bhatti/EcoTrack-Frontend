@@ -1,4 +1,11 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Platform,
+  StatusBar,
+  StyleSheet,
+} from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -57,9 +64,28 @@ const AddScreen = ({ navigation }) => {
 
   const arrow = ">";
   return (
-    <SafeAreaView style={{ backgroundColor: "white", height: "100%" }}>
+    <SafeAreaView
+      style={{
+        backgroundColor: "white",
+        height: "100%",
+
+        // paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : "0px",
+      }}
+    >
+      <View style={styles.monthDiv}>
+        <Text style={{ fontSize: 24, fontWeight: "900", color: "#2DBAA0" }}>
+          Add Emission
+        </Text>
+      </View>
       <View style={{ paddingHorizontal: 20 }}>
-        <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: "bold",
+            // textAlign: "center",
+            marginVertical: 20,
+          }}
+        >
           Select a category
         </Text>
 
@@ -111,5 +137,17 @@ const AddScreen = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-
+const styles = StyleSheet.create({
+  monthDiv: {
+    height: 60,
+    // backgroundColor: "#2DBAA0",
+    alignItems: "center",
+    display: "flex",
+    flexDirection: "row",
+    paddingHorizontal: 14,
+    justifyContent: "space-between",
+    borderBottomColor: "#2DBAA0",
+    borderBottomWidth: 2,
+  },
+});
 export default AddScreen;
