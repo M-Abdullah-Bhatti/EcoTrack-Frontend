@@ -15,6 +15,11 @@ import {
 import React, { useState } from "react";
 import { SafeAreaView, KeyboardAvoidingView } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import { useOAuth } from "@clerk/clerk-expo";
+import { useWarmUpBrowser } from "../../hooks/warmUpBrowser";
+import * as WebBrowser from "expo-web-browser";
+
+WebBrowser.maybeCompleteAuthSession();
 
 const Signup = ({ navigation }) => {
   const imgSrc = require("../../../assets/logo-text.png");
@@ -41,30 +46,51 @@ const Signup = ({ navigation }) => {
       setImgPreview(result?.assets[0]?.uri);
     }
   };
+  useWarmUpBrowser();
 
-  const handleSignup = async ({navigation}) => {
+  const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
+
+  const onPress = React.useCallback(async () => {
+    try {
+      const { createdSessionId, signIn, signUp, setActive } =
+        await startOAuthFlow();
+
+      if (createdSessionId) {
+        setActive({ session: createdSessionId });
+      } else {
+        // Use signIn or signUp for next steps such as MFA
+      }
+    } catch (err) {
+      console.error("OAuth error", err);
+    }
+  }, []);
+
+  const handleSignup = async ({ navigation }) => {
     if (!username || !email || !password) {
       alert("Please fill in all the fields");
       return;
     }
-  
+
     try {
-      const response = await fetch("https://ecotrack-dev.vercel.app/api/users/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: username,
-          email: email,
-          password: password,
-          image: imageUri
-        }),
-      });
-  
+      const response = await fetch(
+        "https://ecotrack-dev.vercel.app/api/users/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: username,
+            email: email,
+            password: password,
+            image: imageUri,
+          }),
+        }
+      );
+
       if (response.ok) {
         alert("Signup successful!");
-        navigation.replace('Home')
+        navigation.replace("Home");
       } else {
         const errorData = await response.json();
         alert(`Signup failed: ${errorData.message}`);
@@ -73,7 +99,6 @@ const Signup = ({ navigation }) => {
       alert("An error occurred. Please try again.");
     }
   };
-  
 
   return (
     <KeyboardAvoidingView
@@ -173,7 +198,7 @@ const Signup = ({ navigation }) => {
           <Text style={styles.bpText}>OR</Text>
           <View style={styles.item}></View>
         </View>
-        <TouchableOpacity style={styles.googleLoginBtn}>
+        <TouchableOpacity style={styles.googleLoginBtn} onPress={onPress}>
           <Image source={require("../../../assets/googlelogo.png")} />
           <Text style={styles.loginTExt}>CONTINUE WITH GOOGLE</Text>
         </TouchableOpacity>
