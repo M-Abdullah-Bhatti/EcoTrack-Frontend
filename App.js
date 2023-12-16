@@ -10,9 +10,10 @@ function App() {
   return (
     <NavigationContainer>
       <ClerkProvider publishableKey="pk_test_Y2hvaWNlLXF1YWdnYS00OC5jbGVyay5hY2NvdW50cy5kZXYk">
-        {/* <Routes /> */}
         <SignedOut>
-          <Signup />
+          <Routes />
+
+          {/* <Signup /> */}
         </SignedOut>
         <SignedIn>
           <UseAuthExample />
