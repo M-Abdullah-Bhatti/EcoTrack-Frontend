@@ -18,6 +18,7 @@ import * as ImagePicker from "expo-image-picker";
 import { useOAuth } from "@clerk/clerk-expo";
 import { useWarmUpBrowser } from "../../hooks/warmUpBrowser";
 import * as WebBrowser from "expo-web-browser";
+import { loginSuccess } from "../../redux/userSlice";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -89,7 +90,9 @@ const Signup = ({ navigation }) => {
       );
 
       if (response.ok) {
+        const responseData = await response.json();
         alert("Signup successful!");
+        dispatch(loginSuccess(responseData));
         navigation.replace("Home");
       } else {
         const errorData = await response.json();
