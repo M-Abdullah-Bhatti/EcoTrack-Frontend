@@ -44,7 +44,6 @@ const AddEmissionCategory = ({ navigation, route }) => {
       icon: <FontAwesome5 name="motorcycle" size={24} color="white" />,
     },
   ];
-
   const meal = [
     {
       image: "",

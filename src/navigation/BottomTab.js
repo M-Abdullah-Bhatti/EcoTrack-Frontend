@@ -1,6 +1,6 @@
-import { StatusBar } from "react-native";
+import { StatusBar, Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator } from "@react-navigation/stack";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import BudgetScreen from "../screen/Home/BudgetScreen";
 import EmissionsScreen from "../screen/Home/EmissionsScreen";
@@ -24,14 +24,13 @@ function TopTabs() {
   );
 }
 
-
 function BottomTab() {
   return (
     <Tab.Navigator
       screenOptions={{
         headerTitleAlign: "center",
         tabBarActiveTintColor: "#46A667",
-        headerShown: false
+        headerShown: false,
       }}
     >
       <Tab.Screen
@@ -75,7 +74,7 @@ function BottomTab() {
           title: "Sustainable Guide",
           headerTitleStyle: {
             textAlign: "center",
-          }
+          },
         }}
       />
       <Tab.Screen
