@@ -1,5 +1,6 @@
 import { StatusBar } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import BudgetScreen from "../screen/Home/BudgetScreen";
 import EmissionsScreen from "../screen/Home/EmissionsScreen";
@@ -10,6 +11,7 @@ import { Ionicons, Foundation } from "@expo/vector-icons";
 import FoodGuide from "../screen/FoodGuide";
 import HabitsGuide from "../screen/HabitsGuide";
 
+const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const TopTab = createMaterialTopTabNavigator();
 
@@ -22,16 +24,14 @@ function TopTabs() {
   );
 }
 
+
 function BottomTab() {
   return (
     <Tab.Navigator
       screenOptions={{
         headerTitleAlign: "center",
-        headerTitleStyle: {
-          fontSize: 24,
-          fontWeight: "bold",
-        },
         tabBarActiveTintColor: "#46A667",
+        headerShown: false
       }}
     >
       <Tab.Screen
@@ -42,9 +42,6 @@ function BottomTab() {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="calculator" color={color} size={size} />
           ),
-          headerStyle: {
-            height: 75,
-          },
         }}
       />
       <Tab.Screen
@@ -71,19 +68,21 @@ function BottomTab() {
         name="Act"
         component={TopTabs}
         options={{
+          headerShown: true,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="hand-left" color={color} size={size} />
           ),
-          headerStyle: {
-            height: 75,
-          },
           title: "Sustainable Guide",
+          headerTitleStyle: {
+            textAlign: "center",
+          }
         }}
       />
       <Tab.Screen
         name="Community"
         component={CommunityScreen}
         options={{
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="people" color={color} size={size} />
           ),

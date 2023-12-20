@@ -77,7 +77,7 @@ const AddEmission = ({ navigation, route }) => {
               <View style={styles.addButtonContainer}>
                 <TouchableOpacity
                   style={styles.addButton}
-                  onPress={() => navigation.navigate("SetBudget")}
+                  onPress={() => navigation.navigate("Emissions")}
                 >
                   <Text style={styles.addButtonText}>Add this emission</Text>
                 </TouchableOpacity>
@@ -132,7 +132,7 @@ const AddEmission = ({ navigation, route }) => {
               <View style={styles.addButtonContainer}>
                 <TouchableOpacity
                   style={styles.addButton}
-                  onPress={() => navigation.navigate("SetBudget")}
+                  onPress={() => navigation.navigate("Emissions")}
                 >
                   <Text style={styles.addButtonText}>Add this emission</Text>
                 </TouchableOpacity>
@@ -187,7 +187,7 @@ const AddEmission = ({ navigation, route }) => {
               <View style={styles.addButtonContainer}>
                 <TouchableOpacity
                   style={styles.addButton}
-                  onPress={() => navigation.navigate("SetBudget")}
+                  onPress={() => navigation.navigate("Emissions")}
                 >
                   <Text style={styles.addButtonText}>Add this emission</Text>
                 </TouchableOpacity>
@@ -242,7 +242,7 @@ const AddEmission = ({ navigation, route }) => {
               <View style={styles.addButtonContainer}>
                 <TouchableOpacity
                   style={styles.addButton}
-                  onPress={() => navigation.navigate("SetBudget")}
+                  onPress={() => navigation.navigate("Emissions")}
                 >
                   <Text style={styles.addButtonText}>Add this emission</Text>
                 </TouchableOpacity>

@@ -31,25 +31,25 @@ const technologyHabits = [
 const HabitsGuide = () => {
   return (
     <View style={{flex: 1, backgroundColor: 'white', alignItems: 'center'}}>
-        <Text style={{textAlign: 'center', paddingVertical: 10, fontSize: 24, fontWeight: 'bold'}}>House</Text>
+        <Text style={{textAlign: 'center', paddingVertical: 10, fontSize: 24, fontFamily: 'PoppinsSemiBold'}}>House</Text>
       {
         houseHabits.map((data)=> (
             <GuideItem data={data} />
         ))
       }
-      <TouchableOpacity style={{borderWidth: 1, borderColor: '#46A667', width: 175, alignItems: 'center', paddingVertical: 10, borderRadius: 100, marginTop: 12}}>
-        <Text style={{fontSize: 18, fontWeight: 'bold', color: '#46A667'}}>See all</Text>
+      <TouchableOpacity style={{borderWidth: 1, borderColor: '#46A667', width: 150, alignItems: 'center', paddingVertical: 6, borderRadius: 100, marginTop: 12}}>
+        <Text style={{fontSize: 18, color: '#46A667', fontFamily: 'PoppinsSemiBold'}}>See all</Text>
       </TouchableOpacity>
 
       <View style={{width: '100%', alignItems: 'center', marginTop: 12}}>
-        <Text style={{textAlign: 'center', paddingVertical: 10, fontSize: 24, fontWeight: 'bold'}}>Technology</Text>
+        <Text style={{textAlign: 'center', paddingVertical: 10, fontSize: 24, fontFamily: 'PoppinsSemiBold'}}>Technology</Text>
         {
             technologyHabits.map((data)=> (
                 <GuideItem data={data} />
             ))
         }
-        <TouchableOpacity style={{borderWidth: 1, borderColor: '#46A667', width: 175, alignItems: 'center', paddingVertical: 10, borderRadius: 100, marginTop: 12}}>
-            <Text style={{fontSize: 18, fontWeight: 'bold', color: '#46A667'}}>See all</Text>
+        <TouchableOpacity style={{borderWidth: 1, borderColor: '#46A667', width: 150, alignItems: 'center', paddingVertical: 6, borderRadius: 100, marginTop: 12}}>
+            <Text style={{fontSize: 18, color: '#46A667', fontFamily: 'PoppinsSemiBold'}}>See all</Text>
         </TouchableOpacity>
       </View>
     </View>

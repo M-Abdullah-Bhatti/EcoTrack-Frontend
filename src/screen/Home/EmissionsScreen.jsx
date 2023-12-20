@@ -36,7 +36,7 @@ const EmissionsScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.monthDiv}>
-        <Text style={{ fontSize: 24, fontWeight: "900", color: "#2DBAA0" }}>
+        <Text style={{ fontSize: 24, fontWeight: "900", color: "#2DBAA0", color: '#000' }}>
           Emissions
         </Text>
       </View>

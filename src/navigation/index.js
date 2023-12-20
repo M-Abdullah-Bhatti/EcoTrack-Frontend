@@ -9,6 +9,7 @@ import AddEmissionCategory from "../screen/Home/AddEmissionCategory";
 import AddEmission from "../screen/Home/AddEmission";
 import SplashScreen from "../screen/SplashScreen";
 import EmissionDetailScreen from "../screen/Home/EmissionDetailScreen";
+import { StatusBar } from "expo-status-bar";
 
 const Routes = () => {
   const MainStackNavigator = createNativeStackNavigator();
@@ -18,6 +19,7 @@ const Routes = () => {
 
   return (
     <>
+      <StatusBar backgroundColor="white" barStyle="light-content" />
       <MainStackNavigator.Navigator initialRouteName="Home">
         <MainStackNavigator.Screen
           name="Splash"
@@ -41,6 +43,7 @@ const Routes = () => {
           name="SetBudget"
           component={SetBudget}
           options={{
+            headerShown: true,
             title: "Monthly Budget",
           }}
         />

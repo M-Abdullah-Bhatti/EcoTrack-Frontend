@@ -4,7 +4,7 @@ import React from 'react'
 const CommunityScreen = () => {
   return (
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text style={{fontSize: 24, fontWeight: 'bold'}}>Coming Soon...</Text>
+      <Text style={{fontSize: 24, fontFamily: 'PoppinsMedium'}}>Community Coming Soon...</Text>
     </View>
   )
 }

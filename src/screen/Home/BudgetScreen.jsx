@@ -15,10 +15,10 @@ const BudgetScreen = ({navigation}) => {
   const [budget, SetBudget] = useState(167);
 
   return (
-    <View style={{flex: 1, alignItems: 'center', backgroundColor: 'white'}}>
+    <View style={{flex: 1, alignItems: 'center', backgroundColor: 'white', marginTop: 30}}>
       <View style={{width: '95%', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20}}>
         <Entypo name="chevron-left" size={28} color="black" />
-        <Text style={{fontSize: 24, fontWeight: 'bold'}}>February</Text>
+        <Text style={{fontSize: 24, fontFamily: 'PoppinsSemiBold'}}>February</Text>
         <Entypo name="chevron-right" size={28} color="black" />
       </View>
       <View style={{width: '95%', alignItems: "center", justifyContent: "center", backgroundColor: '#FFF', borderRadius: 12, paddingBottom: 16, borderWidth: 2, borderColor: '#46a667'}}>
