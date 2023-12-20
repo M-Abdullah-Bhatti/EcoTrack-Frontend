@@ -1,11 +1,25 @@
+import { useEffect } from 'react'
 import { View, Text } from 'react-native'
-import React from 'react'
 import LottieView from 'lottie-react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const SplashScreen = () => {
+const SplashScreen = ({navigation}) => {
+  
+  useEffect(() => {
+    setTimeout(() => {
+      AsyncStorage.getItem('userToken').then(value => {
+        if (value) {
+          navigation.replace('Home')
+        } else {
+            navigation.replace('AuthNavigation')
+          }
+        })
+    }, 3000);
+  }, []);
+
   return (
-    <View style={{flex: 1, marginTop: 50, justifyContent: 'flex-end'}}>
-    <View style={{height: '75%'}}>
+    <View style={{flex: 1, justifyContent: 'flex-end', backgroundColor: 'white'}}>
+    <View style={{height: '65%'}}>
       <LottieView source={require('../../assets/lottie/splash.json')}
         style={{}}
         autoPlay
@@ -13,8 +27,8 @@ const SplashScreen = () => {
       />
     </View>
       <View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
-        <Text style={{fontSize: 24, fontWeight: 'bold'}}>EcoTrack</Text>
-        <Text style={{fontSize: 14, fontWeight: 'bold'}}>Revolutionizing carbon footprint awareness</Text>
+        <Text style={{fontSize: 36, fontFamily: 'Shopia', color: '#46A667'}}>EcoTrack</Text>
+        <Text style={{fontSize: 18, fontFamily: 'Shopia', color: '#5DBF7E'}}>Revolutionizing carbon footprint awareness</Text>
       </View>
     </View>
   )

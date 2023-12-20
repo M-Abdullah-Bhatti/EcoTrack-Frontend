@@ -1,4 +1,4 @@
-import { StatusBar, Text } from "react-native";
+import { SafeAreaView, StatusBar, Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
@@ -17,10 +17,12 @@ const TopTab = createMaterialTopTabNavigator();
 
 function TopTabs() {
   return (
-    <TopTab.Navigator>
-      <TopTab.Screen name="Food" component={FoodGuide} />
-      <TopTab.Screen name="Habits" component={HabitsGuide} />
-    </TopTab.Navigator>
+    <SafeAreaView style={{flex: 1, paddingTop: 30}}>
+      <TopTab.Navigator>
+        <TopTab.Screen name="Food" component={FoodGuide} />
+        <TopTab.Screen name="Habits" component={HabitsGuide} />
+      </TopTab.Navigator>
+    </SafeAreaView>
   );
 }
 
@@ -67,14 +69,15 @@ function BottomTab() {
         name="Act"
         component={TopTabs}
         options={{
-          headerShown: true,
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="hand-left" color={color} size={size} />
           ),
-          title: "Sustainable Guide",
+          // title: "Sustainable Guide",
           headerTitleStyle: {
             textAlign: "center",
           },
+          // tabBarLabel: 'Act'
         }}
       />
       <Tab.Screen

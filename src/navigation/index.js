@@ -20,7 +20,7 @@ const Routes = () => {
   return (
     <>
       <StatusBar backgroundColor="white" barStyle="light-content" />
-      <MainStackNavigator.Navigator initialRouteName="Home">
+      <MainStackNavigator.Navigator initialRouteName="Splash">
         <MainStackNavigator.Screen
           name="Splash"
           component={SplashScreen}

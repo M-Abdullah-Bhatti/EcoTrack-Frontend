@@ -50,8 +50,8 @@ const FoodGuide = () => {
       >
         Meat
       </Text>
-      {meatHabits.map((data) => (
-        <GuideItem data={data} />
+      {meatHabits.map((data, index) => (
+        <GuideItem data={data} key={index} />
       ))}
       <TouchableOpacity
         style={{
@@ -87,8 +87,8 @@ const FoodGuide = () => {
         >
           Vegetables
         </Text>
-        {vegetableHabits.map((data) => (
-          <GuideItem data={data} />
+        {vegetableHabits.map((data, index) => (
+          <GuideItem data={data} key={index} />
         ))}
         <TouchableOpacity
           style={{

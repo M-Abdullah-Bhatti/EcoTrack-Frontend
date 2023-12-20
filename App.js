@@ -5,7 +5,9 @@ import Routes from "./src/navigation";
 import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-expo";
 import UseAuthExample from "./src/screen/Auth/AfterGoogle";
 import Signup from "./src/screen/Auth/Signup";
-import { StatusBar } from 'expo-status-bar';
+import { Provider } from 'react-redux';
+import { store, persistor } from './src/redux/store'
+import { PersistGate } from 'redux-persist/integration/react';
 
 function App() {
   const [fontsLoaded] = useFonts({
@@ -14,6 +16,7 @@ function App() {
     PoppinsMedium: require('./assets/fonts/Poppins-Medium.ttf'),
     PoppinsSemiBold: require('./assets/fonts/Poppins-SemiBold.ttf'),
     PoppinsBold: require('./assets/fonts/Poppins-Bold.ttf'),
+    Shopia: require('./assets/fonts/Shopia.ttf'),
   });
 
   const onLayoutRootView = useCallback(async () => {
@@ -29,18 +32,22 @@ function App() {
   }
 
   return (
-    <NavigationContainer>
-      <ClerkProvider publishableKey="pk_test_Y2hvaWNlLXF1YWdnYS00OC5jbGVyay5hY2NvdW50cy5kZXYk">
-        <SignedOut>
-          <Routes />
+    <Provider store={store}>
+      <PersistGate persistor={persistor} loading={null}>
+        <NavigationContainer>
+          <ClerkProvider publishableKey="pk_test_Y2hvaWNlLXF1YWdnYS00OC5jbGVyay5hY2NvdW50cy5kZXYk">
+            <SignedOut>
+              <Routes />
 
-          {/* <Signup /> */}
-        </SignedOut>
-        <SignedIn>
-          <UseAuthExample />
-        </SignedIn>
-      </ClerkProvider>
-    </NavigationContainer>
+              {/* <Signup /> */}
+            </SignedOut>
+            <SignedIn>
+              <UseAuthExample />
+            </SignedIn>
+          </ClerkProvider>
+        </NavigationContainer>
+      </PersistGate>
+    </Provider>
   );
 }
 

@@ -13,14 +13,14 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView, KeyboardAvoidingView } from "react-native";
-// import { useDispatch } from 'react-redux'
-import { loginStart } from "../../redux/userSlice";
+import { useDispatch } from 'react-redux'
+import { loginStart, loginSuccess } from "../../redux/userSlice";
 
 const Login = ({ navigation }) => {
   const imgSrc = require("../../../assets/logo-text.png");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -43,6 +43,7 @@ const Login = ({ navigation }) => {
   
       if (response.ok) {
         alert("Login successful!");
+        dispatch(loginSuccess(response.data));
         navigation.replace('Home')
       } else {
         const errorData = await response.json();
