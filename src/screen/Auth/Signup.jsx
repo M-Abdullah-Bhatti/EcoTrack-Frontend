@@ -65,7 +65,7 @@ const Signup = ({ navigation }) => {
     }
   }, []);
 
-  const handleSignup = async ({ navigation }) => {
+  const handleSignup = async () => {
     if (!username || !email || !password) {
       alert("Please fill in all the fields");
       return;
