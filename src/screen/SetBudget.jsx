@@ -77,9 +77,24 @@ const SetBudget = () => {
         <View style={{ alignItems: "center", paddingTop: 18 }}>
           {data.map((country, i) => (
             <View key={i}>
-              <Text style={{ fontSize: 16, marginBottom: 12 }}>
-                {country.country} : {country.emission}
-              </Text>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  marginVertical: 6,
+                }}
+              >
+                <Text style={{ textAlign: "left", width: "40%", fontSize: 16 }}>
+                  {country.country}
+                </Text>
+                <Text style={{ textAlign: "left", width: "10%", fontSize: 16 }}>
+                  :
+                </Text>
+                <Text style={{ textAlign: "left", width: "40%", fontSize: 16 }}>
+                  {country.emission}
+                </Text>
+              </View>
             </View>
           ))}
         </View>
