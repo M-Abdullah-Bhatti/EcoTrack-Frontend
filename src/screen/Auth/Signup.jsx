@@ -19,6 +19,7 @@ import { useOAuth } from "@clerk/clerk-expo";
 import { useWarmUpBrowser } from "../../hooks/warmUpBrowser";
 import * as WebBrowser from "expo-web-browser";
 import { loginSuccess } from "../../redux/userSlice";
+import { pickImage } from "../../utils/pickImage";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -31,22 +32,6 @@ const Signup = ({ navigation }) => {
   const [imageUri, setImageUri] = useState("");
   const [imgPreview, setImgPreview] = useState(null);
 
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    // console.log("result", result);
-
-    if (!result.canceled) {
-      setImageUri(result?.assets[0]?.uri);
-      setImgPreview(result?.assets[0]?.uri);
-    }
-  };
   useWarmUpBrowser();
 
   const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
