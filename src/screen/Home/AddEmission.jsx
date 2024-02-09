@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import Slider from "@react-native-community/slider";
 import { useFocusEffect } from "@react-navigation/native";
+import { CarbonCalculationAPI } from "../../axios/NetworkCalls";
 
 const { width } = Dimensions.get("screen");
 
@@ -20,8 +21,27 @@ const AddEmission = ({ navigation, route }) => {
   const [category, setCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
   const [isCalculated, setIsCalculated] = useState(false);
+  const [electricityCarbon, setElectricityCarbon] = useState(false);
 
   const { params } = route;
+
+  const calculateCarbon = async () => {
+    console.log("eletricity cons: ");
+    const params = {
+      country_name: "China",
+      electricity_value: electricity,
+      electricity_unit: "kWh",
+    };
+
+    const electricityCarbon = await CarbonCalculationAPI(
+      "https://carbonsutra1.p.rapidapi.com/electricity_estimate",
+      params
+    );
+    setElectricityCarbon(electricityCarbon?.data?.co2e_kg);
+
+    console.log("electricityCarbon: ", electricityCarbon?.data?.co2e_kg);
+    setIsCalculated(true);
+  };
 
   useFocusEffect(
     React.useCallback(() => {
@@ -115,9 +135,10 @@ const AddEmission = ({ navigation, route }) => {
             <View style={styles.addButtonContainer}>
               <TouchableOpacity
                 style={styles.addButton}
-                onPress={() => {
-                  setIsCalculated(true);
-                }}
+                // onPress={() => {
+                //   setIsCalculated(true);
+                // }}
+                onPress={calculateCarbon}
               >
                 <Text style={styles.addButtonText}>Calculate Emission</Text>
               </TouchableOpacity>
@@ -126,7 +147,9 @@ const AddEmission = ({ navigation, route }) => {
             <>
               <View style={{ marginBottom: 30 }}>
                 <Text style={styles.totalText}>Total</Text>
-                <Text style={styles.totalValue}>10.2 kgCO2eq</Text>
+                <Text style={styles.totalValue}>
+                  {electricityCarbon} kgCO2eq
+                </Text>
               </View>
 
               <View style={styles.addButtonContainer}>
