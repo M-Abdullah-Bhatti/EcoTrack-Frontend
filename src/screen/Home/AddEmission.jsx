@@ -5,14 +5,19 @@ import {
   Dimensions,
   TouchableOpacity,
   StyleSheet,
+  TextInput,
 } from "react-native";
 import Slider from "@react-native-community/slider";
 import { useFocusEffect } from "@react-navigation/native";
 import { CarbonCalculationAPI } from "../../axios/NetworkCalls";
+import { countries } from "../../data";
+import SelectDropDown from "../../components/Shared/SelectDropDown";
 
 const { width } = Dimensions.get("screen");
 
 const AddEmission = ({ navigation, route }) => {
+  const { params } = route;
+
   const [distance, setDistance] = useState(0);
   const [electricity, setElectricity] = useState(0);
   const [foodQuantity, setFoodQuantity] = useState(0);
@@ -22,13 +27,16 @@ const AddEmission = ({ navigation, route }) => {
   const [subCategory, setSubCategory] = useState("");
   const [isCalculated, setIsCalculated] = useState(false);
   const [electricityCarbon, setElectricityCarbon] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState("");
 
-  const { params } = route;
+  const handleSelection = (selectedItem, index) => {
+    setSelectedCountry(selectedItem);
+  };
 
   const calculateCarbon = async () => {
     console.log("eletricity cons: ");
     const params = {
-      country_name: "China",
+      country_name: selectedCountry,
       electricity_value: electricity,
       electricity_unit: "kWh",
     };
@@ -128,6 +136,15 @@ const AddEmission = ({ navigation, route }) => {
               maximumTrackTintColor="#000000"
               thumbTintColor="#46A667"
               onValueChange={(x) => setElectricity(Math.ceil(x))}
+            />
+          </View>
+
+          <Text style={styles.sectionTitle}>Select Country</Text>
+          <View style={styles.dropDownContainer}>
+            <SelectDropDown
+              data={countries}
+              onSelect={handleSelection}
+              defaultButtonText="Select Country"
             />
           </View>
 
@@ -328,6 +345,33 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: "#FFF",
+  },
+  dropDownContainer: {
+    // flex: 1,
+    marginBottom: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10,
+  },
+  dropdownButtonStyle: {
+    width: "100%",
+    height: 50,
+    backgroundColor: "#FFF",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#444",
+  },
+  dropdownStyle: {
+    backgroundColor: "#FFF",
+    borderRadius: 8,
+  },
+  dropdownRowStyle: {
+    backgroundColor: "#FFF",
+    borderBottomColor: "#C5C5C5",
+  },
+  dropdownRowTextStyle: {
+    fontSize: 16,
+    color: "#444",
   },
 });
 
