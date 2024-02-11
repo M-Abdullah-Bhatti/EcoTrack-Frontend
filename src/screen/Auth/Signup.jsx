@@ -16,7 +16,6 @@ import React, { useState } from "react";
 import { SafeAreaView, KeyboardAvoidingView } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useOAuth } from "@clerk/clerk-expo";
-import { useWarmUpBrowser } from "../../hooks/warmUpBrowser";
 import * as WebBrowser from "expo-web-browser";
 import { loginSuccess } from "../../redux/userSlice";
 import { pickImage } from "../../utils/pickImage";
@@ -31,8 +30,6 @@ const Signup = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [imageUri, setImageUri] = useState("");
   const [imgPreview, setImgPreview] = useState(null);
-
-  useWarmUpBrowser();
 
   const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
 
