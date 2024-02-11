@@ -16,34 +16,41 @@ const AddEmissionCategory = ({ navigation, route }) => {
     {
       image: "",
       text: "Train",
+      vehicle_type: "Train-Local",
       icon: <Ionicons name="train" size={24} color="white" />,
     },
     {
       image: "",
       text: "Car",
+      vehicle_type: "Car-Size-Medium",
       icon: <Ionicons name="ios-car-sharp" size={24} color="white" />,
     },
     {
       image: "",
       text: "Bus",
+      vehicle_type: "Bus-LocalAverage",
       icon: <Ionicons name="ios-bus-sharp" size={24} color="white" />,
     },
     {
       image: "",
       text: "Plane",
+      vehicle_type: "train",
       icon: <Entypo name="aircraft-take-off" size={24} color="white" />,
     },
     {
       image: "",
       text: "Boat",
+      vehicle_type: "train",
       icon: <Fontisto name="sait-boat" size={24} color="white" />,
     },
     {
       image: "",
       text: "MotorBike",
+      vehicle_type: "Motorbike-Size-Medium",
       icon: <FontAwesome5 name="motorcycle" size={24} color="white" />,
     },
   ];
+  
   const meal = [
     {
       image: "",

@@ -25,8 +25,10 @@ const AddEmission = ({ navigation, route }) => {
 
   const [category, setCategory] = useState("");
   const [subCategory, setSubCategory] = useState("");
+  const [vehicleType, setVehicleType] = useState("");
   const [isCalculated, setIsCalculated] = useState(false);
   const [electricityCarbon, setElectricityCarbon] = useState(false);
+  const [fuelCarbon, setFuelCarbon] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState("");
 
   const handleSelection = (selectedItem, index) => {
@@ -51,10 +53,30 @@ const AddEmission = ({ navigation, route }) => {
     setIsCalculated(true);
   };
 
+  const calculateFuelCarbon = async () => {
+    console.log("Fuel cons: ");
+    const params = {
+      vehicle_type: vehicleType,
+      distance_value: distance,
+      distance_unit: "km",
+    };
+
+    const fuelCarbon = await CarbonCalculationAPI(
+      "https://carbonsutra1.p.rapidapi.com/vehicle_estimate_by_type",
+      params
+    );
+    
+    setFuelCarbon(fuelCarbon?.data?.co2e_kg);
+
+    console.log("Feul Carbon: ", fuelCarbon?.data?.co2e_kg);
+    setIsCalculated(true);
+  };
+
   useFocusEffect(
     React.useCallback(() => {
       setSubCategory(params?.subCategory?.text);
       setCategory(params?.category);
+      setVehicleType(params?.subCategory?.vehicle_type)
     }, [])
   );
 
@@ -76,7 +98,7 @@ const AddEmission = ({ navigation, route }) => {
             <Slider
               style={styles.slider}
               minimumValue={1}
-              maximumValue={250}
+              maximumValue={1000}
               minimumTrackTintColor="#46A667"
               maximumTrackTintColor="#000000"
               thumbTintColor="#46A667"
@@ -88,9 +110,7 @@ const AddEmission = ({ navigation, route }) => {
             <View style={styles.addButtonContainer}>
               <TouchableOpacity
                 style={styles.addButton}
-                onPress={() => {
-                  setIsCalculated(true);
-                }}
+                onPress={calculateFuelCarbon}
               >
                 <Text style={styles.addButtonText}>Calculate Emission</Text>
               </TouchableOpacity>
@@ -99,7 +119,7 @@ const AddEmission = ({ navigation, route }) => {
             <>
               <View style={{ marginBottom: 30 }}>
                 <Text style={styles.totalText}>Total</Text>
-                <Text style={styles.totalValue}>10.2 kgCO2eq</Text>
+                <Text style={styles.totalValue}>{fuelCarbon} kgCO2eq</Text>
               </View>
 
               <View style={styles.addButtonContainer}>
