@@ -10,6 +10,7 @@ import AddEmission from "../screen/Home/AddEmission";
 import SplashScreen from "../screen/SplashScreen";
 import EmissionDetailScreen from "../screen/Home/EmissionDetailScreen";
 import { StatusBar } from "expo-status-bar";
+import UserDashboard from "../screen/Home/UserDashboard";
 
 const Routes = () => {
   const MainStackNavigator = createNativeStackNavigator();
@@ -70,6 +71,13 @@ const Routes = () => {
             title: "Add Emission",
             headerShown: true,
             headerStyle: {},
+          }}
+        />
+        <MainStackNavigator.Screen
+          name="UserDashboard"
+          component={UserDashboard}
+          options={{
+            headerShown: false,
           }}
         />
       </MainStackNavigator.Navigator>

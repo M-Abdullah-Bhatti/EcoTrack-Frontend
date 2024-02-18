@@ -109,6 +109,26 @@ const BudgetScreen = ({ navigation }) => {
           Set monthly budget
         </Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={{
+          width: width * 0.95,
+          display: "flex",
+          flexDirection: "row",
+          gap: 6,
+          backgroundColor: "#46A667",
+          paddingVertical: 14,
+          alignItems: "center",
+          marginTop: 40,
+          borderRadius: 12,
+          justifyContent: "center",
+        }}
+        onPress={() => navigation.navigate("UserDashboard")}
+      >
+        <Ionicons name="calculator" color="#FFF" size={24} />
+        <Text style={{ fontSize: 18, fontWeight: "bold", color: "#FFF" }}>
+          View My Data
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };
