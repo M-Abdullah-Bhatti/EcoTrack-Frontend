@@ -16,6 +16,7 @@ import React, { useEffect, useState } from "react";
 import { Dimensions } from "react-native";
 import { ProgressChart } from "react-native-chart-kit";
 import { BarChart } from "react-native-gifted-charts";
+import { PieChart } from "react-native-gifted-charts";
 
 import { Ionicons } from "@expo/vector-icons";
 
@@ -23,13 +24,61 @@ import { EmissionData } from "../../dummyEmissionData";
 
 const UserDashboard = ({ navigation }) => {
   const options = ["Electricity", "Food", "Transport"];
-  const screenWidth = Dimensions.get("window").width;
-  const data = {
-    labels: ["Completed", "Not Completed"],
-    data: [0.7, 0.3],
-    colors: ["rgba(70, 166, 103, 1)", "rgba(242, 166, 73, 1)"],
+  const handleCompleteGoal = (id) => {
+    setGoals((prevGoals) =>
+      prevGoals.map((goal) =>
+        goal.id === id ? { ...goal, status: "Complete" } : goal
+      )
+    );
   };
+  const [goals, setGoals] = useState([
+    {
+      id: 1,
+      goal: "Walk about 3 km on feet instead of using bike",
+      status: "Incomplete",
+    },
+    {
+      id: 2,
+      goal: "Reduce electricity consumption by  turning off electronics when not in use",
+      status: "Complete",
+    },
+    {
+      id: 3,
+      goal: "Incorporate more plant-based meals into daily diet ",
+      status: "Incomplete",
+    },
+    {
+      id: 4,
+      goal: "Opt for public transportation, carpooling, or biking for commuting to work or school instead of driving alone",
+      status: "Complete",
+    },
+  ]);
+
+  const renderDot = (color) => {
+    return (
+      <View
+        style={{
+          height: 10,
+          width: 10,
+          borderRadius: 5,
+          backgroundColor: color,
+          marginRight: 10,
+        }}
+      />
+    );
+  };
+  const screenWidth = Dimensions.get("window").width;
+
   const { width } = Dimensions.get("screen");
+  const pieData = [
+    {
+      value: 60,
+      color: "#009FFF",
+      gradientCenterColor: "#006DFF",
+      // focused: true,
+    },
+    { value: 40, color: "#93FCF8", gradientCenterColor: "#3BE9DE" },
+  ];
 
   const [selectedOpt, setSelectedOpt] = useState("Electricity");
 
@@ -79,7 +128,7 @@ const UserDashboard = ({ navigation }) => {
             Data Analysis
           </Text>
         </View>
-        <TouchableOpacity
+        <View
           style={{
             width: "50%",
             // backgroundColor: "red",
@@ -97,7 +146,7 @@ const UserDashboard = ({ navigation }) => {
               style={{ width: 40, height: 40, borderRadius: 20 }}
             />
           </TouchableOpacity>
-        </TouchableOpacity>
+        </View>
       </View>
 
       <View
@@ -142,28 +191,149 @@ const UserDashboard = ({ navigation }) => {
           height={250}
         />
       </View>
-      <View>
-        <Text>Track Your Goals</Text>
-        <ProgressChart
-          data={data}
-          width={width}
-          height={250}
-          strokeWidth={15}
-          hasLegend={true}
-          withCustomBarColorFromData={true}
-          radius={35}
-          chartConfig={{
-            backgroundColor: "#fff",
-            backgroundGradientFrom: "#fff",
-            backgroundGradientTo: "#fff",
-            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-            strokeWidth: 2,
-            barPercentage: 0.5,
-            decimalPlaces: 2,
-            useShadowColorFromDataset: false,
+      <View
+        style={{
+          backgroundColor: "white",
+          paddingVertical: 20,
+          marginVertical: 7,
+          height: "auto",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Text style={{ textAlign: "center", fontSize: 16, marginBottom: 20 }}>
+          Track Your Goals
+        </Text>
+
+        <PieChart
+          data={pieData}
+          donut
+          showGradient
+          sectionAutoFocus
+          radius={90}
+          innerRadius={60}
+          innerCircleColor={"#232B5D"}
+          centerLabelComponent={() => {
+            return (
+              <View style={{ justifyContent: "center", alignItems: "center" }}>
+                <Text
+                  style={{ fontSize: 18, color: "white", fontWeight: "bold" }}
+                >
+                  40% Goals
+                </Text>
+                <Text style={{ fontSize: 14, color: "white" }}>Achieved</Text>
+              </View>
+            );
           }}
-          style={{ paddingVertical: 8 }}
         />
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            marginVertical: 10,
+          }}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              width: 150,
+              marginRight: 20,
+            }}
+          >
+            {renderDot("#006DFF")}
+            <Text style={{ color: "black" }}>Not Completed: 60</Text>
+          </View>
+        </View>
+        <View style={{ flexDirection: "row", justifyContent: "center" }}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              width: 150,
+              marginRight: 20,
+            }}
+          >
+            {renderDot("#3BE9DE")}
+            <Text style={{ color: "black" }}>Completed: 40</Text>
+          </View>
+        </View>
+        <View
+          style={{
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            height: "auto",
+            justifyContent: "space-around",
+            gap: 20,
+            marginTop: 20,
+          }}
+        >
+          {goals.map((goal, i) => (
+            <View
+              key={goal.id}
+              style={{
+                width: "94%",
+                height: 79,
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.25,
+                shadowRadius: 3.84,
+                elevation: 5, // This is required for shadow to appear on iOS
+                backgroundColor: "white",
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-around",
+                alignItems: "center",
+              }}
+            >
+              <View
+                style={{
+                  width: 12,
+                  height: 12,
+                  borderRadius: 6,
+                  backgroundColor:
+                    goal.status == "Incomplete" ? "#fc5a42" : "#52b36c",
+                }}
+              ></View>
+              <Text
+                style={{
+                  fontSize: 12,
+                  width: "60%",
+                  height: "auto",
+                  textDecorationLine:
+                    goal.status == "Complete" ? "line-through" : "",
+                }}
+              >
+                {goal.goal}
+              </Text>
+              <TouchableOpacity
+                style={{
+                  width: "30%",
+                  paddingVertical: 10,
+                  backgroundColor:
+                    goal.status == "Incomplete" ? "#fc5a42" : "#52b36c",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: 10,
+                  marginRight: 3,
+                }}
+                disabled={goal.status == "Complete"}
+                onPress={() => handleCompleteGoal(goal.id)}
+              >
+                <Text
+                  style={{
+                    fontSize: 13,
+                    color: "white",
+                  }}
+                >
+                  {goal.status == "Incomplete" ? "Complete Now" : "Completed"}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
       </View>
     </ScrollView>
   );
