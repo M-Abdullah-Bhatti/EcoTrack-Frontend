@@ -11,6 +11,8 @@ import SplashScreen from "../screen/SplashScreen";
 import EmissionDetailScreen from "../screen/Home/EmissionDetailScreen";
 import { StatusBar } from "expo-status-bar";
 import UserDashboard from "../screen/Home/UserDashboard";
+import ChatbotButton from "../components/Shared/ChatbotButton";
+import ChatScreen from "../screen/Home/ChatScreen";
 
 const Routes = () => {
   const MainStackNavigator = createNativeStackNavigator();
@@ -50,6 +52,15 @@ const Routes = () => {
         />
 
         <MainStackNavigator.Screen
+          name="ChatScreen"
+          component={ChatScreen}
+          options={{
+            headerShown: true,
+            title: "Chatbot",
+          }}
+        />
+
+        <MainStackNavigator.Screen
           name="AddEmissionCategory"
           component={AddEmissionCategory}
           options={{
@@ -81,6 +92,7 @@ const Routes = () => {
           }}
         />
       </MainStackNavigator.Navigator>
+      <ChatbotButton />
     </>
   );
 };
