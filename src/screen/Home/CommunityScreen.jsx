@@ -25,6 +25,7 @@ import { posts, stories } from "../../utils/Data";
 import * as ImagePicker from "expo-image-picker";
 import { uploadImage } from "../../utils/helpers";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ChatbotButton from "../../components/Shared/ChatbotButton";
 
 // https://www.pinterest.com/pin/254664553914369768/
 
@@ -328,14 +329,6 @@ const CommunityScreen = ({ navigation }) => {
         style={styles.mainContainer}
       >
         <View style={styles.stories}>
-          {/* <View style={styles.addStory}>
-          <View style={{ width: "100%", height: "100%", borderRadius: 10 }}>
-            <Image
-              style={{ width: "100%", height: "100%", borderRadius: 10 }}
-              source={require("../../../assets/texture.png")}
-            />
-          </View>
-        </View> */}
           <FlatList
             horizontal
             ItemSeparatorComponent={() => <View style={{ width: 10 }}></View>}
@@ -468,6 +461,8 @@ const CommunityScreen = ({ navigation }) => {
           ))}
         </View>
       </ScrollView>
+
+      <ChatbotButton />
     </>
   );
 };

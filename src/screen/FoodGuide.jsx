@@ -2,6 +2,7 @@ import { View, SafeAreaView, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import GuideItem from "../components/GuideItem";
 import { StatusBar } from "expo-status-bar";
+import ChatbotButton from "../components/Shared/ChatbotButton";
 
 const meatHabits = [
   {
@@ -112,6 +113,7 @@ const FoodGuide = () => {
           </Text>
         </TouchableOpacity>
       </View>
+      <ChatbotButton />
     </SafeAreaView>
   );
 };

@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import GuideItem from "../components/GuideItem";
+import ChatbotButton from "../components/Shared/ChatbotButton";
 
 const houseHabits = [
   {
@@ -104,6 +105,7 @@ const HabitsGuide = () => {
           </Text>
         </TouchableOpacity>
       </View>
+      <ChatbotButton />
     </View>
   );
 };

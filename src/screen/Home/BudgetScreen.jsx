@@ -2,6 +2,7 @@ import { View, Text, Dimensions, TouchableOpacity } from "react-native";
 import { useState } from "react";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 import { ProgressChart } from "react-native-chart-kit";
+import ChatbotButton from "../../components/Shared/ChatbotButton";
 
 const { width } = Dimensions.get("screen");
 
@@ -129,6 +130,8 @@ const BudgetScreen = ({ navigation }) => {
           View My Data
         </Text>
       </TouchableOpacity>
+
+      <ChatbotButton />
     </View>
   );
 };

@@ -1,10 +1,10 @@
 const getColor = (val) => {
   if (val <= 200) {
-    return "#11bf7f";
+    return "#40916c";
   } else if (val > 200 && val <= 500) {
-    return "#7ebf0d";
+    return "#A7C957";
   } else {
-    return "#ad3d05";
+    return "#BC4749";
   }
 };
 export const EmissionData = {

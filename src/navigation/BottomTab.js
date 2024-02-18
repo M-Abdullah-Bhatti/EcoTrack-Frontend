@@ -17,7 +17,7 @@ const TopTab = createMaterialTopTabNavigator();
 
 function TopTabs() {
   return (
-    <SafeAreaView style={{flex: 1, paddingTop: 30}}>
+    <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
       <TopTab.Navigator>
         <TopTab.Screen name="Food" component={FoodGuide} />
         <TopTab.Screen name="Habits" component={HabitsGuide} />

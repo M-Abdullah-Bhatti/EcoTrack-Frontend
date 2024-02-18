@@ -11,6 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import ChatbotButton from "../../components/Shared/ChatbotButton";
 
 const AddScreen = ({ navigation }) => {
   const categories = [
@@ -134,6 +135,7 @@ const AddScreen = ({ navigation }) => {
           ))}
         </View>
       </View>
+      <ChatbotButton />
     </SafeAreaView>
   );
 };

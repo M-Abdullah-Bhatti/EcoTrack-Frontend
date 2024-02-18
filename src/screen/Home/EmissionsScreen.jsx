@@ -7,6 +7,7 @@ import {
 } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
+import ChatbotButton from "../../components/Shared/ChatbotButton";
 
 const EmissionsScreen = ({ navigation }) => {
   const [count, setCount] = useState(0);
@@ -36,7 +37,14 @@ const EmissionsScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.monthDiv}>
-        <Text style={{ fontSize: 24, fontWeight: "900", color: "#2DBAA0", color: '#000' }}>
+        <Text
+          style={{
+            fontSize: 24,
+            fontWeight: "900",
+            color: "#2DBAA0",
+            color: "#000",
+          }}
+        >
           Emissions
         </Text>
       </View>
@@ -75,6 +83,7 @@ const EmissionsScreen = ({ navigation }) => {
           </TouchableOpacity>
         ))}
       </View>
+      <ChatbotButton />
     </View>
   );
 };

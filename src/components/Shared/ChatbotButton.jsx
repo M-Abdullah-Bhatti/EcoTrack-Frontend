@@ -3,6 +3,8 @@ import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 
+// style={[styles.messageBubble, message.sender === 'bot' ? styles.botMessage : styles.userMessage]
+
 const ChatbotButton = () => {
   const navigation = useNavigation();
   return (
@@ -20,7 +22,7 @@ const ChatbotButton = () => {
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    bottom: 55,
+    bottom: 20,
     right: 15,
   },
   button: {
