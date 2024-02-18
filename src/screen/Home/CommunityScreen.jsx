@@ -23,21 +23,22 @@ import SinglePost from "./SinglePost";
 import { pickVideos } from "../../utils/pickImage";
 import { posts, stories } from "../../utils/Data";
 import * as ImagePicker from "expo-image-picker";
-import { uploadImage } from "../../utils/helpers"
+import { uploadImage } from "../../utils/helpers";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // https://www.pinterest.com/pin/254664553914369768/
 
 const CommunityScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
-  const [toUploadImage, setToUploadImage] = useState('');
-  const [description, setDescription] = useState('');
+  const [toUploadImage, setToUploadImage] = useState("");
+  const [description, setDescription] = useState("");
 
-  const {user} = useSelector(state=> state.user);
+  const { user } = useSelector((state) => state.user);
 
   const likes = 0;
   const [text, onChangeText] = React.useState("");
-  
+
   function handleLogout() {
     dispatch(logout());
     navigation.replace("AuthNavigation");
@@ -46,32 +47,34 @@ const CommunityScreen = ({ navigation }) => {
   const handlePostUpload = async () => {
     try {
       const imageUrl = await uploadImage(toUploadImage);
-      console.log('Image uploaded successfully:', imageUrl);
-  
+      console.log("Image uploaded successfully:", imageUrl);
+
       const requestBody = {
         postDescription: description,
         images: [`${imageUrl}`],
-        tags: ['Hello', 'World'],
+        tags: ["Hello", "World"],
       };
-  
-      const response = await fetch('https://ecotrack-dev.vercel.app/api/posts/add/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user._id}`
-        },
-        body: JSON.stringify(requestBody),
-      });
-  
+
+      const response = await fetch(
+        "https://ecotrack-dev.vercel.app/api/posts/add/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user._id}`,
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
+
       if (!response.ok) {
-        throw new Error('Failed to upload post. Please try again later.');
+        throw new Error("Failed to upload post. Please try again later.");
       }
-  
+
       const responseData = await response.json();
-      console.log('Post uploaded successfully!', responseData);
-  
+      console.log("Post uploaded successfully!", responseData);
     } catch (error) {
-      console.error('Error uploading post:', error.message);
+      console.error("Error uploading post:", error.message);
     }
   };
 
@@ -99,7 +102,7 @@ const CommunityScreen = ({ navigation }) => {
       setUploadingImage(false);
     }
   };
-  
+
   return (
     <>
       <View style={styles.header}>
@@ -159,7 +162,7 @@ const CommunityScreen = ({ navigation }) => {
               alignItems: "center",
               justifyContent: "center",
             }}
-            onPress={() => Alert.alert("hello")}
+            onPress={() => console.log("hello")}
           >
             <Ionicons name="settings-sharp" size={20} color="black" />
           </TouchableOpacity>
@@ -178,7 +181,7 @@ const CommunityScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-      
+
       {/* Add Image Modal */}
       <Modal
         animationType="slide"
@@ -246,58 +249,77 @@ const CommunityScreen = ({ navigation }) => {
           placeholder="Say Something..."
           style={{ fontSize: 24, margin: 12, height: 60 }}
           multiline
-          onChangeText={(e)=> setDescription(e)}
+          onChangeText={(e) => setDescription(e)}
         />
         <View style={styles.modalMediaBtns}>
-            {
-              toUploadImage ?
-              <View style={{width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                <Image source={{uri: toUploadImage}} style={{width: '100%', height: 250}} />
-                <TouchableOpacity style={{backgroundColor: 'pink', marginTop: 20, minWidth: 150, alignItems: 'center', paddingVertical: 12, borderRadius: 12}} onPress={handlePostUpload}>
-                  <Text style={{color: 'white', fontSize: 18}}>Post</Text>
-                </TouchableOpacity>
-              </View>
-              :
-              <>
-                <TouchableOpacity
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    width: "46%",
-                    gap: 10,
-                    backgroundColor: "#f5f5f5",
+          {toUploadImage ? (
+            <View
+              style={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Image
+                source={{ uri: toUploadImage }}
+                style={{ width: "100%", height: 250 }}
+              />
+              <TouchableOpacity
+                style={{
+                  backgroundColor: "pink",
+                  marginTop: 20,
+                  minWidth: 150,
+                  alignItems: "center",
+                  paddingVertical: 12,
+                  borderRadius: 12,
+                }}
+                onPress={handlePostUpload}
+              >
+                <Text style={{ color: "white", fontSize: 18 }}>Post</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <>
+              <TouchableOpacity
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "46%",
+                  gap: 10,
+                  backgroundColor: "#f5f5f5",
 
-                    padding: 10,
-                    borderRadius: 12,
-                  }}
-                  onPress={pickMedia}
-                >
-                  <Entypo name="images" size={24} color="red" />
+                  padding: 10,
+                  borderRadius: 12,
+                }}
+                onPress={pickMedia}
+              >
+                <Entypo name="images" size={24} color="red" />
 
-                  <Text>Add Images</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    width: "46%",
-                    gap: 10,
-                    backgroundColor: "#f5f5f5",
-                    // borderColor: "black",
-                    // borderWidth: 0.5,
-                    borderRadius: 12,
-                  }}
-                  onPress={pickVideos}
-                >
-                  <Entypo name="folder-video" size={24} color="blue" />
-                  <Text>Add Videos</Text>
-                </TouchableOpacity>
-              </>
-            }
+                <Text>Add Images</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "46%",
+                  gap: 10,
+                  backgroundColor: "#f5f5f5",
+                  // borderColor: "black",
+                  // borderWidth: 0.5,
+                  borderRadius: 12,
+                }}
+                onPress={pickVideos}
+              >
+                <Entypo name="folder-video" size={24} color="blue" />
+                <Text>Add Videos</Text>
+              </TouchableOpacity>
+            </>
+          )}
         </View>
       </Modal>
 
@@ -390,6 +412,13 @@ const CommunityScreen = ({ navigation }) => {
             )}
           />
         </View>
+        {/* Logout */}
+        <View style={{ marginLeft: 20 }}>
+          <TouchableOpacity onPress={handleLogout}>
+            <Text>Logout</Text>
+          </TouchableOpacity>
+        </View>
+
         <TouchableOpacity
           style={{
             marginHorizontal: 16,
@@ -427,6 +456,7 @@ const CommunityScreen = ({ navigation }) => {
               }}
             />
           </View>
+
           <View style={{ width: "80%" }}>
             <Text style={{ opacity: 0.6 }}>What's On Your Mind</Text>
           </View>
