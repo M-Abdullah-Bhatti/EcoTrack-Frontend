@@ -10,121 +10,96 @@ import {
   ScrollView,
   TextInput,
   Modal,
+  Alert,
   Pressable,
 } from "react-native";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/userSlice";
 import { Ionicons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
-import { AntDesign, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Entypo } from "@expo/vector-icons";
 import SinglePost from "./SinglePost";
-import { pickImage, pickVideos } from "../../utils/pickImage";
+import { pickVideos } from "../../utils/pickImage";
+import { posts, stories } from "../../utils/Data";
+import * as ImagePicker from "expo-image-picker";
+import { uploadImage } from "../../utils/helpers"
 
 // https://www.pinterest.com/pin/254664553914369768/
 
 const CommunityScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
+  const [toUploadImage, setToUploadImage] = useState('');
+  const [description, setDescription] = useState('');
+
+  const {user} = useSelector(state=> state.user);
 
   const likes = 0;
   const [text, onChangeText] = React.useState("");
+  
   function handleLogout() {
     dispatch(logout());
     navigation.replace("AuthNavigation");
   }
 
-  const stories = [
-    {
-      user: "LoggedIn",
-      icon: <AntDesign name="plus" size={18} color="white" />,
-      story: require("../../../assets/t2.jpg"),
-    },
-    {
-      user: "Rizwan",
-      pic: require("../../../assets/rizwan.jpg"),
-      story: require("../../../assets/t2.jpg"),
-    },
-    {
-      user: "Murtaza",
-      pic: require("../../../assets/murtaza.jpg"),
-      story: require("../../../assets/texture.png"),
-    },
-    {
-      user: "Abdullah",
-      pic: require("../../../assets/abdullah.jpg"),
-      story: require("../../../assets/texture.png"),
-    },
-    {
-      user: "Shayan",
-      pic: require("../../../assets/shayan.jpg"),
-      story: require("../../../assets/texture.png"),
-    },
-  ];
-  const posts = [
-    {
-      username: "Murtaza Khan",
-      timestamp: "2 hours ago",
-      description:
-        "Hey Earth champions! 🌍✨ Let's talk carbon footprints today,those invisible but impactful steps we leave on our planetHey Earth champions! 🌍✨ Let's talk carbon footprints today—those invisible but impactful steps we leave on our planet",
-      mediaUploaded: [
-        require("../../../assets/t2.jpg"),
-        require("../../../assets/t2.jpg"),
-      ],
-      totalLikes: 20,
-      totalComments: 5,
-      totalShares: 1,
-      userPic: require("../../../assets/murtaza.jpg"),
-      likesByUsers: [
-        { username: "Abdullah Khan" },
-        { username: "Rizwan Ahmed" },
-        { username: "Raza Abbas" },
-        { username: "Ali Haider" },
-      ],
-    },
-    {
-      username: "Rizwan Ahmed",
-      timestamp: "5 min ago",
-      description: "",
-      mediaUploaded: [
-        require("../../../assets/texture.png"),
-        require("../../../assets/t2.jpg"),
-      ],
-      totalLikes: 11,
-      totalComments: 5,
-      totalShares: 1,
-      userPic: require("../../../assets/rizwan.jpg"),
-      likesByUsers: [
-        { username: "Abdullah Khan" },
-        { username: "Rizwan Ahmed" },
-        { username: "Raza Abbas" },
-        { username: "Ali Haider" },
-        { username: "Ali Haider" },
-        { username: "Ali Haider" },
-        { username: "Ali Haider" },
-        { username: "Ali Haider" },
-        { username: "Ali Haider" },
-        { username: "Ali Haider" },
-        { username: "Ali Haider" },
-      ],
-    },
-    {
-      username: "Shayan Askari",
-      timestamp: "1 hour ago",
-      description: "",
-      mediaUploaded: [
-        require("../../../assets/texture.png"),
-        require("../../../assets/t2.jpg"),
-      ],
-      totalLikes: 0,
-      totalComments: 5,
-      totalShares: 1,
-      userPic: require("../../../assets/shayan.jpg"),
-      likesByUsers: [],
-    },
-  ];
+  const handlePostUpload = async () => {
+    try {
+      const imageUrl = await uploadImage(toUploadImage);
+      console.log('Image uploaded successfully:', imageUrl);
+  
+      const requestBody = {
+        postDescription: description,
+        images: [`${imageUrl}`],
+        tags: ['Hello', 'World'],
+      };
+  
+      const response = await fetch('https://ecotrack-dev.vercel.app/api/posts/add/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user._id}`
+        },
+        body: JSON.stringify(requestBody),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to upload post. Please try again later.');
+      }
+  
+      const responseData = await response.json();
+      console.log('Post uploaded successfully!', responseData);
+  
+    } catch (error) {
+      console.error('Error uploading post:', error.message);
+    }
+  };
+
+  const pickMedia = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    // if (!result.cancelled) {
+    //   console.log("resultL ", result);
+    //   setNewPost({ ...newPost, imageUri: result.uri });
+    // }
+    if (!result.canceled) {
+      console.log("result: ", result);
+      console.log("result: ", result.uri);
+      setToUploadImage(result.uri);
+
+      setUploadingImage(true);
+      const image = await uploadImage(result.uri);
+      console.log("image: ", image);
+      setImage(image);
+      setUploadingImage(false);
+    }
+  };
+  
   return (
     <>
       <View style={styles.header}>
@@ -138,7 +113,7 @@ const CommunityScreen = ({ navigation }) => {
             justifyContent: "space-around",
             alignItems: "center",
           }}
-          onPress={() => alert("Aziz")}
+          onPress={() => Alert.alert("Aziz")}
         >
           <View style={{ width: 40, height: 40, borderRadius: 20 }}>
             <Image
@@ -184,7 +159,7 @@ const CommunityScreen = ({ navigation }) => {
               alignItems: "center",
               justifyContent: "center",
             }}
-            onPress={() => alert("hello")}
+            onPress={() => Alert.alert("hello")}
           >
             <Ionicons name="settings-sharp" size={20} color="black" />
           </TouchableOpacity>
@@ -203,6 +178,8 @@ const CommunityScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
+      
+      {/* Add Image Modal */}
       <Modal
         animationType="slide"
         // transparent={true}
@@ -227,7 +204,7 @@ const CommunityScreen = ({ navigation }) => {
 
               gap: 10,
             }}
-            onPress={() => alert("Aziz")}
+            onPress={() => Alert.alert("Aziz")}
           >
             <View style={{ width: 40, height: 40, borderRadius: 20 }}>
               <Image
@@ -269,45 +246,58 @@ const CommunityScreen = ({ navigation }) => {
           placeholder="Say Something..."
           style={{ fontSize: 24, margin: 12, height: 60 }}
           multiline
+          onChangeText={(e)=> setDescription(e)}
         />
-        <View style={styles.modalMEdiaBtns}>
-          <TouchableOpacity
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "46%",
-              gap: 10,
-              backgroundColor: "#f5f5f5",
+        <View style={styles.modalMediaBtns}>
+            {
+              toUploadImage ?
+              <View style={{width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                <Image source={{uri: toUploadImage}} style={{width: '100%', height: 250}} />
+                <TouchableOpacity style={{backgroundColor: 'pink', marginTop: 20, minWidth: 150, alignItems: 'center', paddingVertical: 12, borderRadius: 12}} onPress={handlePostUpload}>
+                  <Text style={{color: 'white', fontSize: 18}}>Post</Text>
+                </TouchableOpacity>
+              </View>
+              :
+              <>
+                <TouchableOpacity
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "46%",
+                    gap: 10,
+                    backgroundColor: "#f5f5f5",
 
-              padding: 10,
-              borderRadius: 12,
-            }}
-            onPress={pickImage}
-          >
-            <Entypo name="images" size={24} color="red" />
+                    padding: 10,
+                    borderRadius: 12,
+                  }}
+                  onPress={pickMedia}
+                >
+                  <Entypo name="images" size={24} color="red" />
 
-            <Text>Add Images</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "46%",
-              gap: 10,
-              backgroundColor: "#f5f5f5",
-              // borderColor: "black",
-              // borderWidth: 0.5,
-              borderRadius: 12,
-            }}
-            onPress={pickVideos}
-          >
-            <Entypo name="folder-video" size={24} color="blue" />
-            <Text>Add Videos</Text>
-          </TouchableOpacity>
+                  <Text>Add Images</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "46%",
+                    gap: 10,
+                    backgroundColor: "#f5f5f5",
+                    // borderColor: "black",
+                    // borderWidth: 0.5,
+                    borderRadius: 12,
+                  }}
+                  onPress={pickVideos}
+                >
+                  <Entypo name="folder-video" size={24} color="blue" />
+                  <Text>Add Videos</Text>
+                </TouchableOpacity>
+              </>
+            }
         </View>
       </Modal>
 
@@ -553,7 +543,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "#2DBAA0",
     borderBottomWidth: 0.3,
   },
-  modalMEdiaBtns: {
+  modalMediaBtns: {
     // position: "absolute",
     width: "100%",
     display: "flex",
