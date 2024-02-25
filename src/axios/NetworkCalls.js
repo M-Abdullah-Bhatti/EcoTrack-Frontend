@@ -33,7 +33,7 @@ export const CarbonCalculationAPI = async (endpoint, params) => {
 export const GetAllData = async (endpoint) => {
   try {
     const { data } = await axiosInstance.get(endpoint);
-    // console.log("data: ", data);
+    console.log("data: ", data);
     if (data?.status) {
       return { success: true, data: data.data };
     } else {

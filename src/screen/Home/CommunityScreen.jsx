@@ -12,7 +12,7 @@ import {
   Modal,
   Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/userSlice";
 import { Ionicons } from "@expo/vector-icons";
@@ -20,10 +20,12 @@ import { Feather } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import SinglePost from "./SinglePost";
 import { pickVideos } from "../../utils/pickImage";
-import { posts, stories } from "../../utils/Data";
+import { stories } from "../../utils/Data";
 import * as ImagePicker from "expo-image-picker";
 import { uploadImage } from "../../utils/helpers";
 import ChatbotButton from "../../components/Shared/ChatbotButton";
+import { GetAllData } from "../../axios/NetworkCalls";
+import axios from "axios";
 
 // https://www.pinterest.com/pin/254664553914369768/
 
@@ -32,6 +34,7 @@ const CommunityScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [toUploadImage, setToUploadImage] = useState("");
   const [description, setDescription] = useState("");
+  const [posts, setPosts] = useState([]);
 
   const { user } = useSelector((state) => state.user);
 
@@ -96,6 +99,16 @@ const CommunityScreen = ({ navigation }) => {
       // setUploadingImage(false);
     }
   };
+
+  useEffect(()=> {
+    const getData = async () => {
+      const postData = await axios.get('https://ecotrack-dev.vercel.app/api/posts/');
+      setPosts(postData.data);
+      console.log("POSTS: ", postData.data);
+    };
+    
+    getData();
+  }, [])
 
   return (
     <>

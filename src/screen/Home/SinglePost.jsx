@@ -4,20 +4,16 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Platform,
-  StatusBar,
   Image,
-  FlatList,
-  ScrollView,
   TextInput,
   Modal,
-  Pressable,
 } from "react-native";
 
 import { Ionicons, Entypo } from "@expo/vector-icons";
+import {formatDateLikeFacebook} from '../../utils/helpers'
 
 import { AntDesign, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
-import { pickFiles, pickImage, pickVideos } from "../../utils/pickImage";
+import { pickFiles } from "../../utils/pickImage";
 
 const SinglePost = ({ post, id }) => {
   const [viewFullDesc, setViewFullDesc] = useState(false);
@@ -60,7 +56,7 @@ const SinglePost = ({ post, id }) => {
         >
           <View style={{ width: 40, height: 40, borderRadius: 20 }}>
             <Image
-              source={post.userPic}
+              source={require("../../../assets/rizwan.jpg")}
               style={{ width: 40, height: 40, borderRadius: 20 }}
             />
           </View>
@@ -72,9 +68,9 @@ const SinglePost = ({ post, id }) => {
             }}
           >
             <Text style={{ fontSize: 13, marginTop: 2, fontWeight: "bold" }}>
-              {post.username}
+              {post.userId.name}
             </Text>
-            <Text style={{ fontSize: 11, marginTop: 2 }}>{post.timestamp}</Text>
+            <Text style={{ fontSize: 11, marginTop: 2 }}>{formatDateLikeFacebook(post.createdAt)}</Text>
           </View>
         </TouchableOpacity>
 
@@ -118,20 +114,20 @@ const SinglePost = ({ post, id }) => {
                 paddingHorizontal: 10,
               }}
             >
-              {post.description.substring(0, 60)}...{" "}
-              <Text
+              {post.postDescription}
+              {/* <Text
                 style={{ fontSize: 14 }}
                 onPress={() => setViewFullDesc(true)}
               >
                 See More
-              </Text>
+              </Text> */}
             </Text>
           ))}
       </View>
 
-      {post.mediaUploaded.length > 0 && (
+      {post.images.length > 0 && (
         <Image
-          source={post.mediaUploaded[0]}
+          source={{uri: post.images[0]}}
           style={{ height: 250, width: "94%", marginHorizontal: 10 }}
         />
       )}
@@ -145,7 +141,7 @@ const SinglePost = ({ post, id }) => {
         }}
         onPress={() => setModalVisible(true)}
       >
-        {post.totalLikes > 0 && (
+        {post.likeCount > 0 && (
           <View
             style={{
               display: "flex",
@@ -157,20 +153,20 @@ const SinglePost = ({ post, id }) => {
             }}
           >
             <AntDesign
-              name={post.totalLikes > 0 ? "like1" : "like2"}
+              name={post.likeCount > 0 ? "like1" : "like2"}
               size={16}
               color="black"
             />
 
-            <Text style={{ marginLeft: 4 }}>
+            {/* <Text style={{ marginLeft: 4 }}>
               {post.likesByUsers.length > 0 &&
                 post.likesByUsers[0].username.split(" ")[0]}{" "}
               and {post.likesByUsers.length > 0 && post.likesByUsers.length - 1}{" "}
               others
-            </Text>
+            </Text> */}
           </View>
         )}
-        {post.totalComments > 0 && (
+        {post.commentCount > 0 && (
           <View
             style={{
               display: "flex",
@@ -185,7 +181,7 @@ const SinglePost = ({ post, id }) => {
           >
             <FontAwesome5 name="comment-dots" size={16} color="black" />
 
-            <Text style={{ marginLeft: 4 }}>{post.totalComments} comments</Text>
+            <Text style={{ marginLeft: 4 }}>{post.commentCount} comments</Text>
           </View>
         )}
       </TouchableOpacity>
@@ -205,11 +201,11 @@ const SinglePost = ({ post, id }) => {
           }}
           onPress={() => sethasLoggedInUserLike(!hasLoggedInUserLike)}
         >
-          <AntDesign
+          {/* <AntDesign
             name={hasLoggedInUserLike ? "like1" : "like2"}
             size={18}
             color="white"
-          />
+          /> */}
 
           <Text style={{ color: "white" }}>Like</Text>
         </TouchableOpacity>
@@ -265,7 +261,7 @@ const SinglePost = ({ post, id }) => {
         onShow={() => inputCommentRef.current.focus()}
       >
         <View style={styles.modalHeader}>
-          {post.totalLikes > 0 && (
+          {post.likeCount > 0 && (
             <TouchableOpacity
               style={{
                 width: "80%",
@@ -281,7 +277,7 @@ const SinglePost = ({ post, id }) => {
               onPress={() => alert("Aziz")}
             >
               <AntDesign
-                name={post.totalLikes > 0 ? "like1" : "like2"}
+                name={post.likeCount > 0 ? "like1" : "like2"}
                 size={16}
                 color="black"
               />
@@ -292,7 +288,7 @@ const SinglePost = ({ post, id }) => {
                   width: "70%",
                 }}
               >
-                <Text
+                {/* <Text
                   style={{
                     fontSize: 13,
                     marginTop: 2,
@@ -305,7 +301,7 @@ const SinglePost = ({ post, id }) => {
                   and{" "}
                   {post.likesByUsers.length > 0 && post.likesByUsers.length - 1}{" "}
                   others
-                </Text>
+                </Text> */}
               </View>
             </TouchableOpacity>
           )}
@@ -341,6 +337,8 @@ const SinglePost = ({ post, id }) => {
     </View>
   );
 };
+
+
 const styles = StyleSheet.create({
   postheader: {
     display: "flex",
