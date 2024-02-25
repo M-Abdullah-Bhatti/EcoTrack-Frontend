@@ -119,7 +119,7 @@ const BudgetScreen = ({ navigation }) => {
           backgroundColor: "#46A667",
           paddingVertical: 14,
           alignItems: "center",
-          marginTop: 40,
+          marginTop: 20,
           borderRadius: 12,
           justifyContent: "center",
         }}

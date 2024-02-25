@@ -74,11 +74,13 @@ export const DeleteSingleData = async (endpoint) => {
 };
 
 export const PostData = async (endpoint, body) => {
+  console.log("Body: ", body);
   try {
-    const { data } = await axiosInstance.post(endpoint, body);
-    return data;
+    const response = await axiosInstance.post(endpoint, body);
+    console.log("Response: ", response)
+    // return data;
   } catch (error) {
-    return error.response.data.message;
+    return error.message;
   }
 };
 

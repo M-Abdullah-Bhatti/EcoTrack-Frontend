@@ -11,7 +11,6 @@ import {
   TextInput,
   Modal,
   Alert,
-  Pressable,
 } from "react-native";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,7 +23,6 @@ import { pickVideos } from "../../utils/pickImage";
 import { posts, stories } from "../../utils/Data";
 import * as ImagePicker from "expo-image-picker";
 import { uploadImage } from "../../utils/helpers";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import ChatbotButton from "../../components/Shared/ChatbotButton";
 
 // https://www.pinterest.com/pin/254664553914369768/
@@ -36,9 +34,6 @@ const CommunityScreen = ({ navigation }) => {
   const [description, setDescription] = useState("");
 
   const { user } = useSelector((state) => state.user);
-
-  const likes = 0;
-  const [text, onChangeText] = React.useState("");
 
   function handleLogout() {
     dispatch(logout());
@@ -62,7 +57,7 @@ const CommunityScreen = ({ navigation }) => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${user._id}`,
+            Authorization: `Bearer ${user.token}`,
           },
           body: JSON.stringify(requestBody),
         }
@@ -74,6 +69,8 @@ const CommunityScreen = ({ navigation }) => {
 
       const responseData = await response.json();
       console.log("Post uploaded successfully!", responseData);
+      setModalVisible(false);
+      Alert.alert("Post Uploaded Successfully")
     } catch (error) {
       console.error("Error uploading post:", error.message);
     }
@@ -87,20 +84,16 @@ const CommunityScreen = ({ navigation }) => {
       quality: 1,
     });
 
-    // if (!result.cancelled) {
-    //   console.log("resultL ", result);
-    //   setNewPost({ ...newPost, imageUri: result.uri });
-    // }
     if (!result.canceled) {
       console.log("result: ", result);
       console.log("result: ", result.uri);
       setToUploadImage(result.uri);
 
-      setUploadingImage(true);
+      // setUploadingImage(true);
       const image = await uploadImage(result.uri);
       console.log("image: ", image);
       setImage(image);
-      setUploadingImage(false);
+      // setUploadingImage(false);
     }
   };
 
