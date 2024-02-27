@@ -26,6 +26,7 @@ import { uploadImage } from "../../utils/helpers";
 import ChatbotButton from "../../components/Shared/ChatbotButton";
 import { GetAllData } from "../../axios/NetworkCalls";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // https://www.pinterest.com/pin/254664553914369768/
 
@@ -37,6 +38,7 @@ const CommunityScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
 
   const { user } = useSelector((state) => state.user);
+  const token = AsyncStorage.getItem('userToken')
 
   function handleLogout() {
     dispatch(logout());
@@ -60,11 +62,13 @@ const CommunityScreen = ({ navigation }) => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
+            "Authorization": `Bearer ${user.token}`,
           },
           body: JSON.stringify(requestBody),
         }
       );
+
+      if(response.status === 401) Alert.alert("Unauthorized Access")
 
       if (!response.ok) {
         throw new Error("Failed to upload post. Please try again later.");
@@ -411,12 +415,6 @@ const CommunityScreen = ({ navigation }) => {
             )}
           />
         </View>
-        {/* Logout */}
-        <View style={{ marginLeft: 20 }}>
-          <TouchableOpacity onPress={handleLogout}>
-            <Text>Logout</Text>
-          </TouchableOpacity>
-        </View>
 
         <TouchableOpacity
           style={{
@@ -461,11 +459,26 @@ const CommunityScreen = ({ navigation }) => {
           </View>
         </TouchableOpacity>
 
-        <View style={styles.postsContainer}>
-          {posts.map((post, id) => (
-            <SinglePost post={post} id={id} key={id} />
-          ))}
+        {
+          !posts ?
+          <View>
+            <Text>No posts found</Text>
+          </View>
+          :
+          <View style={styles.postsContainer}>
+            {posts.map((post, id) => (
+              <SinglePost post={post} id={id} key={id} />
+            ))}
+          </View>
+        }
+
+        {/* Logout */}
+        <View style={{ marginLeft: 20, alignItems: 'center', justifyContent: 'center', marginVertical: 20 }}>
+          <TouchableOpacity style={{backgroundColor: '#000111', paddingVertical: 8, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 16, borderRadius: 12}} onPress={handleLogout}>
+            <Text style={{color: '#fff', fontSize: 16}}>Logout</Text>
+          </TouchableOpacity>
         </View>
+
       </ScrollView>
 
       <ChatbotButton />

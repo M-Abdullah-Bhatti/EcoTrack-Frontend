@@ -14,12 +14,47 @@ import {formatDateLikeFacebook} from '../../utils/helpers'
 
 import { AntDesign, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { pickFiles } from "../../utils/pickImage";
+import { useSelector } from "react-redux";
 
 const SinglePost = ({ post, id }) => {
   const [viewFullDesc, setViewFullDesc] = useState(false);
   const [hasLoggedInUserLike, sethasLoggedInUserLike] = useState(false);
   const inputCommentRef = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
+
+  const { user } = useSelector((state) => state.user);
+
+  const addComment = async () => {
+    try {
+
+      const requestBody = {
+        "like": false,
+        "share": false,
+        "comment": "Nice post deer"
+      };
+
+      const response = await fetch(
+        `https://ecotrack-dev.vercel.app/api/posts/${post._id}/activity`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to add comment. Please try again later.");
+      }
+
+      const responseData = await response.json();
+      console.log("Comment added successfully!", responseData);
+    } catch (error) {
+      console.error("Error adding comment:", error.message);
+    }
+  };
 
   return (
     <View
