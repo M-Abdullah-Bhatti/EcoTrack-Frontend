@@ -38,7 +38,38 @@ const CommunityScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
 
   const { user } = useSelector((state) => state.user);
-  const token = AsyncStorage.getItem('userToken')
+  const token = AsyncStorage.getItem("userToken");
+  const dummyComments = [
+    {
+      username: "Abdullah Imdad",
+      pic: require("../../../assets/abdullah.jpg"),
+      comment: "Good to see you contributing in saving the planet",
+    },
+    {
+      username: "Rizwan Ahmed",
+      pic: require("../../../assets/rizwan.jpg"),
+      comment:
+        "Saving world from carbon can make our lives healthier and easier and therefore the world will be carbon free and will be a happier place for the entire humanity.",
+    },
+    {
+      username: "Rizwan ",
+      pic: require("../../../assets/rizwan.jpg"),
+      comment:
+        "Saving world from carbon can make our lives healthier and easier and therefore the world will be carbon free and will be a happier place for the entire humanityseljfhdskagbksadbgasvgdashjsvgasjvg.",
+    },
+    {
+      username: "Rizwan ",
+      pic: require("../../../assets/rizwan.jpg"),
+      comment:
+        "Saving world from carbon can make our lives healthier and easier and therefore the world will be carbon free and will be a happier place for the entire humanityseljfhdskagbksadbgasvgdashjsvgasjvg.",
+    },
+    {
+      username: "Rizwan ",
+      pic: require("../../../assets/rizwan.jpg"),
+      comment:
+        "Saving world from carbon can make our lives healthier and easier and therefore the world will be carbon free and will be a happier place for the entire humanityseljfhdskagbksadbgasvgdashjsvgasjvg.",
+    },
+  ];
 
   function handleLogout() {
     dispatch(logout());
@@ -62,13 +93,13 @@ const CommunityScreen = ({ navigation }) => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${user.token}`,
+            Authorization: `Bearer ${user.token}`,
           },
           body: JSON.stringify(requestBody),
         }
       );
 
-      if(response.status === 401) Alert.alert("Unauthorized Access")
+      if (response.status === 401) Alert.alert("Unauthorized Access");
 
       if (!response.ok) {
         throw new Error("Failed to upload post. Please try again later.");
@@ -77,7 +108,7 @@ const CommunityScreen = ({ navigation }) => {
       const responseData = await response.json();
       console.log("Post uploaded successfully!", responseData);
       setModalVisible(false);
-      Alert.alert("Post Uploaded Successfully")
+      Alert.alert("Post Uploaded Successfully");
     } catch (error) {
       console.error("Error uploading post:", error.message);
     }
@@ -104,15 +135,17 @@ const CommunityScreen = ({ navigation }) => {
     }
   };
 
-  useEffect(()=> {
+  useEffect(() => {
     const getData = async () => {
-      const postData = await axios.get('https://ecotrack-dev.vercel.app/api/posts/');
+      const postData = await axios.get(
+        "https://ecotrack-dev.vercel.app/api/posts/"
+      );
       setPosts(postData.data);
       console.log("POSTS: ", postData.data);
     };
-    
+
     getData();
-  }, [])
+  }, []);
 
   return (
     <>
@@ -459,26 +492,46 @@ const CommunityScreen = ({ navigation }) => {
           </View>
         </TouchableOpacity>
 
-        {
-          !posts ?
+        {!posts ? (
           <View>
             <Text>No posts found</Text>
           </View>
-          :
+        ) : (
           <View style={styles.postsContainer}>
             {posts.map((post, id) => (
-              <SinglePost post={post} id={id} key={id} />
+              <SinglePost
+                post={post}
+                id={id}
+                key={id}
+                commentsData={dummyComments}
+              />
             ))}
           </View>
-        }
+        )}
 
         {/* Logout */}
-        <View style={{ marginLeft: 20, alignItems: 'center', justifyContent: 'center', marginVertical: 20 }}>
-          <TouchableOpacity style={{backgroundColor: '#000111', paddingVertical: 8, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 16, borderRadius: 12}} onPress={handleLogout}>
-            <Text style={{color: '#fff', fontSize: 16}}>Logout</Text>
+        <View
+          style={{
+            marginLeft: 20,
+            alignItems: "center",
+            justifyContent: "center",
+            marginVertical: 20,
+          }}
+        >
+          <TouchableOpacity
+            style={{
+              backgroundColor: "#000111",
+              paddingVertical: 8,
+              alignItems: "center",
+              justifyContent: "center",
+              paddingHorizontal: 16,
+              borderRadius: 12,
+            }}
+            onPress={handleLogout}
+          >
+            <Text style={{ color: "#fff", fontSize: 16 }}>Logout</Text>
           </TouchableOpacity>
         </View>
-
       </ScrollView>
 
       <ChatbotButton />
