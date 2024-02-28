@@ -7,31 +7,42 @@ import {
   Image,
   TextInput,
   Modal,
+  ScrollView,
   Alert
 } from "react-native";
 
 import { Ionicons, Entypo } from "@expo/vector-icons";
-import {formatDateLikeFacebook} from '../../utils/helpers'
+import { formatDateLikeFacebook } from "../../utils/helpers";
 
 import { AntDesign, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { pickFiles } from "../../utils/pickImage";
 import { useSelector } from "react-redux";
 
-const SinglePost = ({ post, id }) => {
+const SinglePost = ({ post, id, commentsData }) => {
   const [viewFullDesc, setViewFullDesc] = useState(false);
   const [hasLoggedInUserLike, sethasLoggedInUserLike] = useState(false);
   const inputCommentRef = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
+  // Initialize showFullComment state
+  const [showFullComment, setShowFullComment] = useState(
+    new Array(commentsData.length).fill(false)
+  );
+
+  // Function to toggle the state of a specific comment
+  const toggleComment = (id) => {
+    const updatedShowFullComment = [...showFullComment];
+    updatedShowFullComment[id] = !updatedShowFullComment[id];
+    setShowFullComment(updatedShowFullComment);
+  };
 
   const { user } = useSelector((state) => state.user);
 
   const addComment = async () => {
     try {
-
       const requestBody = {
-        "like": false,
-        "share": false,
-        "comment": "Nice post deer"
+        like: false,
+        share: false,
+        comment: "Nice post deer",
       };
 
       const response = await fetch(
@@ -106,7 +117,9 @@ const SinglePost = ({ post, id }) => {
             <Text style={{ fontSize: 13, marginTop: 2, fontWeight: "bold" }}>
               {post.userId.name}
             </Text>
-            <Text style={{ fontSize: 11, marginTop: 2 }}>{formatDateLikeFacebook(post.createdAt)}</Text>
+            <Text style={{ fontSize: 11, marginTop: 2 }}>
+              {formatDateLikeFacebook(post.createdAt)}
+            </Text>
           </View>
         </TouchableOpacity>
 
@@ -163,7 +176,7 @@ const SinglePost = ({ post, id }) => {
 
       {post.images.length > 0 && (
         <Image
-          source={{uri: post.images[0]}}
+          source={{ uri: post.images[0] }}
           style={{ height: 250, width: "94%", marginHorizontal: 10 }}
         />
       )}
@@ -289,9 +302,9 @@ const SinglePost = ({ post, id }) => {
         // transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
           setModalVisible(!modalVisible);
         }}
+        on
         presentationStyle="fullScreen"
         style={{ position: "relative" }}
         onShow={() => inputCommentRef.current.focus()}
@@ -349,11 +362,88 @@ const SinglePost = ({ post, id }) => {
               justifyContent: "center",
               marginRight: 20,
             }}
-            onPress={() => setModalVisible(false)}
+            onPress={() => {
+              setModalVisible(false);
+              setShowFullComment(new Array(commentsData.length).fill(false));
+            }}
           >
             <Entypo name="circle-with-cross" size={24} color="black" />
           </TouchableOpacity>
         </View>
+        <ScrollView
+          contentContainerStyle={{
+            paddingBottom: 20,
+            gap: 10,
+            display: "flex",
+            alignItems: "center",
+            marginTop: 20,
+          }}
+        >
+          {commentsData.map((comm, id) => (
+            <View
+              key={id}
+              style={{
+                width: "96%",
+                height: showFullComment ? "auto" : 60,
+                paddingVertical: 10,
+                backgroundColor: "#f7f7f7",
+                marginBottom: 10,
+                display: "flex",
+                alignItems: "flex-start",
+                flexDirection: "row",
+                borderRadius: 10,
+                paddingHorizontal: 6,
+              }}
+            >
+              <View style={{ width: 30, height: 30, borderRadius: 15 }}>
+                <Image
+                  style={{
+                    width: 30,
+                    height: 30,
+                    objectFit: "cover",
+                    borderRadius: 15,
+                  }}
+                  source={comm.pic}
+                />
+              </View>
+              <View
+                style={{
+                  width: "90%",
+                  paddingHorizontal: 5,
+                  // backgroundColor: "red",
+                  height: showFullComment[id] ? "auto" : 40,
+                  display: "flex",
+                  justifyContent: "flex-start",
+                }}
+              >
+                <Text style={{ fontSize: 11, fontWeight: "bold" }}>
+                  {comm.username}
+                </Text>
+                {showFullComment[id] ? (
+                  <Text
+                    onPress={() => toggleComment(id)}
+                    style={{ fontSize: 10, height: "auto" }}
+                  >
+                    {comm.comment}
+                  </Text>
+                ) : (
+                  <Text
+                    onPress={() => toggleComment(id)}
+                    style={{ fontSize: 10 }}
+                  >
+                    {comm.comment.length > 80
+                      ? comm.comment.substr(0, 80)
+                      : comm.comment}
+                    {comm.comment.length > 80 && (
+                      <Text style={{ fontSize: 12 }}>...see more</Text>
+                    )}
+                  </Text>
+                )}
+              </View>
+            </View>
+          ))}
+        </ScrollView>
+
         <View style={styles.commentBox}>
           <TextInput
             placeholder="Add a comment..."
@@ -361,19 +451,19 @@ const SinglePost = ({ post, id }) => {
             multiline
             ref={inputCommentRef}
           />
-          <Entypo
-            name="attachment"
-            size={20}
-            color="black"
-            style={{ marginRight: 30 }}
-            onPress={pickFiles}
-          />
+          <TouchableOpacity>
+            <AntDesign
+              name="caretright"
+              size={24}
+              color="black"
+              style={{ marginRight: 30 }}
+            />
+          </TouchableOpacity>
         </View>
       </Modal>
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   postheader: {
@@ -423,12 +513,13 @@ const styles = StyleSheet.create({
     borderWidth: 0.4,
     width: "95%",
     marginHorizontal: 10,
-    borderRadius: 50,
-    marginBottom: 20,
+    borderRadius: 10,
+    marginBottom: 2,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    backgroundColor: "white",
   },
 });
 export default SinglePost;

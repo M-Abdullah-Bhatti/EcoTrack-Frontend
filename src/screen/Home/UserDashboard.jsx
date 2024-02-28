@@ -18,12 +18,32 @@ import { ProgressChart } from "react-native-chart-kit";
 import { BarChart } from "react-native-gifted-charts";
 import { PieChart } from "react-native-gifted-charts";
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { Ionicons } from "@expo/vector-icons";
 
 import { EmissionData } from "../../dummyEmissionData";
-
+import { GetAllMyEmissions } from "../../axios/NetworkCalls";
+import axios from "axios";
+import { useSelector } from "react-redux";
 const UserDashboard = ({ navigation }) => {
   const options = ["Electricity", "Food", "Transport"];
+  const { user } = useSelector((state) => state.user);
+
+  const fetchEmissionData = async () => {
+    const emissionData = await axios.get(
+      "https://ecotrack-dev.vercel.app/api/emission/allMyEmission",
+      {
+        headers: {
+          authorization: `Bearer ${user.token}`,
+        },
+      }
+    );
+    console.log("dataa now is", emissionData.data);
+  };
+  useEffect(() => {
+    fetchEmissionData();
+  }, []);
   const handleCompleteGoal = (id) => {
     setGoals((prevGoals) =>
       prevGoals.map((goal) =>

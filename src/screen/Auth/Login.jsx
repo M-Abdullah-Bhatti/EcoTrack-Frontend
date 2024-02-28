@@ -95,6 +95,7 @@ const Login = ({ navigation }) => {
             onChangeText={(value) => setPassword(value)}
             value={password}
             placeholder="Enter Your Password..."
+            secureTextEntry={true}
           />
           <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
             <Text style={styles.loginTExt}>LOGIN</Text>

@@ -173,6 +173,7 @@ const Signup = ({ navigation }) => {
             onChangeText={(value) => setPassword(value)}
             value={password}
             placeholder="Enter Your Password..."
+            secureTextEntry={true}
           />
           <TouchableOpacity style={styles.loginBtn} onPress={handleSignup}>
             <Text style={styles.loginTExt}>SIGNUP</Text>
