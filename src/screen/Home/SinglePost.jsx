@@ -7,6 +7,7 @@ import {
   Image,
   TextInput,
   Modal,
+  Alert
 } from "react-native";
 
 import { Ionicons, Entypo } from "@expo/vector-icons";
@@ -201,7 +202,7 @@ const SinglePost = ({ post, id }) => {
             </Text> */}
           </View>
         )}
-        {post.commentCount > 0 && (
+        {post.comments > 0 && (
           <View
             style={{
               display: "flex",
