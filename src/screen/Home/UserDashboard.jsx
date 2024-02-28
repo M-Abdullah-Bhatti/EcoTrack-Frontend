@@ -12,7 +12,7 @@ import {
   Modal,
   Pressable,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Dimensions } from "react-native";
 import { ProgressChart } from "react-native-chart-kit";
 import { BarChart } from "react-native-gifted-charts";
@@ -29,21 +29,54 @@ import { useSelector } from "react-redux";
 const UserDashboard = ({ navigation }) => {
   const options = ["Electricity", "Food", "Transport"];
   const { user } = useSelector((state) => state.user);
+  const [loading, setLoading] = useState(false);
+  const [CarbonData, setCarbonData] = useState([]);
+  const [CarbonDataToBeSHown, setCarbonDataToBeSHown] = useState([]);
+  const [CarbonDataToBeSHownInFormat, setCarbonDataToBeSHownInFormat] =
+    useState([]);
 
   const fetchEmissionData = async () => {
-    const emissionData = await axios.get(
-      "https://ecotrack-dev.vercel.app/api/emission/allMyEmission",
-      {
-        headers: {
-          authorization: `Bearer ${user.token}`,
-        },
+    try {
+      setLoading(true);
+      const emissionData = await axios.get(
+        "https://ecotrack-dev.vercel.app/api/emission/allMyEmission",
+        {
+          headers: {
+            authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      if (emissionData.data) {
+        setCarbonData(emissionData.data);
+        console.log("Data from api is", CarbonData);
+        setCarbonDataToBeSHown(
+          transformData(
+            CarbonData.filter(
+              (item) => item.category.toLowerCase() == selectedOpt.toLowerCase()
+            )
+          )
+        );
       }
-    );
-    console.log("dataa now is", emissionData.data);
+      setLoading(false);
+    } catch (error) {
+      alert("An error occurred. Please try again.");
+    }
   };
+
   useEffect(() => {
     fetchEmissionData();
   }, []);
+  useEffect(() => {
+    setCarbonDataToBeSHown(
+      transformData(
+        CarbonData.filter(
+          (item) => item.category.toLowerCase() === selectedOpt.toLowerCase()
+        )
+      )
+    );
+  }, [CarbonData, selectedOpt]);
+
   const handleCompleteGoal = (id) => {
     setGoals((prevGoals) =>
       prevGoals.map((goal) =>
@@ -73,6 +106,41 @@ const UserDashboard = ({ navigation }) => {
       status: "Complete",
     },
   ]);
+  const getColor = (val) => {
+    if (val <= 200) {
+      return "#40916c";
+    } else if (val > 200 && val <= 500) {
+      return "#A7C957";
+    } else {
+      return "#BC4749";
+    }
+  };
+
+  const transformData = (fetchedData) => {
+    const transformedData = {};
+
+    fetchedData.forEach((item) => {
+      const { month, carbonEmitted } = item;
+      if (!transformedData[month]) {
+        transformedData[month] = {
+          value: carbonEmitted,
+          label: month,
+          frontColor: getColor(carbonEmitted),
+        };
+      } else {
+        transformedData[month].value += carbonEmitted;
+        transformedData[month].frontColor = getColor(
+          transformedData[month].value
+        );
+      }
+    });
+
+    // Convert object back to array
+    const transformedArray = Object.values(transformedData);
+    console.log("now array is", transformedArray);
+
+    return transformedArray;
+  };
 
   const renderDot = (color) => {
     return (
@@ -104,6 +172,13 @@ const UserDashboard = ({ navigation }) => {
 
   const handleSelectedOption = async (opt) => {
     setSelectedOpt(opt);
+    setCarbonDataToBeSHown(
+      transformData(
+        CarbonData.filter(
+          (item) => item.category.toLowerCase() === opt.toLowerCase()
+        )
+      )
+    );
   };
 
   return (
@@ -197,19 +272,28 @@ const UserDashboard = ({ navigation }) => {
             </TouchableOpacity>
           ))}
         </View>
+        {
+          loading ? (
+            <Text>loading....</Text>
+          ) : CarbonDataToBeSHown.length == 0 ? (
+            <Text>No data available</Text>
+          ) : (
+            <BarChart
+              barWidth={22}
+              noOfSections={3}
+              barBorderRadius={4}
+              frontColor="lightgray"
+              data={CarbonDataToBeSHown}
+              yAxisThickness={0}
+              xAxisThickness={0}
+              width={screenWidth}
+              xAxisLabelTexts={["Months", "Months"]}
+              height={250}
+            />
+          )
 
-        <BarChart
-          barWidth={22}
-          noOfSections={3}
-          barBorderRadius={4}
-          frontColor="lightgray"
-          data={EmissionData[selectedOpt]}
-          yAxisThickness={0}
-          xAxisThickness={0}
-          width={screenWidth}
-          xAxisLabelTexts={["Months", "Months"]}
-          height={250}
-        />
+          // <Text>hehehe</Text>
+        }
       </View>
       <View
         style={{
@@ -322,7 +406,7 @@ const UserDashboard = ({ navigation }) => {
                   width: "60%",
                   height: "auto",
                   textDecorationLine:
-                    goal.status == "Complete" ? "line-through" : "",
+                    goal.status == "Complete" ? "line-through" : "none",
                 }}
               >
                 {goal.goal}
