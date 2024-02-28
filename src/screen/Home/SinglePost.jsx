@@ -7,26 +7,27 @@ import {
   Image,
   TextInput,
   Modal,
-  ScrollView,
-  Alert
+  ScrollView
 } from "react-native";
 
 import { Ionicons, Entypo } from "@expo/vector-icons";
 import { formatDateLikeFacebook } from "../../utils/helpers";
 
 import { AntDesign, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
-import { pickFiles } from "../../utils/pickImage";
 import { useSelector } from "react-redux";
 
-const SinglePost = ({ post, id, commentsData }) => {
+const SinglePost = ({ post, id }) => {
   const [viewFullDesc, setViewFullDesc] = useState(false);
   const [hasLoggedInUserLike, sethasLoggedInUserLike] = useState(false);
+  const [comment, setComment] = useState("");
   const inputCommentRef = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
   // Initialize showFullComment state
   const [showFullComment, setShowFullComment] = useState(
-    new Array(commentsData.length).fill(false)
+    new Array(post.comments.length).fill(false)
   );
+
+  console.log("Comments: ", post.comments)
 
   // Function to toggle the state of a specific comment
   const toggleComment = (id) => {
@@ -38,11 +39,14 @@ const SinglePost = ({ post, id, commentsData }) => {
   const { user } = useSelector((state) => state.user);
 
   const addComment = async () => {
+
+    console.log("Add Comment Triggered")
+
+    if (!comment) return;
+    
     try {
       const requestBody = {
-        like: false,
-        share: false,
-        comment: "Nice post deer",
+        comment: comment,
       };
 
       const response = await fetch(
@@ -63,6 +67,7 @@ const SinglePost = ({ post, id, commentsData }) => {
 
       const responseData = await response.json();
       console.log("Comment added successfully!", responseData);
+      setComment("")
     } catch (error) {
       console.error("Error adding comment:", error.message);
     }
@@ -364,7 +369,7 @@ const SinglePost = ({ post, id, commentsData }) => {
             }}
             onPress={() => {
               setModalVisible(false);
-              setShowFullComment(new Array(commentsData.length).fill(false));
+              setShowFullComment(new Array(post.comments.length).fill(false));
             }}
           >
             <Entypo name="circle-with-cross" size={24} color="black" />
@@ -379,7 +384,7 @@ const SinglePost = ({ post, id, commentsData }) => {
             marginTop: 20,
           }}
         >
-          {commentsData.map((comm, id) => (
+          {post.comments.map((comment, id) => (
             <View
               key={id}
               style={{
@@ -398,43 +403,43 @@ const SinglePost = ({ post, id, commentsData }) => {
               <View style={{ width: 30, height: 30, borderRadius: 15 }}>
                 <Image
                   style={{
-                    width: 30,
-                    height: 30,
+                    width: 40,
+                    height: 40,
                     objectFit: "cover",
-                    borderRadius: 15,
+                    borderRadius: 100,
                   }}
-                  source={comm.pic}
+                  source={require('../../../assets/placeholder.jpg')}
                 />
               </View>
               <View
                 style={{
                   width: "90%",
-                  paddingHorizontal: 5,
+                  paddingHorizontal: 15,
                   // backgroundColor: "red",
                   height: showFullComment[id] ? "auto" : 40,
                   display: "flex",
                   justifyContent: "flex-start",
                 }}
               >
-                <Text style={{ fontSize: 11, fontWeight: "bold" }}>
-                  {comm.username}
+                <Text style={{ fontSize: 14, fontWeight: "bold" }}>
+                  {comment.username || 'Rizwan Ahmed'}
                 </Text>
                 {showFullComment[id] ? (
                   <Text
                     onPress={() => toggleComment(id)}
-                    style={{ fontSize: 10, height: "auto" }}
+                    style={{ fontSize: 12, height: "auto" }}
                   >
-                    {comm.comment}
+                    {comment.comment}
                   </Text>
                 ) : (
                   <Text
                     onPress={() => toggleComment(id)}
                     style={{ fontSize: 10 }}
                   >
-                    {comm.comment.length > 80
-                      ? comm.comment.substr(0, 80)
-                      : comm.comment}
-                    {comm.comment.length > 80 && (
+                    {comment.comment.length > 80
+                      ? comment.comment.substr(0, 80)
+                      : comment.comment}
+                    {comment.comment.length > 80 && (
                       <Text style={{ fontSize: 12 }}>...see more</Text>
                     )}
                   </Text>
@@ -450,8 +455,9 @@ const SinglePost = ({ post, id, commentsData }) => {
             style={{ fontSize: 16, margin: 12, height: "auto", width: "80%" }}
             multiline
             ref={inputCommentRef}
+            onChangeText={(e)=> setComment(e)}
           />
-          <TouchableOpacity>
+          <TouchableOpacity onPress={addComment}>
             <AntDesign
               name="caretright"
               size={24}

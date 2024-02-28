@@ -24,9 +24,7 @@ import { stories } from "../../utils/Data";
 import * as ImagePicker from "expo-image-picker";
 import { uploadImage } from "../../utils/helpers";
 import ChatbotButton from "../../components/Shared/ChatbotButton";
-import { GetAllData } from "../../axios/NetworkCalls";
 import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // https://www.pinterest.com/pin/254664553914369768/
 
@@ -38,38 +36,6 @@ const CommunityScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
 
   const { user } = useSelector((state) => state.user);
-  const token = AsyncStorage.getItem("userToken");
-  const dummyComments = [
-    {
-      username: "Abdullah Imdad",
-      pic: require("../../../assets/abdullah.jpg"),
-      comment: "Good to see you contributing in saving the planet",
-    },
-    {
-      username: "Rizwan Ahmed",
-      pic: require("../../../assets/rizwan.jpg"),
-      comment:
-        "Saving world from carbon can make our lives healthier and easier and therefore the world will be carbon free and will be a happier place for the entire humanity.",
-    },
-    {
-      username: "Rizwan ",
-      pic: require("../../../assets/rizwan.jpg"),
-      comment:
-        "Saving world from carbon can make our lives healthier and easier and therefore the world will be carbon free and will be a happier place for the entire humanityseljfhdskagbksadbgasvgdashjsvgasjvg.",
-    },
-    {
-      username: "Rizwan ",
-      pic: require("../../../assets/rizwan.jpg"),
-      comment:
-        "Saving world from carbon can make our lives healthier and easier and therefore the world will be carbon free and will be a happier place for the entire humanityseljfhdskagbksadbgasvgdashjsvgasjvg.",
-    },
-    {
-      username: "Rizwan ",
-      pic: require("../../../assets/rizwan.jpg"),
-      comment:
-        "Saving world from carbon can make our lives healthier and easier and therefore the world will be carbon free and will be a happier place for the entire humanityseljfhdskagbksadbgasvgdashjsvgasjvg.",
-    },
-  ];
 
   function handleLogout() {
     dispatch(logout());
@@ -503,7 +469,6 @@ const CommunityScreen = ({ navigation }) => {
                 post={post}
                 id={id}
                 key={id}
-                commentsData={dummyComments}
               />
             ))}
           </View>
