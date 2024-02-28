@@ -20,14 +20,14 @@ const SinglePost = ({ post, id }) => {
   const [viewFullDesc, setViewFullDesc] = useState(false);
   const [hasLoggedInUserLike, sethasLoggedInUserLike] = useState(false);
   const [comment, setComment] = useState("");
+  const [comments, setComments] = useState(post.comments);
+  const [likes, setLikes] = useState(post.likes);
   const inputCommentRef = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
   // Initialize showFullComment state
   const [showFullComment, setShowFullComment] = useState(
     new Array(post.comments.length).fill(false)
   );
-
-  console.log("Comments: ", post.comments)
 
   // Function to toggle the state of a specific comment
   const toggleComment = (id) => {
@@ -36,11 +36,11 @@ const SinglePost = ({ post, id }) => {
     setShowFullComment(updatedShowFullComment);
   };
 
+  
   const { user } = useSelector((state) => state.user);
-
+  const liked = likes.includes(user._id);
+  
   const addComment = async () => {
-
-    console.log("Add Comment Triggered")
 
     if (!comment) return;
     
@@ -66,10 +66,45 @@ const SinglePost = ({ post, id }) => {
       }
 
       const responseData = await response.json();
+      setComments(responseData.comments)
       console.log("Comment added successfully!", responseData);
       setComment("")
     } catch (error) {
       console.error("Error adding comment:", error.message);
+    }
+  };
+
+  const likePost = async () => {
+
+    if (liked) return;
+    
+    try {
+      const requestBody = {
+        "like": false,
+      };
+
+      const response = await fetch(
+        `https://ecotrack-dev.vercel.app/api/posts/${post._id}/activity`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to like post. Please try again later.");
+      }
+
+      const responseData = await response.json();
+      setLikes(responseData.likes)
+      console.log("Post Liked successfully!", responseData);
+      setComment("")
+    } catch (error) {
+      console.error("Error liking post:", error.message);
     }
   };
 
@@ -220,7 +255,7 @@ const SinglePost = ({ post, id }) => {
             </Text> */}
           </View>
         )}
-        {post.comments > 0 && (
+        {comments > 0 && (
           <View
             style={{
               display: "flex",
@@ -249,19 +284,18 @@ const SinglePost = ({ post, id }) => {
             width: "30%",
             gap: 8,
             backgroundColor: "#2DBAA0",
-
             padding: 10,
             borderRadius: 12,
           }}
-          onPress={() => sethasLoggedInUserLike(!hasLoggedInUserLike)}
+          onPress={likePost}
         >
-          {/* <AntDesign
-            name={hasLoggedInUserLike ? "like1" : "like2"}
+          <AntDesign
+            name={liked ? "like1" : "like2"}
             size={18}
             color="white"
-          /> */}
+          />
 
-          <Text style={{ color: "white" }}>Like</Text>
+          {!liked && <Text style={{ color: "white" }}>Like</Text>}
         </TouchableOpacity>
         <TouchableOpacity
           style={{
@@ -369,7 +403,7 @@ const SinglePost = ({ post, id }) => {
             }}
             onPress={() => {
               setModalVisible(false);
-              setShowFullComment(new Array(post.comments.length).fill(false));
+              setShowFullComment(new Array(comments.length).fill(false));
             }}
           >
             <Entypo name="circle-with-cross" size={24} color="black" />
@@ -384,7 +418,7 @@ const SinglePost = ({ post, id }) => {
             marginTop: 20,
           }}
         >
-          {post.comments.map((comment, id) => (
+          {comments.map((comment, id) => (
             <View
               key={id}
               style={{
