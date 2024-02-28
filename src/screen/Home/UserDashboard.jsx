@@ -20,7 +20,13 @@ import { PieChart } from "react-native-gifted-charts";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { Ionicons } from "@expo/vector-icons";
+import {
+  Ionicons,
+  FontAwesome,
+  Fontisto,
+  AntDesign,
+  Entypo,
+} from "@expo/vector-icons";
 
 import { EmissionData } from "../../dummyEmissionData";
 import { GetAllMyEmissions } from "../../axios/NetworkCalls";
@@ -32,8 +38,9 @@ const UserDashboard = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [CarbonData, setCarbonData] = useState([]);
   const [CarbonDataToBeSHown, setCarbonDataToBeSHown] = useState([]);
-  const [CarbonDataToBeSHownInFormat, setCarbonDataToBeSHownInFormat] =
-    useState([]);
+  const [ModalVisibleForGoal, setModalVisibleForGoal] = useState(false);
+  const [modalGoalId, setModalGoalId] = useState(null);
+  const { width } = Dimensions.get("screen");
 
   const fetchEmissionData = async () => {
     try {
@@ -78,32 +85,66 @@ const UserDashboard = ({ navigation }) => {
   }, [CarbonData, selectedOpt]);
 
   const handleCompleteGoal = (id) => {
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const today = new Date();
+    const formattedDate = `${today.getDate()}-${
+      months[today.getMonth()]
+    }-${today.getFullYear()}`;
+
     setGoals((prevGoals) =>
       prevGoals.map((goal) =>
-        goal.id === id ? { ...goal, status: "Complete" } : goal
+        goal.id === id
+          ? { ...goal, status: "Complete", completedOn: formattedDate }
+          : goal
       )
     );
   };
+
   const [goals, setGoals] = useState([
     {
       id: 1,
       goal: "Walk about 3 km on feet instead of using bike",
       status: "Incomplete",
+      createdOn: "20-Feb-2024",
+      goalDate: "1-Mar-2024",
+      completedOn: "",
     },
     {
       id: 2,
       goal: "Reduce electricity consumption by  turning off electronics when not in use",
-      status: "Complete",
+      status: "Completed",
+      createdOn: "20-Feb-2024",
+      goalDate: "1-Mar-2024",
+      completedOn: "27-Feb-2024",
     },
     {
       id: 3,
       goal: "Incorporate more plant-based meals into daily diet ",
       status: "Incomplete",
+      createdOn: "20-Feb-2024",
+      goalDate: "1-Mar-2024",
+      completedOn: "",
     },
     {
       id: 4,
       goal: "Opt for public transportation, carpooling, or biking for commuting to work or school instead of driving alone",
-      status: "Complete",
+      status: "Completed",
+      createdOn: "20-Feb-2024",
+      goalDate: "1-Mar-2024",
+      completedOn: "23-Feb-2024",
     },
   ]);
   const getColor = (val) => {
@@ -157,7 +198,6 @@ const UserDashboard = ({ navigation }) => {
   };
   const screenWidth = Dimensions.get("window").width;
 
-  const { width } = Dimensions.get("screen");
   const pieData = [
     {
       value: 60,
@@ -186,6 +226,9 @@ const UserDashboard = ({ navigation }) => {
       style={styles.mainContainer}
       contentContainerStyle={{ paddingBottom: 20 }}
     >
+      <View
+        style={[styles.overlay, modalGoalId !== null && styles.overlayVisible]}
+      ></View>
       <View style={styles.header}>
         <View
           style={{
@@ -276,7 +319,11 @@ const UserDashboard = ({ navigation }) => {
           loading ? (
             <Text>loading....</Text>
           ) : CarbonDataToBeSHown.length == 0 ? (
-            <Text>No data available</Text>
+            <Text
+              style={{ textAlign: "center", fontSize: 14, marginVertical: 10 }}
+            >
+              No data available for {selectedOpt}
+            </Text>
           ) : (
             <BarChart
               barWidth={22}
@@ -391,6 +438,72 @@ const UserDashboard = ({ navigation }) => {
                 alignItems: "center",
               }}
             >
+              {modalGoalId === goal.id && (
+                <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={modalGoalId === goal.id}
+                >
+                  <View style={styles.goalModal}>
+                    <TouchableOpacity
+                      onPress={() => setModalGoalId(null)}
+                      style={{ alignSelf: "flex-end", marginRight: 10 }}
+                    >
+                      <Entypo
+                        name="circle-with-cross"
+                        size={20}
+                        color="black"
+                      />
+                    </TouchableOpacity>
+                    <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                      Goal: {goal.id}
+                    </Text>
+                    <Text
+                      style={{
+                        width: "90%",
+                        textAlign: "center",
+                        fontSize: 16,
+                        fontWeight: "600",
+                      }}
+                    >
+                      {goal.goal}
+                    </Text>
+                    <Text style={{ fontWeight: "bold" }}>
+                      Created On:
+                      <Text style={{ fontWeight: "normal" }}>
+                        {goal.createdOn}
+                      </Text>
+                    </Text>
+                    <Text style={{ fontWeight: "bold" }}>
+                      Status:
+                      <Text style={{ fontWeight: "normal" }}>
+                        {goal.status}{" "}
+                        {goal.status !== "Incomplete" ? (
+                          <FontAwesome
+                            name="check-circle"
+                            size={14}
+                            color="green"
+                          />
+                        ) : (
+                          <Entypo
+                            name="circle-with-cross"
+                            size={14}
+                            color="red"
+                          />
+                        )}
+                      </Text>
+                    </Text>
+                    {goal.status != "Incomplete" && (
+                      <Text style={{ fontWeight: "bold" }}>
+                        Completed On:
+                        <Text style={{ fontWeight: "normal" }}>
+                          {goal.completedOn}
+                        </Text>
+                      </Text>
+                    )}
+                  </View>
+                </Modal>
+              )}
               <View
                 style={{
                   width: 12,
@@ -411,7 +524,7 @@ const UserDashboard = ({ navigation }) => {
               >
                 {goal.goal}
               </Text>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={{
                   width: "30%",
                   paddingVertical: 10,
@@ -434,7 +547,17 @@ const UserDashboard = ({ navigation }) => {
                 >
                   {goal.status == "Incomplete" ? "Complete Now" : "Completed"}
                 </Text>
+              </TouchableOpacity> */}
+              <TouchableOpacity onPress={() => setModalGoalId(goal.id)}>
+                <AntDesign name="upcircleo" size={22} color="black" />
               </TouchableOpacity>
+              {goal.status !== "Incomplete" ? (
+                <FontAwesome name="check-circle" size={24} color="green" />
+              ) : (
+                <TouchableOpacity onPress={() => handleCompleteGoal(goal.id)}>
+                  <Fontisto name="checkbox-passive" size={24} color="black" />
+                </TouchableOpacity>
+              )}
             </View>
           ))}
         </View>
@@ -447,7 +570,7 @@ const styles = StyleSheet.create({
     flex: 1,
     // paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : "0px",
     // backgroundColor: "white",
-    // position: "relative",
+    position: "relative",
     // paddingBottom: 200,
   },
   header: {
@@ -488,6 +611,29 @@ const styles = StyleSheet.create({
   },
   selectedOptionText: {
     color: "white",
+  },
+  goalModal: {
+    width: "96%",
+    height: "auto",
+    backgroundColor: "white",
+    marginHorizontal: "2%",
+    display: "flex",
+    marginTop: 200,
+    alignItems: "center",
+    gap: 10,
+    paddingBottom: 27,
+    paddingTop: 5,
+  },
+  overlay: {
+    position: "absolute",
+    height: "100%",
+    width: "100%",
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
+    display: "none",
+    zIndex: 10,
+  },
+  overlayVisible: {
+    display: "flex",
   },
 });
 export default UserDashboard;
