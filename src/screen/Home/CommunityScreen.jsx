@@ -113,13 +113,14 @@ const CommunityScreen = ({ navigation }) => {
     getData();
   }, []);
 
+  console.log(user)
+
   return (
     <>
       <View style={styles.header}>
         <TouchableOpacity
           style={{
             width: "64%",
-            // backgroundColor: "red",
             display: "flex",
             flexDirection: "row",
             height: 60,
@@ -143,12 +144,13 @@ const CommunityScreen = ({ navigation }) => {
                 marginTop: 2,
                 fontWeight: "bold",
                 color: "black",
+                textTransform: "capitalize"
               }}
             >
-              Abdullah Azizzzzzzz
+              {user.name}
             </Text>
             <Text style={{ fontSize: 11, marginTop: 2, color: "black" }}>
-              @A4Abdullah
+              @{user.name}
             </Text>
           </View>
         </TouchableOpacity>
