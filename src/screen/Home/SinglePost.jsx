@@ -115,7 +115,6 @@ const SinglePost = ({ post, id }) => {
         height: "auto",
         marginVertical: 20,
         width: "96%",
-
         shadowColor: "#000",
         backgroundColor: "white",
         shadowOffset: {
@@ -132,7 +131,6 @@ const SinglePost = ({ post, id }) => {
         <TouchableOpacity
           style={{
             width: "60%",
-            // backgroundColor: "red",
             display: "flex",
             flexDirection: "row",
             height: 60,
@@ -246,6 +244,12 @@ const SinglePost = ({ post, id }) => {
               size={16}
               color="black"
             />
+
+            <Text style={{ marginLeft: 4 }}>
+              {likes.length > 0 &&
+              likes.length + " Likes"
+              }
+            </Text>
 
             {/* <Text style={{ marginLeft: 4 }}>
               {post.likesByUsers.length > 0 &&
@@ -449,7 +453,6 @@ const SinglePost = ({ post, id }) => {
                 style={{
                   width: "90%",
                   paddingHorizontal: 15,
-                  // backgroundColor: "red",
                   height: showFullComment[id] ? "auto" : 40,
                   display: "flex",
                   justifyContent: "flex-start",
