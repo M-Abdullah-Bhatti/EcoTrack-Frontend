@@ -1,131 +1,14 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFocusEffect } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
-import { Fontisto, FontAwesome5 } from "@expo/vector-icons";
-import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { food, meal, transport } from "../../data";
 
 const AddEmissionCategory = ({ navigation, route }) => {
   const { params } = route;
 
   const [subCategories, setSubCategories] = useState([]);
-
-  const transport = [
-    {
-      image: "",
-      text: "Train",
-      vehicle_type: "Train-Local",
-      icon: <Ionicons name="train" size={24} color="white" />,
-    },
-    {
-      image: "",
-      text: "Car",
-      vehicle_type: "Car-Size-Medium",
-      icon: <Ionicons name="ios-car-sharp" size={24} color="white" />,
-    },
-    {
-      image: "",
-      text: "Bus",
-      vehicle_type: "Bus-LocalAverage",
-      icon: <Ionicons name="ios-bus-sharp" size={24} color="white" />,
-    },
-    {
-      image: "",
-      text: "Plane",
-      vehicle_type: "train",
-      icon: <Entypo name="aircraft-take-off" size={24} color="white" />,
-    },
-    {
-      image: "",
-      text: "Boat",
-      vehicle_type: "train",
-      icon: <Fontisto name="sait-boat" size={24} color="white" />,
-    },
-    {
-      image: "",
-      text: "MotorBike",
-      vehicle_type: "Motorbike-Size-Medium",
-      icon: <FontAwesome5 name="motorcycle" size={24} color="white" />,
-    },
-  ];
-  
-  const meal = [
-    {
-      image: "",
-      text: "High  Meat",
-      icon: (
-        <MaterialCommunityIcons name="food-turkey" size={24} color="white" />
-      ),
-    },
-    {
-      image: "",
-      text: "Medium Meat",
-      icon: (
-        <MaterialCommunityIcons name="food-hot-dog" size={24} color="white" />
-      ),
-    },
-    {
-      image: "",
-      text: "Low Meat",
-      icon: (
-        <MaterialCommunityIcons name="food-steak" size={24} color="white" />
-      ),
-    },
-    {
-      image: "",
-      text: "Vegetarian",
-      icon: (
-        <MaterialCommunityIcons
-          name="food-drumstick-off-outline"
-          size={24}
-          color="white"
-        />
-      ),
-    },
-    // {
-    //   image: "",
-    //   text: "Vegan",
-    // },
-  ];
-
-  const food = [
-    {
-      image: "",
-      text: "Red Meat",
-      icon: (
-        <MaterialCommunityIcons name="food-turkey" size={24} color="white" />
-      ),
-    },
-    {
-      image: "",
-      text: "White Meat",
-      icon: <MaterialIcons name="set-meal" size={24} color="white" />,
-    },
-    {
-      image: "",
-      text: "Coffee",
-      icon: <Fontisto name="coffeescript" size={24} color="white" />,
-    },
-    {
-      image: "",
-      text: "Chocolate",
-      icon: (
-        <MaterialCommunityIcons name="spoon-sugar" size={24} color="white" />
-      ),
-    },
-    {
-      image: "",
-      text: "Fish",
-      icon: <FontAwesome5 name="fish" size={24} color="white" />,
-    },
-    {
-      image: "",
-      text: "Lamb",
-      icon: <MaterialIcons name="goat" size={24} color="white" />,
-    },
-  ];
 
   useFocusEffect(
     React.useCallback(() => {
@@ -144,7 +27,6 @@ const AddEmissionCategory = ({ navigation, route }) => {
     }, [])
   );
 
-  const arrow = ">";
   return (
     <SafeAreaView style={{ backgroundColor: "white", height: "100%" }}>
       <View style={{ paddingHorizontal: 20 }}>
@@ -152,13 +34,14 @@ const AddEmissionCategory = ({ navigation, route }) => {
           Select a sub-category
         </Text>
 
-        <View
+        <ScrollView
           style={{
-            marginTop: 20,
+            marginVertical: 20,
             display: "flex",
             flexDirection: "column",
             gap: 15,
           }}
+          showsVerticalScrollIndicator={false}
         >
           {subCategories.length > 0 &&
             subCategories.map((item, key) => (
@@ -171,6 +54,7 @@ const AddEmissionCategory = ({ navigation, route }) => {
                   justifyContent: "space-between",
                   paddingHorizontal: 10,
                   paddingVertical: 15,
+                  marginBottom: 12,
                   borderRadius: 5,
                   borderWidth: 1,
                   borderColor: "green",
@@ -200,7 +84,7 @@ const AddEmissionCategory = ({ navigation, route }) => {
                 </View>
               </TouchableOpacity>
             ))}
-        </View>
+        </ScrollView>
       </View>
     </SafeAreaView>
   );

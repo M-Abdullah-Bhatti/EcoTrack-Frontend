@@ -5,13 +5,13 @@ import {
   Dimensions,
   TouchableOpacity,
   StyleSheet,
-  TextInput,
 } from "react-native";
 import Slider from "@react-native-community/slider";
 import { useFocusEffect } from "@react-navigation/native";
 import { CarbonCalculationAPI } from "../../axios/NetworkCalls";
 import { countries } from "../../data";
 import SelectDropDown from "../../components/Shared/SelectDropDown";
+import axios from "axios";
 
 const { width } = Dimensions.get("screen");
 
@@ -29,6 +29,7 @@ const AddEmission = ({ navigation, route }) => {
   const [isCalculated, setIsCalculated] = useState(false);
   const [electricityCarbon, setElectricityCarbon] = useState(false);
   const [fuelCarbon, setFuelCarbon] = useState(false);
+  const [foodCarbon, setFoodCarbon] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("");
 
   const handleSelection = (selectedItem, index) => {
@@ -69,6 +70,23 @@ const AddEmission = ({ navigation, route }) => {
     setFuelCarbon(fuelCarbon?.data?.co2e_kg);
 
     console.log("Feul Carbon: ", fuelCarbon?.data?.co2e_kg);
+    setIsCalculated(true);
+  };
+
+  const calculateFoodCarbon = async () => {
+    console.group("Quantity: ", foodQuantity)
+    const requestBody = {
+      food: params.subCategory.label,
+      kg: foodQuantity,
+    };
+
+    const response = await axios.post(
+      "https://ecotrack-dev.vercel.app/api/food/", requestBody
+    );
+    
+    setFoodCarbon(response.data.carbonFootprint);
+
+    console.log("Food Carbon: ", response.data.carbonFootprint);
     setIsCalculated(true);
   };
 
@@ -211,14 +229,14 @@ const AddEmission = ({ navigation, route }) => {
 
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Quantity</Text>
-            <Text>{foodQuantity} (g)</Text>
+            <Text>{foodQuantity} (kg)</Text>
           </View>
 
           <View style={styles.sliderContainer}>
             <Slider
               style={styles.slider}
               minimumValue={1}
-              maximumValue={2000}
+              maximumValue={100}
               minimumTrackTintColor="#46A667"
               maximumTrackTintColor="#000000"
               thumbTintColor="#46A667"
@@ -230,9 +248,7 @@ const AddEmission = ({ navigation, route }) => {
             <View style={styles.addButtonContainer}>
               <TouchableOpacity
                 style={styles.addButton}
-                onPress={() => {
-                  setIsCalculated(true);
-                }}
+                onPress={calculateFoodCarbon}
               >
                 <Text style={styles.addButtonText}>Calculate Emission</Text>
               </TouchableOpacity>
@@ -241,7 +257,7 @@ const AddEmission = ({ navigation, route }) => {
             <>
               <View style={{ marginBottom: 30 }}>
                 <Text style={styles.totalText}>Total</Text>
-                <Text style={styles.totalValue}>10.2 kgCO2eq</Text>
+                <Text style={styles.totalValue}>{foodCarbon} kgCO2eq</Text>
               </View>
 
               <View style={styles.addButtonContainer}>
