@@ -141,7 +141,7 @@ export const food = [
   {
     text: "Barley",
     label: "barley",
-    icon: <FontAwesome5 name="barley" size={24} color="white" />,
+    icon: <MaterialCommunityIcons name="barley" size={24} color="white" />,
   },
   {
     text: "Oatmeal",
@@ -181,7 +181,7 @@ export const food = [
   {
     text: "Nuts",
     label: "nuts",
-    icon: <FontAwesome5 name="nut" size={24} color="white" />,
+    icon: <MaterialCommunityIcons name="peanut" size={24} color="white" />,
   },
   {
     text: "Groundnuts",
@@ -211,12 +211,12 @@ export const food = [
   {
     text: "Sunflower Oil",
     label: "sunflowerOil",
-    icon: <MaterialCommunityIcons name="sunflower" size={24} color="white" />,
+    icon: <FontAwesome5 name="oil-can" size={24} color="white" />,
   },
   {
     text: "Rapeseed Oil",
     label: "rapeseedOil",
-    icon: <MaterialCommunityIcons name="canola-oil" size={24} color="white" />,
+    icon: <FontAwesome5 name="oil-can" size={24} color="white" />,
   },
   {
     text: "Olive Oil",
@@ -256,12 +256,12 @@ export const food = [
   {
     text: "Apples",
     label: "apples",
-    icon: <MaterialCommunityIcons name="apple" size={24} color="white" />,
+    icon: <MaterialCommunityIcons name="food-apple-outline" size={24} color="white" />,
   },
   {
     text: "Berries and Grapes",
     label: "berriesAndGrapes",
-    icon: <MaterialCommunityIcons name="grapes" size={24} color="white" />,
+    icon: <MaterialCommunityIcons name="fruit-grapes" size={24} color="white" />,
   },
   {
     text: "Other Fruit",
