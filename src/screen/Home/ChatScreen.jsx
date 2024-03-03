@@ -6,70 +6,107 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import bot from "../../.././assets/bot.png";
 import send from "../../.././assets/send.png";
 import Message from "../../components/Chats/Message";
-
-const data = [
-  {
-    id: 1,
-    content: "Hello, how can I help you? If you need any help then let me know",
-    sender: "bot",
-  },
-  {
-    id: 2,
-    content:
-      "I have a question about your service. Can I ask you a few questions",
-    sender: "user",
-  },
-  {
-    id: 3,
-    content: "Hey are you availabe for the chat?",
-    sender: "user",
-  },
-  {
-    id: 4,
-    content: "Yes please ask the questions please",
-    sender: "bot",
-  },
-  {
-    id: 5,
-    content: "I have cheeeest problem how I am polluting enviroment",
-    sender: "user",
-  },
-  {
-    id: 6,
-    content: "this is a big problem bro!!",
-    sender: "bot",
-  },
-];
+import axios from "axios";
+import ThreeDotLoader from "../../components/ThreeDotLoader";
 
 const ChatScreen = () => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [loader, setLoader] = useState(false);
+
+  const scrollViewRef = useRef();
 
   const sendMessage = () => {
     console.log("send message: ", message);
+    if (!message) {
+      return;
+    }
+    if (message.trim()) {
+      // Ensure we don't send empty messages
+      const newMessage = [...messages, { question: message, answer: "" }]; // Assume an empty answer initially
+      setMessages(newMessage);
+      setMessage("");
+
+      setLoader(true); // Set loader to true before the request
+      // hit the api here
+      const body = JSON.stringify({
+        user_id: 23324345435,
+        question: message,
+      });
+
+      console.log("body: ", body);
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      axios
+        .post("http://ecotrack.pythonanywhere.com/app/bot/", body, config)
+        .then((res) => {
+          const updatedMessages = [...newMessage];
+          updatedMessages[updatedMessages.length - 1].answer =
+            res?.data?.answer;
+          setMessages(updatedMessages);
+          console.log("res: ", res?.data?.answer);
+        })
+        .catch((err) => console.log("err: ", err))
+        .finally(() => setLoader(false)); // Use finally to set loader to false after the request completes
+    }
   };
 
   useEffect(() => {
-    setMessages(data);
-  }, [data]);
+    setLoading(true);
+    const body = JSON.stringify({
+      user_id: 23324345435,
+    });
+
+    console.log("body: ", body);
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const response = axios
+      .post(
+        "http://ecotrack.pythonanywhere.com/app/chat-history/",
+        body,
+        config
+      )
+      .then((res) => console.log("res: ", setMessages(res?.data?.chat_history)))
+      .catch((err) => console.log("err: ", err));
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    scrollViewRef.current?.scrollToEnd({ animated: true });
+  }, [messages]);
 
   return (
     <>
       <View style={styles.container}>
-        <View style={styles.picContainer}>
-          <Image style={styles.botPicture} source={bot} alt="bot" />
-        </View>
-
         {/* Render all Messages */}
-        <ScrollView style={styles.messageContainer}>
-          {messages.map((item, index) => (
-            <Message item={item} key={index} />
-          ))}
+        <ScrollView style={styles.messageContainer} ref={scrollViewRef}>
+          <View style={styles.picContainer}>
+            <Image style={styles.botPicture} source={bot} alt="bot" />
+          </View>
+          {loading ? (
+            <ActivityIndicator size="large" color="#00ff00" />
+          ) : (
+            // <Text>Loading</Text>
+            <>
+              {messages.map((item, index) => (
+                <Message item={item} key={index} />
+              ))}
+              {loader && <ThreeDotLoader />}
+            </>
+          )}
         </ScrollView>
 
         {/* Send Message Container */}
@@ -80,7 +117,11 @@ const ChatScreen = () => {
             onChangeText={setMessage}
             placeholder="Type your message here..."
           />
-          <TouchableOpacity onPress={sendMessage} style={styles.sendButton}>
+          <TouchableOpacity
+            onPress={sendMessage}
+            disabled={loader ? true : false}
+            style={styles.sendButton}
+          >
             <Image source={send} style={styles.sendIcon} />
           </TouchableOpacity>
         </View>
@@ -137,3 +178,23 @@ const styles = StyleSheet.create({
 });
 
 export default ChatScreen;
+
+// const body = JSON.stringify({
+//   user_id: 23324345435,
+// });
+
+// console.log("body: ", body);
+// const config = {
+//   headers: {
+//     "Content-Type": "application/json",
+//   },
+// };
+// const response = axios
+//   .post(
+//     "http://ecotrack.pythonanywhere.com/app/chat-history/",
+//     body,
+//     config
+//   )
+//   .then((res) => console.log("res: ", res?.data?.chat_history))
+//   .catch((err) => console.log("err: ", err));
+// console.log("response: ", response);

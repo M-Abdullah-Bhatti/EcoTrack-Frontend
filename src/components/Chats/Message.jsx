@@ -2,25 +2,45 @@ import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 
 const Message = ({ item, key }) => {
-  console.log("item: ", item);
+  // console.log("item: ", item);
   return (
-    <View
-      style={[
-        // styles.messageBubble,
-        item.sender === "bot" ? styles.botMessage : styles.userMessage,
-      ]}
-    >
-      <Text
+    <>
+      {/* question */}
+      <View
         style={[
-          styles.messageText,
-          item.sender === "bot"
-            ? styles.botMessageText
-            : styles.userMessageText,
+          // styles.messageBubble,
+          item.question ? styles.userMessage : styles.botMessage,
         ]}
       >
-        {item?.content}
-      </Text>
-    </View>
+        <Text
+          style={[
+            styles.messageText,
+            item.question ? styles.userMessageText : styles.botMessageText,
+          ]}
+        >
+          {item?.question}
+        </Text>
+      </View>
+
+      {/* answer */}
+      {item?.answer && (
+        <View
+          style={[
+            // styles.messageBubble,
+            item.answer ? styles.botMessage : styles.userMessage,
+          ]}
+        >
+          <Text
+            style={[
+              styles.messageText,
+              item.answer ? styles.botMessageText : styles.userMessageText,
+            ]}
+          >
+            {item?.answer}
+          </Text>
+        </View>
+      )}
+    </>
   );
 };
 const styles = StyleSheet.create({
