@@ -11,6 +11,7 @@ import {
   TextInput,
   Modal,
   Pressable,
+  ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Dimensions } from "react-native";
@@ -36,7 +37,12 @@ const UserDashboard = ({ navigation }) => {
   const options = ["Electricity", "Food", "Transport"];
   const { user } = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
+  const [completedGoals, setcompletedGoals] = useState(0);
+  const [IncompletedGoals, setIncompletedGoals] = useState(0);
+
+  const [loadingForGoals, setLoadingForGoals] = useState(false);
   const [CarbonData, setCarbonData] = useState([]);
+  const [goalsData, setgoalsData] = useState([]);
   const [CarbonDataToBeSHown, setCarbonDataToBeSHown] = useState([]);
   const [ModalVisibleForGoal, setModalVisibleForGoal] = useState(false);
   const [modalGoalId, setModalGoalId] = useState(null);
@@ -56,7 +62,7 @@ const UserDashboard = ({ navigation }) => {
 
       if (emissionData.data) {
         setCarbonData(emissionData.data);
-        console.log("Data from api is", CarbonData);
+        // console.log("Data from api is", CarbonData);
         setCarbonDataToBeSHown(
           transformData(
             CarbonData.filter(
@@ -70,9 +76,40 @@ const UserDashboard = ({ navigation }) => {
       alert("An error occurred. Please try again.");
     }
   };
+  const fetchGoalsOfUserData = async () => {
+    try {
+      setLoadingForGoals(true);
+      const goalsDataFromApi = await axios.get(
+        "https://ecotrack-dev.vercel.app/api/goal",
+        {
+          headers: {
+            authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
 
+      if (goalsDataFromApi.data) {
+        setgoalsData(goalsDataFromApi.data);
+        // console.log("Data from goals api is", goalsData);
+        // setCarbonDataToBeSHown(
+        //   transformData(
+        //     CarbonData.filter(
+        //       (item) => item.category.toLowerCase() == selectedOpt.toLowerCase()
+        //     )
+        //   )
+        // );
+      }
+      setLoadingForGoals(false);
+    } catch (error) {
+      alert("An error occurred. Please try again.");
+    }
+  };
+
+  const totalGoals = completedGoals + IncompletedGoals;
+  const completedPercentage = (completedGoals / totalGoals) * 100;
   useEffect(() => {
     fetchEmissionData();
+    fetchGoalsOfUserData();
   }, []);
   useEffect(() => {
     setCarbonDataToBeSHown(
@@ -82,71 +119,43 @@ const UserDashboard = ({ navigation }) => {
         )
       )
     );
-  }, [CarbonData, selectedOpt]);
+    let completedCount = 0;
+    let incompletedCount = 0;
+    goalsData.forEach((goal) => {
+      if (goal.goalStatus === "Incomplete") {
+        incompletedCount++;
+      } else {
+        completedCount++;
+      }
+    });
+    setIncompletedGoals(incompletedCount);
+    setcompletedGoals(completedCount);
+    console.log("now goals are", goalsData.length);
+  }, [CarbonData, selectedOpt, goalsData]);
 
-  const handleCompleteGoal = (id) => {
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    const today = new Date();
-    const formattedDate = `${today.getDate()}-${
-      months[today.getMonth()]
-    }-${today.getFullYear()}`;
-
-    setGoals((prevGoals) =>
-      prevGoals.map((goal) =>
-        goal.id === id
-          ? { ...goal, status: "Complete", completedOn: formattedDate }
-          : goal
-      )
-    );
+  const handleCompleteGoal = async (id) => {
+    try {
+      const { data } = await axios.put(
+        `https://ecotrack-dev.vercel.app/api/goal/${id}`,
+        {
+          goalStatus: "complete",
+          dateWhenGoalCompleted: new Date().toISOString(),
+        },
+        {
+          headers: {
+            authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      console.log("now data is", data);
+      // Fetch goals again after completion
+      fetchGoalsOfUserData();
+    } catch (error) {
+      console.error("Error completing goal:", error);
+      // Handle error appropriately, such as displaying an error message
+    }
   };
 
-  const [goals, setGoals] = useState([
-    {
-      id: 1,
-      goal: "Walk about 3 km on feet instead of using bike",
-      status: "Incomplete",
-      createdOn: "20-Feb-2024",
-      goalDate: "1-Mar-2024",
-      completedOn: "",
-    },
-    {
-      id: 2,
-      goal: "Reduce electricity consumption by  turning off electronics when not in use",
-      status: "Completed",
-      createdOn: "20-Feb-2024",
-      goalDate: "1-Mar-2024",
-      completedOn: "27-Feb-2024",
-    },
-    {
-      id: 3,
-      goal: "Incorporate more plant-based meals into daily diet ",
-      status: "Incomplete",
-      createdOn: "20-Feb-2024",
-      goalDate: "1-Mar-2024",
-      completedOn: "",
-    },
-    {
-      id: 4,
-      goal: "Opt for public transportation, carpooling, or biking for commuting to work or school instead of driving alone",
-      status: "Completed",
-      createdOn: "20-Feb-2024",
-      goalDate: "1-Mar-2024",
-      completedOn: "23-Feb-2024",
-    },
-  ]);
   const getColor = (val) => {
     if (val <= 200) {
       return "#40916c";
@@ -178,7 +187,7 @@ const UserDashboard = ({ navigation }) => {
 
     // Convert object back to array
     const transformedArray = Object.values(transformedData);
-    console.log("now array is", transformedArray);
+    // console.log("now array is", transformedArray);
 
     return transformedArray;
   };
@@ -200,12 +209,16 @@ const UserDashboard = ({ navigation }) => {
 
   const pieData = [
     {
-      value: 60,
+      value: completedGoals,
       color: "#009FFF",
       gradientCenterColor: "#006DFF",
       // focused: true,
     },
-    { value: 40, color: "#93FCF8", gradientCenterColor: "#3BE9DE" },
+    {
+      value: IncompletedGoals,
+      color: "#93FCF8",
+      gradientCenterColor: "#3BE9DE",
+    },
   ];
 
   const [selectedOpt, setSelectedOpt] = useState("Electricity");
@@ -317,7 +330,7 @@ const UserDashboard = ({ navigation }) => {
         </View>
         {
           loading ? (
-            <Text>loading....</Text>
+            <ActivityIndicator size="large" color="#00ff00" />
           ) : CarbonDataToBeSHown.length == 0 ? (
             <Text
               style={{ textAlign: "center", fontSize: 14, marginVertical: 10 }}
@@ -352,179 +365,202 @@ const UserDashboard = ({ navigation }) => {
           alignItems: "center",
         }}
       >
-        <Text style={{ textAlign: "center", fontSize: 16, marginBottom: 20 }}>
+        <Text style={{ textAlign: "center", fontSize: 20, marginBottom: 20 }}>
           Track Your Goals
         </Text>
-
-        <PieChart
-          data={pieData}
-          donut
-          showGradient
-          sectionAutoFocus
-          radius={90}
-          innerRadius={60}
-          innerCircleColor={"#232B5D"}
-          centerLabelComponent={() => {
-            return (
-              <View style={{ justifyContent: "center", alignItems: "center" }}>
-                <Text
-                  style={{ fontSize: 18, color: "white", fontWeight: "bold" }}
-                >
-                  40% Goals
-                </Text>
-                <Text style={{ fontSize: 14, color: "white" }}>Achieved</Text>
-              </View>
-            );
-          }}
-        />
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            marginVertical: 10,
-          }}
-        >
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              width: 150,
-              marginRight: 20,
-            }}
+        {loadingForGoals ? (
+          <Text
+            style={{ textAlign: "center", marginVertical: 10, fontSize: 10 }}
           >
-            {renderDot("#006DFF")}
-            <Text style={{ color: "black" }}>Not Completed: 60</Text>
-          </View>
-        </View>
-        <View style={{ flexDirection: "row", justifyContent: "center" }}>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              width: 150,
-              marginRight: 20,
-            }}
-          >
-            {renderDot("#3BE9DE")}
-            <Text style={{ color: "black" }}>Completed: 40</Text>
-          </View>
-        </View>
-        <View
-          style={{
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            height: "auto",
-            justifyContent: "space-around",
-            gap: 20,
-            marginTop: 20,
-          }}
-        >
-          {goals.map((goal, i) => (
-            <View
-              key={goal.id}
-              style={{
-                width: "94%",
-                height: 79,
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.25,
-                shadowRadius: 3.84,
-                elevation: 5, // This is required for shadow to appear on iOS
-                backgroundColor: "white",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-around",
-                alignItems: "center",
-              }}
-            >
-              {modalGoalId === goal.id && (
-                <Modal
-                  animationType="slide"
-                  transparent={true}
-                  visible={modalGoalId === goal.id}
-                >
-                  <View style={styles.goalModal}>
-                    <TouchableOpacity
-                      onPress={() => setModalGoalId(null)}
-                      style={{ alignSelf: "flex-end", marginRight: 10 }}
-                    >
-                      <Entypo
-                        name="circle-with-cross"
-                        size={20}
-                        color="black"
-                      />
-                    </TouchableOpacity>
-                    <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                      Goal: {goal.id}
-                    </Text>
+            <ActivityIndicator size="large" color="#00ff00" />
+          </Text>
+        ) : goalsData.length == 0 ? (
+          <Text>No data available for your goals</Text>
+        ) : (
+          <>
+            <PieChart
+              data={pieData}
+              donut
+              showGradient
+              sectionAutoFocus
+              radius={90}
+              innerRadius={60}
+              innerCircleColor={"#232B5D"}
+              centerLabelComponent={() => {
+                return (
+                  <View
+                    style={{ justifyContent: "center", alignItems: "center" }}
+                  >
                     <Text
                       style={{
-                        width: "90%",
-                        textAlign: "center",
-                        fontSize: 16,
-                        fontWeight: "600",
+                        fontSize: 18,
+                        color: "white",
+                        fontWeight: "bold",
                       }}
                     >
-                      {goal.goal}
+                      {completedPercentage.toFixed(0)}% Goals
                     </Text>
-                    <Text style={{ fontWeight: "bold" }}>
-                      Created On:
-                      <Text style={{ fontWeight: "normal" }}>
-                        {goal.createdOn}
-                      </Text>
+                    <Text style={{ fontSize: 14, color: "white" }}>
+                      Achieved
                     </Text>
-                    <Text style={{ fontWeight: "bold" }}>
-                      Status:
-                      <Text style={{ fontWeight: "normal" }}>
-                        {goal.status}{" "}
-                        {goal.status !== "Incomplete" ? (
-                          <FontAwesome
-                            name="check-circle"
-                            size={14}
-                            color="green"
-                          />
-                        ) : (
-                          <Entypo
-                            name="circle-with-cross"
-                            size={14}
-                            color="red"
-                          />
-                        )}
-                      </Text>
-                    </Text>
-                    {goal.status != "Incomplete" && (
-                      <Text style={{ fontWeight: "bold" }}>
-                        Completed On:
-                        <Text style={{ fontWeight: "normal" }}>
-                          {goal.completedOn}
-                        </Text>
-                      </Text>
-                    )}
                   </View>
-                </Modal>
-              )}
+                );
+              }}
+            />
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                marginVertical: 10,
+              }}
+            >
               <View
                 style={{
-                  width: 12,
-                  height: 12,
-                  borderRadius: 6,
-                  backgroundColor:
-                    goal.status == "Incomplete" ? "#fc5a42" : "#52b36c",
-                }}
-              ></View>
-              <Text
-                style={{
-                  fontSize: 12,
-                  width: "60%",
-                  height: "auto",
-                  textDecorationLine:
-                    goal.status == "Complete" ? "line-through" : "none",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  width: 150,
+                  marginRight: 20,
                 }}
               >
-                {goal.goal}
-              </Text>
-              {/* <TouchableOpacity
+                {renderDot("#006DFF")}
+                <Text style={{ color: "black" }}>
+                  Not Completed: {IncompletedGoals}
+                </Text>
+              </View>
+            </View>
+            <View style={{ flexDirection: "row", justifyContent: "center" }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  width: 150,
+                  marginRight: 20,
+                }}
+              >
+                {renderDot("#3BE9DE")}
+                <Text style={{ color: "black" }}>
+                  Completed: {completedGoals}
+                </Text>
+              </View>
+            </View>
+            <View
+              style={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                height: "auto",
+                justifyContent: "space-around",
+                gap: 20,
+                marginTop: 20,
+              }}
+            >
+              {goalsData.map((goal, i) => (
+                <View
+                  key={goal._id}
+                  style={{
+                    width: "94%",
+                    height: 79,
+                    shadowColor: "#000",
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.25,
+                    shadowRadius: 3.84,
+                    elevation: 5, // This is required for shadow to appear on iOS
+                    backgroundColor: "white",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                  }}
+                >
+                  {modalGoalId === goal._id && (
+                    <Modal
+                      animationType="slide"
+                      transparent={true}
+                      visible={modalGoalId === goal._id}
+                    >
+                      <View style={styles.goalModal}>
+                        <TouchableOpacity
+                          onPress={() => setModalGoalId(null)}
+                          style={{ alignSelf: "flex-end", marginRight: 10 }}
+                        >
+                          <Entypo
+                            name="circle-with-cross"
+                            size={20}
+                            color="black"
+                          />
+                        </TouchableOpacity>
+                        <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+                          Goal number: {i + 1}
+                        </Text>
+                        <Text
+                          style={{
+                            width: "90%",
+                            textAlign: "center",
+                            fontSize: 14,
+                            fontWeight: "600",
+                          }}
+                        >
+                          {goal.goalText}
+                        </Text>
+                        <Text style={{ fontWeight: "bold" }}>
+                          Created On:
+                          <Text style={{ fontWeight: "normal" }}>
+                            {goal.createdAt.substr(0, 10)}
+                          </Text>
+                        </Text>
+                        <Text style={{ fontWeight: "bold" }}>
+                          Status:
+                          <Text style={{ fontWeight: "normal" }}>
+                            {goal.goalStatus}{" "}
+                            {goal.goalStatus !== "Incomplete" ? (
+                              <FontAwesome
+                                name="check-circle"
+                                size={14}
+                                color="green"
+                              />
+                            ) : (
+                              <Entypo
+                                name="circle-with-cross"
+                                size={14}
+                                color="red"
+                              />
+                            )}
+                          </Text>
+                        </Text>
+                        {goal.goalStatus != "Incomplete" && (
+                          <Text style={{ fontWeight: "bold" }}>
+                            Completed On:
+                            <Text style={{ fontWeight: "normal" }}>
+                              {goal.dateWhenGoalCompleted.substr(0, 10)}
+                            </Text>
+                          </Text>
+                        )}
+                      </View>
+                    </Modal>
+                  )}
+                  <View
+                    style={{
+                      width: 12,
+                      height: 12,
+                      borderRadius: 6,
+                      backgroundColor:
+                        goal.goalStatus == "Incomplete" ? "#fc5a42" : "#52b36c",
+                    }}
+                  ></View>
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      width: "60%",
+                      height: "auto",
+                      textDecorationLine:
+                        goal.dateWhenGoalCompleted == "complete"
+                          ? "line-through"
+                          : "none",
+                    }}
+                  >
+                    {goal.goalText}
+                  </Text>
+                  {/* <TouchableOpacity
                 style={{
                   width: "30%",
                   paddingVertical: 10,
@@ -548,19 +584,27 @@ const UserDashboard = ({ navigation }) => {
                   {goal.status == "Incomplete" ? "Complete Now" : "Completed"}
                 </Text>
               </TouchableOpacity> */}
-              <TouchableOpacity onPress={() => setModalGoalId(goal.id)}>
-                <AntDesign name="upcircleo" size={22} color="black" />
-              </TouchableOpacity>
-              {goal.status !== "Incomplete" ? (
-                <FontAwesome name="check-circle" size={24} color="green" />
-              ) : (
-                <TouchableOpacity onPress={() => handleCompleteGoal(goal.id)}>
-                  <Fontisto name="checkbox-passive" size={24} color="black" />
-                </TouchableOpacity>
-              )}
+                  <TouchableOpacity onPress={() => setModalGoalId(goal._id)}>
+                    <AntDesign name="upcircleo" size={22} color="black" />
+                  </TouchableOpacity>
+                  {goal.goalStatus !== "Incomplete" ? (
+                    <FontAwesome name="check-circle" size={24} color="green" />
+                  ) : (
+                    <TouchableOpacity
+                      onPress={() => handleCompleteGoal(goal._id)}
+                    >
+                      <Fontisto
+                        name="checkbox-passive"
+                        size={22}
+                        color="black"
+                      />
+                    </TouchableOpacity>
+                  )}
+                </View>
+              ))}
             </View>
-          ))}
-        </View>
+          </>
+        )}
       </View>
     </ScrollView>
   );
