@@ -46,6 +46,7 @@ const UserDashboard = ({ navigation }) => {
   const [CarbonDataToBeSHown, setCarbonDataToBeSHown] = useState([]);
   const [ModalVisibleForGoal, setModalVisibleForGoal] = useState(false);
   const [modalGoalId, setModalGoalId] = useState(null);
+  const [loadingGoalId, setLoadingGoalId] = useState(null);
   const { width } = Dimensions.get("screen");
 
   const fetchEmissionData = async () => {
@@ -104,6 +105,25 @@ const UserDashboard = ({ navigation }) => {
       alert("An error occurred. Please try again.");
     }
   };
+  const fetchGoalById = async (id) => {
+    try {
+      const { data } = await axios.get(
+        `https://ecotrack-dev.vercel.app/api/goal/${id}`,
+        {
+          headers: {
+            authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+      // Update the goals data with the updated goal
+      setgoalsData((prevGoalsData) =>
+        prevGoalsData.map((goal) => (goal._id === id ? data : goal))
+      );
+    } catch (error) {
+      console.error("Error fetching goal:", error);
+      // Handle error appropriately, such as displaying an error message
+    }
+  };
 
   const totalGoals = completedGoals + IncompletedGoals;
   const completedPercentage = (completedGoals / totalGoals) * 100;
@@ -135,6 +155,7 @@ const UserDashboard = ({ navigation }) => {
 
   const handleCompleteGoal = async (id) => {
     try {
+      setLoadingGoalId(id);
       const { data } = await axios.put(
         `https://ecotrack-dev.vercel.app/api/goal/${id}`,
         {
@@ -149,10 +170,12 @@ const UserDashboard = ({ navigation }) => {
       );
       console.log("now data is", data);
       // Fetch goals again after completion
-      fetchGoalsOfUserData();
+      fetchGoalById(id);
     } catch (error) {
       console.error("Error completing goal:", error);
       // Handle error appropriately, such as displaying an error message
+    } finally {
+      setLoadingGoalId(null); // Reset loading state
     }
   };
 
@@ -553,9 +576,7 @@ const UserDashboard = ({ navigation }) => {
                       width: "60%",
                       height: "auto",
                       textDecorationLine:
-                        goal.dateWhenGoalCompleted == "complete"
-                          ? "line-through"
-                          : "none",
+                        goal.goalStatus == "complete" ? "line-through" : "none",
                     }}
                   >
                     {goal.goalText}
@@ -589,6 +610,8 @@ const UserDashboard = ({ navigation }) => {
                   </TouchableOpacity>
                   {goal.goalStatus !== "Incomplete" ? (
                     <FontAwesome name="check-circle" size={24} color="green" />
+                  ) : loadingGoalId == goal._id ? (
+                    <ActivityIndicator size="small" color="#00ff00" />
                   ) : (
                     <TouchableOpacity
                       onPress={() => handleCompleteGoal(goal._id)}
