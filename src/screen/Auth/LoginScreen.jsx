@@ -13,9 +13,10 @@ import {
   Animated,
   Easing,
   Dimensions,
+  Keyboard,
   KeyboardAvoidingView,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native";
 import { FontAwesome, AntDesign, Feather } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
@@ -53,6 +54,7 @@ const Login = ({ navigation }) => {
   const dispatch = useDispatch();
   const AnimatedRect = Animated.createAnimatedComponent(Rect);
   const animatedVal = React.useRef(new Animated.Value(0)).current;
+  const [keyboardPadding, setKeyboardPadding] = useState(0);
   const validateForm = () => {
     let errors = {};
     if (!email) errors.email = "Email is required";
@@ -61,6 +63,18 @@ const Login = ({ navigation }) => {
     setErrors(errors);
 
     return Object.keys(errors).length === 0;
+  };
+  const handleFocus = () => {
+    Keyboard.addListener("keyboardDidShow", (e) => {
+      console.log("height is", e.endCoordinates.height);
+      setKeyboardPadding(e.endCoordinates.height);
+    });
+  };
+
+  const handleBlur = () => {
+    Keyboard.addListener("keyboardDidHide", () => {
+      setKeyboardPadding(0);
+    });
   };
 
   const chartWidth = width;
@@ -123,11 +137,23 @@ const Login = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
-      style={{ flex: 1 }}
+    <View
+      // keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
+      // behavior={Platform.OS === "ios" ? "padding" : undefined}
+      style={{
+        flex: 1,
+        // paddingBottom: -keyboardPadding,
+
+        // backgroundColor: "red",
+      }}
     >
-      <ScrollView style={styles.container}>
+      <ScrollView
+        style={[
+          styles.container,
+          { marginTop: keyboardPadding > 0 ? -keyboardPadding + 20 : 0 },
+        ]}
+        // contentContainerStyle={{ paddingBottom: keyboardPadding }}
+      >
         <View style={styles.headerDiv}>
           <Svg width={chartWidth} height={chartHeight} style={styles.svg}>
             <Path
@@ -217,6 +243,8 @@ const Login = ({ navigation }) => {
               value={email}
               placeholder="Enter Your Email..."
               placeholderTextColor="#04753E"
+              onFocus={handleFocus}
+              onBlur={handleBlur}
             />
           </View>
           {errors.password && (
@@ -252,6 +280,8 @@ const Login = ({ navigation }) => {
               style={styles.input}
               onChangeText={(value) => setPassword(value)}
               value={password}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
               placeholder="Enter Your Password..."
               placeholderTextColor="#04753E"
               secureTextEntry={!passwordVisible ? true : false}
@@ -330,7 +360,7 @@ const Login = ({ navigation }) => {
           </Text>
         </View>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 const styles = StyleSheet.create({
