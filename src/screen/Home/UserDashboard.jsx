@@ -39,6 +39,17 @@ const UserDashboard = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [completedGoals, setcompletedGoals] = useState(0);
   const [IncompletedGoals, setIncompletedGoals] = useState(0);
+  const boxShadowStyle = Platform.select({
+    ios: {
+      shadowColor: "black",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.5,
+      shadowRadius: 4,
+    },
+    android: {
+      elevation: 4,
+    },
+  });
 
   const [loadingForGoals, setLoadingForGoals] = useState(false);
   const [CarbonData, setCarbonData] = useState([]);
@@ -47,6 +58,7 @@ const UserDashboard = ({ navigation }) => {
   const [ModalVisibleForGoal, setModalVisibleForGoal] = useState(false);
   const [modalGoalId, setModalGoalId] = useState(null);
   const [loadingGoalId, setLoadingGoalId] = useState(null);
+  const [year, setyear] = useState(2023);
   const { width } = Dimensions.get("screen");
 
   const fetchEmissionData = async () => {
@@ -63,7 +75,7 @@ const UserDashboard = ({ navigation }) => {
 
       if (emissionData.data) {
         setCarbonData(emissionData.data);
-        // console.log("Data from api is", CarbonData);
+
         setCarbonDataToBeSHown(
           transformData(
             CarbonData.filter(
@@ -135,10 +147,13 @@ const UserDashboard = ({ navigation }) => {
     setCarbonDataToBeSHown(
       transformData(
         CarbonData.filter(
-          (item) => item.category.toLowerCase() === selectedOpt.toLowerCase()
+          (item) =>
+            item.category.toLowerCase() === selectedOpt.toLowerCase() &&
+            item.year == year
         )
       )
     );
+    console.log("Data from api is", CarbonData);
     let completedCount = 0;
     let incompletedCount = 0;
     goalsData.forEach((goal) => {
@@ -151,7 +166,7 @@ const UserDashboard = ({ navigation }) => {
     setIncompletedGoals(incompletedCount);
     setcompletedGoals(completedCount);
     console.log("now goals are", goalsData.length);
-  }, [CarbonData, selectedOpt, goalsData]);
+  }, [CarbonData, selectedOpt, goalsData, year]);
 
   const handleCompleteGoal = async (id) => {
     try {
@@ -177,6 +192,15 @@ const UserDashboard = ({ navigation }) => {
     } finally {
       setLoadingGoalId(null); // Reset loading state
     }
+  };
+  const handleDecreaseYear = () => {
+    if (year > 2023) {
+      setyear(year - 1);
+    }
+  };
+
+  const handleIncreaseYear = () => {
+    setyear(year + 1);
   };
 
   const getColor = (val) => {
@@ -248,10 +272,13 @@ const UserDashboard = ({ navigation }) => {
 
   const handleSelectedOption = async (opt) => {
     setSelectedOpt(opt);
+    setyear(2023);
     setCarbonDataToBeSHown(
       transformData(
         CarbonData.filter(
-          (item) => item.category.toLowerCase() === opt.toLowerCase()
+          (item) =>
+            item.category.toLowerCase() === opt.toLowerCase() &&
+            item.year == year
         )
       )
     );
@@ -355,24 +382,74 @@ const UserDashboard = ({ navigation }) => {
           loading ? (
             <ActivityIndicator size="large" color="#00ff00" />
           ) : CarbonDataToBeSHown.length == 0 ? (
-            <Text
-              style={{ textAlign: "center", fontSize: 14, marginVertical: 10 }}
-            >
-              No data available for {selectedOpt}
-            </Text>
+            <>
+              <View
+                style={{
+                  width: "100%",
+                  height: 40,
+                  marginVertical: 10,
+                  // backgroundColor: "red",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "row",
+                  gap: 20,
+                }}
+              >
+                <TouchableOpacity onPress={handleDecreaseYear}>
+                  <AntDesign name="leftcircleo" size={24} color="black" />
+                </TouchableOpacity>
+                <Text style={{ fontSize: 16, fontWeight: "700" }}>{year}</Text>
+                <TouchableOpacity onPress={handleIncreaseYear}>
+                  <AntDesign name="rightcircleo" size={24} color="black" />
+                </TouchableOpacity>
+              </View>
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontSize: 14,
+                  marginVertical: 10,
+                }}
+              >
+                No data available for {selectedOpt} and year:{year}
+              </Text>
+            </>
           ) : (
-            <BarChart
-              barWidth={22}
-              noOfSections={3}
-              barBorderRadius={4}
-              frontColor="lightgray"
-              data={CarbonDataToBeSHown}
-              yAxisThickness={0}
-              xAxisThickness={0}
-              width={screenWidth}
-              xAxisLabelTexts={["Months", "Months"]}
-              height={250}
-            />
+            <View>
+              <View
+                style={{
+                  width: "100%",
+                  height: 40,
+                  marginVertical: 10,
+                  // backgroundColor: "red",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "row",
+                  gap: 20,
+                }}
+              >
+                <TouchableOpacity onPress={handleDecreaseYear}>
+                  <AntDesign name="leftcircleo" size={24} color="black" />
+                </TouchableOpacity>
+                <Text style={{ fontSize: 16, fontWeight: "700" }}>{year}</Text>
+                <TouchableOpacity onPress={handleIncreaseYear}>
+                  <AntDesign name="rightcircleo" size={24} color="black" />
+                </TouchableOpacity>
+              </View>
+              <BarChart
+                barWidth={22}
+                noOfSections={3}
+                barBorderRadius={4}
+                frontColor="lightgray"
+                data={CarbonDataToBeSHown}
+                yAxisThickness={0}
+                xAxisThickness={0}
+                width={screenWidth}
+                xAxisLabelTexts={["Months", "Months"]}
+                height={250}
+              />
+            </View>
           )
 
           // <Text>hehehe</Text>

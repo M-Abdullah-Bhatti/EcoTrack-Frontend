@@ -1,6 +1,6 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Login from "../screen/Auth/Login";
+import LoginScreen from "../screen/Auth/LoginScreen";
 import SignUp from "../screen/Auth/Signup";
 
 // Auth stack:
@@ -11,7 +11,7 @@ export function AuthStacks() {
     <AuthStack.Navigator initialRouteName="Login">
       <AuthStack.Screen
         name="Login"
-        component={Login}
+        component={LoginScreen}
         options={{ headerShown: false }}
       />
       <AuthStack.Screen
