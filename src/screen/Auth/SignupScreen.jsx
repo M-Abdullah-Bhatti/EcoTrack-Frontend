@@ -54,8 +54,10 @@ const Signup = ({ navigation }) => {
   const imgSrc = require("../../../assets/logo-text.png");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmpassword, setconfirmPassword] = useState("");
   const [username, setusername] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmpasswordVisible, setconfirmPasswordVisible] = useState(false);
   const { width, height } = Dimensions.get("screen");
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
@@ -67,6 +69,9 @@ const Signup = ({ navigation }) => {
     if (!email) errors.email = "Email is required";
     if (!password) errors.password = "Password is required";
     if (!username) errors.username = "Username is required";
+    if (!confirmpassword) errors.confirmpassword = "Confirm your password";
+    if (confirmpassword && !(confirmpassword == password))
+      errors.confirmpasswordSimilarity = "Passwords are not same";
 
     setErrors(errors);
 
@@ -314,6 +319,88 @@ const Signup = ({ navigation }) => {
                   right: 20,
                 }}
                 onPress={() => setPasswordVisible(true)}
+              >
+                <AntDesign name="eye" size={18} color="#04753E" />
+              </TouchableOpacity>
+            )}
+          </View>
+
+          {errors.confirmpassword && (
+            <View style={{ width: "90%" }}>
+              <Text
+                style={{
+                  color: "red",
+
+                  marginBottom: -10,
+                  marginTop: 10,
+                  textAlign: "left",
+                  fontSize: 12,
+                }}
+              >
+                {errors.confirmpassword}
+              </Text>
+            </View>
+          )}
+          {errors.confirmpasswordSimilarity && (
+            <View style={{ width: "90%" }}>
+              <Text
+                style={{
+                  color: "red",
+
+                  marginBottom: -10,
+                  marginTop: 10,
+                  textAlign: "left",
+                  fontSize: 12,
+                }}
+              >
+                {errors.confirmpasswordSimilarity}
+              </Text>
+            </View>
+          )}
+
+          <View
+            style={[
+              styles.inputContainer,
+              errors.confirmpassword && { borderColor: "red", borderWidth: 1 },
+              errors.confirmpasswordSimilarity && {
+                borderColor: "red",
+                borderWidth: 1,
+              },
+            ]}
+          >
+            <FontAwesome
+              name="lock"
+              size={20}
+              style={{ marginLeft: 15 }}
+              color="#04753E"
+            />
+            <TextInput
+              style={styles.input}
+              onChangeText={(value) => setconfirmPassword(value)}
+              value={confirmpassword}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              placeholder="Confirm Password..."
+              placeholderTextColor="#04753E"
+              secureTextEntry={!confirmpasswordVisible ? true : false}
+            />
+            {confirmpasswordVisible ? (
+              <TouchableOpacity
+                style={{
+                  position: "absolute",
+                  right: 20,
+                }}
+                onPress={() => setconfirmPasswordVisible(false)}
+              >
+                <Feather name="eye-off" size={18} color="#04753E" />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={{
+                  position: "absolute",
+                  right: 20,
+                }}
+                onPress={() => setconfirmPasswordVisible(true)}
               >
                 <AntDesign name="eye" size={18} color="#04753E" />
               </TouchableOpacity>
