@@ -18,7 +18,13 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native";
-import { FontAwesome, AntDesign, Feather, Ionicons } from "@expo/vector-icons";
+import {
+  FontAwesome,
+  AntDesign,
+  Feather,
+  Ionicons,
+  MaterialIcons,
+} from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import Svg, { Path, Rect } from "react-native-svg";
 import { loginStart, loginSuccess } from "../../redux/userSlice";
@@ -48,6 +54,7 @@ const Signup = ({ navigation }) => {
   const imgSrc = require("../../../assets/logo-text.png");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [username, setusername] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
   const { width, height } = Dimensions.get("screen");
   const [errors, setErrors] = useState({});
@@ -59,6 +66,7 @@ const Signup = ({ navigation }) => {
     let errors = {};
     if (!email) errors.email = "Email is required";
     if (!password) errors.password = "Password is required";
+    if (!username) errors.username = "Username is required";
 
     setErrors(errors);
 
@@ -130,7 +138,7 @@ const Signup = ({ navigation }) => {
       <ScrollView
         style={[
           styles.container,
-          { marginTop: keyboardPadding > 0 ? -keyboardPadding + 20 : 0 },
+          { marginTop: keyboardPadding > 0 ? -keyboardPadding + 150 : 0 },
         ]}
         // contentContainerStyle={{ paddingBottom: keyboardPadding }}
       >
@@ -156,7 +164,7 @@ const Signup = ({ navigation }) => {
             Eco Track
           </Text>
           <Text style={{ fontSize: 14, color: "black", marginBottom: 5 }}>
-            Create your New Account
+            Create your new account
           </Text>
           <Image
             source={require("../../../assets/hello.png")}
@@ -173,7 +181,7 @@ const Signup = ({ navigation }) => {
           />
         </View>
         <View style={{ width: "100%", display: "flex", alignItems: "center" }}>
-          {errors.email && (
+          {errors.username && (
             <View style={{ width: "90%" }}>
               <Text
                 style={{
@@ -185,26 +193,26 @@ const Signup = ({ navigation }) => {
                   textAlign: "left",
                 }}
               >
-                {errors.email}
+                {errors.username}
               </Text>
             </View>
           )}
           <View
             style={[
               styles.inputContainer,
-              errors.email && { borderColor: "red", borderWidth: 1 },
+              errors.username && { borderColor: "red", borderWidth: 1 },
             ]}
           >
             <FontAwesome
               name="user"
               size={20}
-              style={{ marginLeft: 7 }}
+              style={{ marginLeft: 15 }}
               color="#04753E"
             />
             <TextInput
               style={styles.input}
-              onChangeText={(value) => setEmail(value)}
-              value={email}
+              onChangeText={(value) => setusername(value)}
+              value={username}
               placeholder="Enter Your Name..."
               placeholderTextColor="#04753E"
               onFocus={handleFocus}
@@ -233,12 +241,13 @@ const Signup = ({ navigation }) => {
               errors.email && { borderColor: "red", borderWidth: 1 },
             ]}
           >
-            <Ionicons
-              name="mail"
-              size={17}
-              style={{ paddingLeft: 4 }}
+            <MaterialIcons
+              name="email"
+              size={19}
+              style={{ marginLeft: 12 }}
               color="#04753E"
             />
+
             <TextInput
               style={styles.input}
               onChangeText={(value) => setEmail(value)}
@@ -275,7 +284,7 @@ const Signup = ({ navigation }) => {
             <FontAwesome
               name="lock"
               size={20}
-              style={{ marginLeft: 7 }}
+              style={{ marginLeft: 15 }}
               color="#04753E"
             />
             <TextInput
@@ -291,7 +300,8 @@ const Signup = ({ navigation }) => {
             {passwordVisible ? (
               <TouchableOpacity
                 style={{
-                  marginLeft: -12,
+                  position: "absolute",
+                  right: 20,
                 }}
                 onPress={() => setPasswordVisible(false)}
               >
@@ -300,7 +310,8 @@ const Signup = ({ navigation }) => {
             ) : (
               <TouchableOpacity
                 style={{
-                  marginLeft: -12,
+                  position: "absolute",
+                  right: 20,
                 }}
                 onPress={() => setPasswordVisible(true)}
               >
@@ -370,7 +381,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 8,
     borderColor: "#acacac",
-    width: "82%",
+    width: "78%",
 
     fontSize: 12,
   },
@@ -435,6 +446,8 @@ const styles = StyleSheet.create({
     height: 45,
     width: "90%",
     backgroundColor: "#EBF6EF",
+    justifyContent: "space-around",
+    position: "relative",
   },
   svg: {
     position: "absolute",
