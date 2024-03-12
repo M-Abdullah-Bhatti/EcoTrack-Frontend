@@ -1,7 +1,7 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "../screen/Auth/LoginScreen";
-import SignUp from "../screen/Auth/Signup";
+import SignUp from "../screen/Auth/SignupScreen";
 
 // Auth stack:
 const AuthStack = createNativeStackNavigator();

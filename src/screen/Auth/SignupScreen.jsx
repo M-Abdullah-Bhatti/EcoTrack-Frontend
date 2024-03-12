@@ -18,13 +18,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native";
-import {
-  FontAwesome,
-  AntDesign,
-  Feather,
-  Ionicons,
-  MaterialIcons,
-} from "@expo/vector-icons";
+import { FontAwesome, AntDesign, Feather, Ionicons } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import Svg, { Path, Rect } from "react-native-svg";
 import { loginStart, loginSuccess } from "../../redux/userSlice";
@@ -50,7 +44,7 @@ import { loginStart, loginSuccess } from "../../redux/userSlice";
 //   );
 // };
 
-const Login = ({ navigation }) => {
+const Signup = ({ navigation }) => {
   const imgSrc = require("../../../assets/logo-text.png");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -83,26 +77,6 @@ const Login = ({ navigation }) => {
     });
   };
 
-  const chartWidth = width;
-  const chartHeight = 225;
-
-  const start = `0, ${chartHeight - 10}`;
-  const controlPointA = `${chartWidth / 150} ${chartHeight / 2}`;
-  const controlPointB = `${(chartWidth / 3) * 2} ${chartHeight}`;
-  const end = `${chartWidth} ${chartHeight / 2}`;
-
-  const originX = animatedVal.interpolate({
-    inputRange: [0, 0],
-    outputRange: [0, chartWidth],
-  });
-  React.useEffect(() => {
-    Animated.timing(animatedVal, {
-      toValue: 10,
-      duration: 3000,
-      useNativeDriver: true,
-      easing: Easing.linear,
-    }).start();
-  }, []);
   const handleLogin = async () => {
     // if (!email || !password) {
     //   alert("Please enter both email and password");
@@ -160,59 +134,43 @@ const Login = ({ navigation }) => {
         ]}
         // contentContainerStyle={{ paddingBottom: keyboardPadding }}
       >
-        <View style={styles.headerDiv}>
-          <Svg width={chartWidth} height={chartHeight} style={styles.svg}>
-            <Path
-              d={`M${start} C${controlPointA} ${controlPointB} ${end} v${end}`}
-              stroke={""}
-              fill={"white"} // Set the color to match your headerDiv background
-              strokeWidth={0}
-            />
-            {/* <AnimatedRect
-              x={originX}
-              y={0}
-              width={chartWidth}
-              height={chartHeight}
-              fill={"white"}
-            /> */}
-          </Svg>
-          <View
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              backgroundColor: "white",
-              width: "100%",
-              height: "100%",
-              borderRadius: 135 / 2,
-            }}
-          >
-            <Image
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-              }}
-              source={require("../../../assets/splashbg.jpg")}
-            />
-          </View>
-        </View>
+        {/* <View style={styles.headerDiv}></View> */}
 
-        <View style={{ alignItems: "center", justifyContent: "center" }}>
+        <View
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            position: "relative",
+            marginVertical: 30,
+          }}
+        >
           <Text
             style={{
               fontSize: 28,
               color: "#04753E",
               fontWeight: "bold",
               marginBottom: 6,
-              marginTop: -10,
+              //   marginTop: -10,
             }}
           >
             Eco Track
           </Text>
           <Text style={{ fontSize: 14, color: "black", marginBottom: 5 }}>
-            Login To your Account
+            Create your New Account
           </Text>
+          <Image
+            source={require("../../../assets/hello.png")}
+            style={{
+              width: 100,
+              height: 100,
+              objectFit: "fill",
+              position: "absolute",
+              right: -10,
+              top: 10,
+              zIndex: 10,
+              transform: [{ rotateX: "35deg" }],
+            }}
+          />
         </View>
         <View style={{ width: "100%", display: "flex", alignItems: "center" }}>
           {errors.email && (
@@ -237,19 +195,50 @@ const Login = ({ navigation }) => {
               errors.email && { borderColor: "red", borderWidth: 1 },
             ]}
           >
-            {/* <Ionicons
-              name="mail"
-              size={17}
-              style={{ paddingLeft: 11 }}
-              color="#04753E"
-            /> */}
-            <MaterialIcons
-              name="email"
+            <FontAwesome
+              name="user"
               size={20}
-              style={{ marginLeft: 13 }}
+              style={{ marginLeft: 7 }}
               color="#04753E"
             />
+            <TextInput
+              style={styles.input}
+              onChangeText={(value) => setEmail(value)}
+              value={email}
+              placeholder="Enter Your Name..."
+              placeholderTextColor="#04753E"
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+            />
+          </View>
+          {errors.email && (
+            <View style={{ width: "90%" }}>
+              <Text
+                style={{
+                  color: "red",
 
+                  marginBottom: -10,
+                  fontSize: 12,
+                  marginTop: 10,
+                  textAlign: "left",
+                }}
+              >
+                {errors.email}
+              </Text>
+            </View>
+          )}
+          <View
+            style={[
+              styles.inputContainer,
+              errors.email && { borderColor: "red", borderWidth: 1 },
+            ]}
+          >
+            <Ionicons
+              name="mail"
+              size={17}
+              style={{ paddingLeft: 4 }}
+              color="#04753E"
+            />
             <TextInput
               style={styles.input}
               onChangeText={(value) => setEmail(value)}
@@ -286,7 +275,7 @@ const Login = ({ navigation }) => {
             <FontAwesome
               name="lock"
               size={20}
-              style={{ marginLeft: 15 }}
+              style={{ marginLeft: 7 }}
               color="#04753E"
             />
             <TextInput
@@ -302,8 +291,7 @@ const Login = ({ navigation }) => {
             {passwordVisible ? (
               <TouchableOpacity
                 style={{
-                  position: "absolute",
-                  right: 20,
+                  marginLeft: -12,
                 }}
                 onPress={() => setPasswordVisible(false)}
               >
@@ -312,8 +300,7 @@ const Login = ({ navigation }) => {
             ) : (
               <TouchableOpacity
                 style={{
-                  position: "absolute",
-                  right: 20,
+                  marginLeft: -12,
                 }}
                 onPress={() => setPasswordVisible(true)}
               >
@@ -322,21 +309,8 @@ const Login = ({ navigation }) => {
             )}
           </View>
 
-          <TouchableOpacity style={{ width: "90%" }}>
-            <Text
-              style={{
-                textAlign: "right",
-
-                color: "#04753E",
-                fontWeight: "700",
-              }}
-            >
-              Forgot Password?
-            </Text>
-          </TouchableOpacity>
-
           <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
-            <Text style={styles.loginTExt}>LOGIN</Text>
+            <Text style={styles.loginTExt}>Register</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.breakPoint}>
@@ -363,12 +337,12 @@ const Login = ({ navigation }) => {
           }}
         >
           <Text style={{ fontSize: 14, color: "rgba(0, 0, 0, 0.5)" }}>
-            Don’t have an account?{" "}
+            Already have an account?{" "}
             <Text
-              onPress={() => navigation.navigate("SignUp")}
+              onPress={() => navigation.navigate("Login")}
               style={{ color: "#096151", fontWeight: "700" }}
             >
-              Register
+              Login
             </Text>
           </Text>
         </View>
@@ -396,8 +370,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 8,
     borderColor: "#acacac",
-    width: "78%",
-    // borderWidth: 1,
+    width: "82%",
 
     fontSize: 12,
   },
@@ -462,8 +435,6 @@ const styles = StyleSheet.create({
     height: 45,
     width: "90%",
     backgroundColor: "#EBF6EF",
-    justifyContent: "space-around",
-    position: "relative",
   },
   svg: {
     position: "absolute",
@@ -476,4 +447,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default Signup;
