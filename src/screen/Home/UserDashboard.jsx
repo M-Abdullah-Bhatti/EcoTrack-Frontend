@@ -33,10 +33,13 @@ import { EmissionData } from "../../dummyEmissionData";
 import { GetAllMyEmissions } from "../../axios/NetworkCalls";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import ModalTemplate from "../../components/Shared/ModalTemplate";
 const UserDashboard = ({ navigation }) => {
   const options = ["Electricity", "Food", "Transport"];
   const { user } = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
+  const [successWhileFetching, setsuccessWhileFetching] = useState(false);
+  const [errorWhileFetching, seterrorWhileFetching] = useState(false);
   const [completedGoals, setcompletedGoals] = useState(0);
   const [IncompletedGoals, setIncompletedGoals] = useState(0);
   const boxShadowStyle = Platform.select({
@@ -171,6 +174,8 @@ const UserDashboard = ({ navigation }) => {
   const handleCompleteGoal = async (id) => {
     try {
       setLoadingGoalId(id);
+      seterrorWhileFetching(false);
+      setsuccessWhileFetching(false);
       const { data } = await axios.put(
         `https://ecotrack-dev.vercel.app/api/goal/${id}`,
         {
@@ -186,11 +191,18 @@ const UserDashboard = ({ navigation }) => {
       console.log("now data is", data);
       // Fetch goals again after completion
       fetchGoalById(id);
+      setsuccessWhileFetching(true);
+      setModalVisibleForGoal(true);
     } catch (error) {
+      setModalVisibleForGoal(true);
       console.error("Error completing goal:", error);
+      seterrorWhileFetching(true);
+
       // Handle error appropriately, such as displaying an error message
     } finally {
-      setLoadingGoalId(null); // Reset loading state
+      setLoadingGoalId(null);
+      // seterrorWhileFetching(false);
+      // Reset loading state
     }
   };
   const handleDecreaseYear = () => {
@@ -289,6 +301,26 @@ const UserDashboard = ({ navigation }) => {
       style={styles.mainContainer}
       contentContainerStyle={{ paddingBottom: 20 }}
     >
+      <ModalTemplate
+        isVisible={ModalVisibleForGoal}
+        hideModal={() => setModalVisibleForGoal(false)}
+        success={successWhileFetching}
+        error={errorWhileFetching}
+        title={
+          errorWhileFetching
+            ? "Error"
+            : successWhileFetching
+            ? "Goal Completed"
+            : null
+        }
+        description={
+          errorWhileFetching
+            ? "There was an error while completing the goal"
+            : successWhileFetching
+            ? "Congratulations! You have successfully completed a goal."
+            : null
+        }
+      />
       <View
         style={[styles.overlay, modalGoalId !== null && styles.overlayVisible]}
       ></View>
