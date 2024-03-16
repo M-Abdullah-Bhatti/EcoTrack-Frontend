@@ -103,7 +103,7 @@ const BudgetScreen = ({ navigation }) => {
           borderRadius: 12,
           justifyContent: "center",
         }}
-        onPress={() => navigation.navigate("SetBudget")}
+        onPress={() => navigation.navigate("ProfileScreen")}
       >
         <Ionicons name="calculator" color="#FFF" size={24} />
         <Text style={{ fontSize: 18, fontWeight: "bold", color: "#FFF" }}>

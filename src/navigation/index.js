@@ -13,6 +13,8 @@ import { StatusBar } from "expo-status-bar";
 import UserDashboard from "../screen/Home/UserDashboard";
 import ChatbotButton from "../components/Shared/ChatbotButton";
 import ChatScreen from "../screen/Home/ChatScreen";
+import ProfileScreen from "../screen/Home/ProfileScreen";
+import EditProfileScreen from "../screen/Home/EditProfile";
 
 const Routes = () => {
   const MainStackNavigator = createNativeStackNavigator();
@@ -57,6 +59,24 @@ const Routes = () => {
           options={{
             headerShown: true,
             title: "Chatbot",
+          }}
+        />
+
+        <MainStackNavigator.Screen
+          name="ProfileScreen"
+          component={ProfileScreen}
+          options={{
+            headerShown: true,
+            title: "Profile",
+          }}
+        />
+
+        <MainStackNavigator.Screen
+          name="EditProfile"
+          component={EditProfileScreen}
+          options={{
+            headerShown: true,
+            title: "Edit Profile",
           }}
         />
 
