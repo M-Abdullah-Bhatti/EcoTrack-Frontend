@@ -15,6 +15,7 @@ import {
   Dimensions,
   Keyboard,
   KeyboardAvoidingView,
+  ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native";
@@ -28,27 +29,9 @@ import {
 import { useDispatch } from "react-redux";
 import Svg, { Path, Rect } from "react-native-svg";
 import { loginStart, loginSuccess } from "../../redux/userSlice";
-// const AnimatedChart = () => {
-//   return (
-//     <View style={styles.container}>
-//       <Svg width={chartWidth} height={chartHeight} style={styles.svg}>
-//         <Path
-//           d={`M${start} C${controlPointA} ${controlPointB} ${end} v${end}`}
-//           stroke={"black"}
-//           fill={"yellow"}
-//           strokeWidth={3}
-//         />
-//         <AnimatedRect
-//           x={originX}
-//           y={0}
-//           width={chartWidth}
-//           height={chartHeight}
-//           fill={"white"}
-//         />
-//       </Svg>
-//     </View>
-//   );
-// };
+import ErrorModal from "../../components/Shared/ErrorModal";
+import SuccessModal from "../../components/Shared/SuccessModal";
+import { toastShow } from "../../utils/helpers";
 
 const Login = ({ navigation }) => {
   const imgSrc = require("../../../assets/logo-text.png");
@@ -61,6 +44,15 @@ const Login = ({ navigation }) => {
   const AnimatedRect = Animated.createAnimatedComponent(Rect);
   const animatedVal = React.useRef(new Animated.Value(0)).current;
   const [keyboardPadding, setKeyboardPadding] = useState(0);
+  const [loader, setLoader] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+
+  const [error, setError] = useState("");
+
+  const toggleErrorModal = () => {
+    setShowErrorModal(!showErrorModal);
+  };
+
   const validateForm = () => {
     let errors = {};
     if (!email) errors.email = "Email is required";
@@ -72,7 +64,6 @@ const Login = ({ navigation }) => {
   };
   const handleFocus = () => {
     Keyboard.addListener("keyboardDidShow", (e) => {
-      // console.log("height is", e.endCoordinates.height);
       setKeyboardPadding(e.endCoordinates.height);
     });
   };
@@ -113,6 +104,7 @@ const Login = ({ navigation }) => {
     }
 
     try {
+      setLoader(true);
       // dispatch(loginStart());
       const response = await fetch(
         "https://ecotrack-dev.vercel.app/api/users/login",
@@ -129,16 +121,22 @@ const Login = ({ navigation }) => {
       );
 
       if (response.ok) {
+        setLoader(false);
         const responseData = await response.json(); // Parse the response body as JSON
-        alert("Login successful!");
+        toastShow("Login successful!");
         dispatch(loginSuccess(responseData)); // Use responseData instead of response.data
         navigation.replace("Home");
       } else {
+        setLoader(false);
+
         const errorData = await response.json();
-        alert(`Login failed: ${errorData.message}`);
+        setError(`Login failed: ${errorData.message}`);
+        toggleErrorModal();
       }
     } catch (error) {
-      alert("An error occurred. Please try again.");
+      setError(`An error occurred. Please try again.`);
+      toggleErrorModal();
+      setLoader(false);
     }
   };
 
@@ -336,7 +334,11 @@ const Login = ({ navigation }) => {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
-            <Text style={styles.loginTExt}>LOGIN</Text>
+            {loader ? (
+              <ActivityIndicator size="small" color="white" />
+            ) : (
+              <Text style={styles.loginTExt}>LOGIN</Text>
+            )}
           </TouchableOpacity>
         </View>
         <View style={styles.breakPoint}>
@@ -372,6 +374,16 @@ const Login = ({ navigation }) => {
             </Text>
           </Text>
         </View>
+
+        {/* Error Modal */}
+        {showErrorModal && (
+          <ErrorModal
+            isVisible={showErrorModal}
+            hideModal={toggleErrorModal}
+            modalText={error}
+            buttonText={"Continue"}
+          />
+        )}
       </ScrollView>
     </View>
   );
@@ -391,15 +403,15 @@ const styles = StyleSheet.create({
   },
   input: {
     height: "100%",
-    margin: 12,
+    margin: 5,
 
-    padding: 10,
+    // padding: 10,
     borderRadius: 8,
     borderColor: "#acacac",
     width: "78%",
     // borderWidth: 1,
 
-    fontSize: 12,
+    fontSize: 13,
   },
   loginBtn: {
     width: "90%",

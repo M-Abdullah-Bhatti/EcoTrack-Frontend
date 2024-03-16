@@ -6,15 +6,11 @@ const Button = ({ buttonText, onPress, backgroundColor }) => {
   return (
     <TouchableOpacity
       style={{
+        width: "100%",
         backgroundColor: backgroundColor,
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        paddingHorizontal: 10,
-        paddingVertical: 10,
+        alignItems: "center",
+        paddingVertical: 15,
         borderRadius: 5,
-        width: "",
-        marginTop: 10,
       }}
       onPress={onPress}
     >
@@ -26,7 +22,9 @@ const Button = ({ buttonText, onPress, backgroundColor }) => {
           gap: 15,
         }}
       >
-        <Text style={{ color: "white" }}>{buttonText}</Text>
+        <Text style={{ color: "white", fontSize: 16, fontWeight: 500 }}>
+          {buttonText}
+        </Text>
       </View>
     </TouchableOpacity>
   );

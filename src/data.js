@@ -68,37 +68,6 @@ export const transport = [
 
 export const meal = [
   {
-    image: "",
-    text: "High  Meat",
-    icon: <MaterialCommunityIcons name="food-turkey" size={24} color="white" />,
-  },
-  {
-    image: "",
-    text: "Medium Meat",
-    icon: (
-      <MaterialCommunityIcons name="food-hot-dog" size={24} color="white" />
-    ),
-  },
-  {
-    image: "",
-    text: "Low Meat",
-    icon: <MaterialCommunityIcons name="food-steak" size={24} color="white" />,
-  },
-  {
-    image: "",
-    text: "Vegetarian",
-    icon: (
-      <MaterialCommunityIcons
-        name="food-drumstick-off-outline"
-        size={24}
-        color="white"
-      />
-    ),
-  },
-];
-
-export const food = [
-  {
     text: "Red Meat",
     label: "beefBeefHerd",
     icon: <MaterialCommunityIcons name="food-turkey" size={24} color="white" />,
@@ -109,16 +78,6 @@ export const food = [
     icon: <MaterialIcons name="set-meal" size={24} color="white" />,
   },
   {
-    text: "Coffee",
-    label: "coffee",
-    icon: <Fontisto name="coffeescript" size={24} color="white" />,
-  },
-  {
-    text: "Dark Chocolate",
-    label: "darkChocolate",
-    icon: <MaterialCommunityIcons name="spoon-sugar" size={24} color="white" />,
-  },
-  {
     text: "Fish",
     label: "fishFarmed",
     icon: <FontAwesome5 name="fish" size={24} color="white" />,
@@ -127,6 +86,29 @@ export const food = [
     text: "Lamb",
     label: "lambAndMutton",
     icon: <MaterialIcons name="goat" size={24} color="white" />,
+  },
+  {
+    text: "Soy Milk",
+    label: "soymilk",
+    icon: <FontAwesome5 name="glass-whiskey" size={24} color="white" />,
+  },
+  {
+    text: "Tofu",
+    label: "tofu",
+    icon: <FontAwesome5 name="cheese" size={24} color="white" />,
+  },
+];
+
+export const food = [
+  {
+    text: "Coffee",
+    label: "coffee",
+    icon: <Fontisto name="coffeescript" size={24} color="white" />,
+  },
+  {
+    text: "Dark Chocolate",
+    label: "darkChocolate",
+    icon: <MaterialCommunityIcons name="spoon-sugar" size={24} color="white" />,
   },
   {
     text: "Wheat",
@@ -193,16 +175,6 @@ export const food = [
     icon: <MaterialCommunityIcons name="peanut" size={24} color="white" />,
   },
   {
-    text: "Soy Milk",
-    label: "soymilk",
-    icon: <FontAwesome5 name="glass-whiskey" size={24} color="white" />,
-  },
-  {
-    text: "Tofu",
-    label: "tofu",
-    icon: <FontAwesome5 name="cheese" size={24} color="white" />,
-  },
-  {
     text: "Soybean Oil",
     label: "soybeanOil",
     icon: <MaterialCommunityIcons name="soy-sauce" size={24} color="white" />,
@@ -236,12 +208,12 @@ export const food = [
   {
     text: "Tomatoes",
     label: "tomatoes",
-    icon: <MaterialCommunityIcons name="food-tomato" size={24} color="white" />,
+    icon: <MaterialIcons name="food-bank" size={24} color="black" />,
   },
   {
     text: "Onions and Leeks",
     label: "onionsAndLeeks",
-    icon: <MaterialCommunityIcons name="onion" size={24} color="white" />,
+    icon: <MaterialIcons name="food-bank" size={24} color="black" />,
   },
   {
     text: "Root Vegetables",
@@ -265,7 +237,9 @@ export const food = [
   {
     text: "Bananas",
     label: "bananas",
-    icon: <MaterialCommunityIcons name="banana" size={24} color="white" />,
+    icon: (
+      <MaterialCommunityIcons name="fruit-citrus-off" size={24} color="white" />
+    ),
   },
   {
     text: "Apples",

@@ -15,6 +15,7 @@ import {
   Dimensions,
   Keyboard,
   KeyboardAvoidingView,
+  ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native";
@@ -28,6 +29,8 @@ import {
 import { useDispatch } from "react-redux";
 import Svg, { Path, Rect } from "react-native-svg";
 import { loginStart, loginSuccess } from "../../redux/userSlice";
+import { toastShow } from "../../utils/helpers";
+import ErrorModal from "../../components/Shared/ErrorModal";
 // const AnimatedChart = () => {
 //   return (
 //     <View style={styles.container}>
@@ -64,6 +67,16 @@ const Signup = ({ navigation }) => {
   const AnimatedRect = Animated.createAnimatedComponent(Rect);
   const animatedVal = React.useRef(new Animated.Value(0)).current;
   const [keyboardPadding, setKeyboardPadding] = useState(0);
+
+  const [loader, setLoader] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+
+  const [error, setError] = useState("");
+
+  const toggleErrorModal = () => {
+    setShowErrorModal(!showErrorModal);
+  };
+
   const validateForm = () => {
     let errors = {};
     if (!email) errors.email = "Email is required";
@@ -79,7 +92,6 @@ const Signup = ({ navigation }) => {
   };
   const handleFocus = () => {
     Keyboard.addListener("keyboardDidShow", (e) => {
-      // console.log("height is", e.endCoordinates.height);
       setKeyboardPadding(e.endCoordinates.height);
     });
   };
@@ -90,25 +102,28 @@ const Signup = ({ navigation }) => {
     });
   };
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     // if (!email || !password) {
     //   alert("Please enter both email and password");
     //   return;
     // }
+
     if (!validateForm()) {
       return; // Exit if the form is not valid
     }
 
     try {
+      setLoader(true);
       // dispatch(loginStart());
       const response = await fetch(
-        "https://ecotrack-dev.vercel.app/api/users/login",
+        "https://ecotrack-dev.vercel.app/api/users/register",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+            name: username,
             email: email,
             password: password,
           }),
@@ -116,16 +131,21 @@ const Signup = ({ navigation }) => {
       );
 
       if (response.ok) {
+        setLoader(false);
         const responseData = await response.json(); // Parse the response body as JSON
-        alert("Login successful!");
-        dispatch(loginSuccess(responseData)); // Use responseData instead of response.data
+        toastShow("Signup successful!");
+        dispatch(loginSuccess(responseData));
         navigation.replace("Home");
       } else {
+        setLoader(false);
         const errorData = await response.json();
-        alert(`Login failed: ${errorData.message}`);
+        setError(`Signup failed: ${errorData.message}`);
+        toggleErrorModal();
       }
     } catch (error) {
-      alert("An error occurred. Please try again.");
+      setLoader(false);
+      setError(`An error occurred. Please try again.`);
+      toggleErrorModal();
     }
   };
 
@@ -407,8 +427,12 @@ const Signup = ({ navigation }) => {
             )}
           </View>
 
-          <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
-            <Text style={styles.loginTExt}>Register</Text>
+          <TouchableOpacity style={styles.loginBtn} onPress={handleRegister}>
+            {loader ? (
+              <ActivityIndicator size="small" color="white" />
+            ) : (
+              <Text style={styles.loginTExt}>Register</Text>
+            )}
           </TouchableOpacity>
         </View>
         <View style={styles.breakPoint}>
@@ -444,6 +468,16 @@ const Signup = ({ navigation }) => {
             </Text>
           </Text>
         </View>
+
+        {/* Error Modal */}
+        {showErrorModal && (
+          <ErrorModal
+            isVisible={showErrorModal}
+            hideModal={toggleErrorModal}
+            modalText={error}
+            buttonText={"Continue"}
+          />
+        )}
       </ScrollView>
     </View>
   );
@@ -464,13 +498,11 @@ const styles = StyleSheet.create({
   input: {
     height: "100%",
     margin: 12,
-
-    padding: 10,
     borderRadius: 8,
     borderColor: "#acacac",
     width: "78%",
 
-    fontSize: 12,
+    fontSize: 13,
   },
   loginBtn: {
     width: "90%",
