@@ -11,6 +11,7 @@ import {
   TextInput,
   Modal,
   Alert,
+  ActivityIndicator
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,7 +23,7 @@ import SinglePost from "./SinglePost";
 import { pickVideos } from "../../utils/pickImage";
 import { stories } from "../../utils/Data";
 import * as ImagePicker from "expo-image-picker";
-import { uploadImage } from "../../utils/helpers";
+import { toastShow, uploadImage } from "../../utils/helpers";
 import ChatbotButton from "../../components/Shared/ChatbotButton";
 import axios from "axios";
 
@@ -34,6 +35,7 @@ const CommunityScreen = ({ navigation }) => {
   const [toUploadImage, setToUploadImage] = useState("");
   const [description, setDescription] = useState("");
   const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { user } = useSelector((state) => state.user);
 
@@ -43,14 +45,16 @@ const CommunityScreen = ({ navigation }) => {
   }
 
   const handlePostUpload = async () => {
+    setIsLoading(true);
+    
     try {
       const imageUrl = await uploadImage(toUploadImage);
       console.log("Image uploaded successfully:", imageUrl);
 
       const requestBody = {
+        userId: user._id,
         postDescription: description,
-        images: [`${imageUrl}`],
-        tags: ["Hello", "World"],
+        image: imageUrl,
       };
 
       const response = await fetch(
@@ -68,15 +72,22 @@ const CommunityScreen = ({ navigation }) => {
       if (response.status === 401) Alert.alert("Unauthorized Access");
 
       if (!response.ok) {
+        setModalVisible(false);
+        toastShow("Couldn't upload post. Try again later.");
         throw new Error("Failed to upload post. Please try again later.");
       }
 
       const responseData = await response.json();
       console.log("Post uploaded successfully!", responseData);
+      setIsLoading(false);
       setModalVisible(false);
-      Alert.alert("Post Uploaded Successfully");
+      toastShow("Post uploaded successfully!");
     } catch (error) {
       console.error("Error uploading post:", error.message);
+      setModalVisible(false);
+      toastShow("Couldn't upload post. Try again later.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -200,7 +211,6 @@ const CommunityScreen = ({ navigation }) => {
         // transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
           setModalVisible(!modalVisible);
         }}
         presentationStyle="fullScreen"
@@ -210,7 +220,6 @@ const CommunityScreen = ({ navigation }) => {
           <TouchableOpacity
             style={{
               width: "80%",
-              // backgroundColor: "red",
               display: "flex",
               flexDirection: "row",
               height: 60,
@@ -242,7 +251,7 @@ const CommunityScreen = ({ navigation }) => {
                   color: "black",
                 }}
               >
-                Abdullah Azizzzzzzz
+                {user.name}
               </Text>
             </View>
           </TouchableOpacity>
@@ -279,7 +288,7 @@ const CommunityScreen = ({ navigation }) => {
               />
               <TouchableOpacity
                 style={{
-                  backgroundColor: "pink",
+                  backgroundColor: "#04753E",
                   marginTop: 20,
                   minWidth: 150,
                   alignItems: "center",
@@ -287,8 +296,13 @@ const CommunityScreen = ({ navigation }) => {
                   borderRadius: 12,
                 }}
                 onPress={handlePostUpload}
+                disabled={isLoading}
               >
+              {isLoading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
                 <Text style={{ color: "white", fontSize: 18 }}>Post</Text>
+              )}
               </TouchableOpacity>
             </View>
           ) : (

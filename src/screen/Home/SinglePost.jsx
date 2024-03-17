@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -10,7 +10,7 @@ import {
   ScrollView
 } from "react-native";
 
-import { Ionicons, Entypo } from "@expo/vector-icons";
+import { Feather, Entypo } from "@expo/vector-icons";
 import { formatDateLikeFacebook } from "../../utils/helpers";
 
 import { AntDesign, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
@@ -18,10 +18,9 @@ import { useSelector } from "react-redux";
 
 const SinglePost = ({ post, id }) => {
   const [viewFullDesc, setViewFullDesc] = useState(false);
-  const [hasLoggedInUserLike, sethasLoggedInUserLike] = useState(false);
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState(post.comments);
-  const [likes, setLikes] = useState(post.likes);
+  const [postLikes, setPostLikes] = useState(post.likes);
   const inputCommentRef = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
   // Initialize showFullComment state
@@ -36,9 +35,16 @@ const SinglePost = ({ post, id }) => {
     setShowFullComment(updatedShowFullComment);
   };
 
+  if (post.user.profilePic) {
+    source = { uri: post.user.profilePic };
+  } else {
+    source = require("../../../assets/placeholder.jpg");
+  }
   
   const { user } = useSelector((state) => state.user);
-  const liked = likes.includes(user._id);
+  
+  // Check if the current user has liked the post
+  const liked = postLikes.includes(user._id);
   
   const addComment = async () => {
 
@@ -46,11 +52,12 @@ const SinglePost = ({ post, id }) => {
     
     try {
       const requestBody = {
+        userId: user._id,
         comment: comment,
       };
 
       const response = await fetch(
-        `https://ecotrack-dev.vercel.app/api/posts/${post._id}/activity`,
+        `https://ecotrack-dev.vercel.app/api/posts/${post._id}/comments`,
         {
           method: "PUT",
           headers: {
@@ -75,16 +82,13 @@ const SinglePost = ({ post, id }) => {
   };
 
   const likePost = async () => {
-
-    if (liked) return;
-    
     try {
       const requestBody = {
-        "like": false,
+        userId: user._id,
       };
-
+  
       const response = await fetch(
-        `https://ecotrack-dev.vercel.app/api/posts/${post._id}/activity`,
+        `https://ecotrack-dev.vercel.app/api/posts/${post._id}/like`,
         {
           method: "PUT",
           headers: {
@@ -94,19 +98,23 @@ const SinglePost = ({ post, id }) => {
           body: JSON.stringify(requestBody),
         }
       );
-
+  
       if (!response.ok) {
         throw new Error("Failed to like post. Please try again later.");
       }
-
+  
       const responseData = await response.json();
-      setLikes(responseData.likes)
+      setPostLikes(responseData.likes)
       console.log("Post Liked successfully!", responseData);
-      setComment("")
     } catch (error) {
       console.error("Error liking post:", error.message);
     }
   };
+
+  useEffect(() => {
+    console.log("Comment: ", post.comments[0])
+  }, [])
+
 
   return (
     <View
@@ -141,7 +149,7 @@ const SinglePost = ({ post, id }) => {
         >
           <View style={{ width: 40, height: 40, borderRadius: 20 }}>
             <Image
-              source={require("../../../assets/rizwan.jpg")}
+              source={source}
               style={{ width: 40, height: 40, borderRadius: 20 }}
             />
           </View>
@@ -153,7 +161,7 @@ const SinglePost = ({ post, id }) => {
             }}
           >
             <Text style={{ fontSize: 13, marginTop: 2, fontWeight: "bold" }}>
-              {post.userId.name}
+              {post.user.name}
             </Text>
             <Text style={{ fontSize: 11, marginTop: 2 }}>
               {formatDateLikeFacebook(post.createdAt)}
@@ -173,11 +181,11 @@ const SinglePost = ({ post, id }) => {
           }}
           onPress={() => alert("hello")}
         >
-          <Ionicons name="settings-sharp" size={20} color="black" />
+          <Feather name="more-horizontal" size={20} color="black" />
         </TouchableOpacity>
       </View>
       <View style={{ width: "100%" }}>
-        {post.description != "" &&
+        {post.postDescription ?
           (viewFullDesc ? (
             <Text
               style={{
@@ -202,19 +210,16 @@ const SinglePost = ({ post, id }) => {
               }}
             >
               {post.postDescription}
-              {/* <Text
-                style={{ fontSize: 14 }}
-                onPress={() => setViewFullDesc(true)}
-              >
-                See More
-              </Text> */}
             </Text>
-          ))}
+          ))
+          :
+          ""
+          }
       </View>
 
-      {post.images.length > 0 && (
+      {post.image && (
         <Image
-          source={{ uri: post.images[0] }}
+          source={{ uri: post.image }}
           style={{ height: 250, width: "94%", marginHorizontal: 10 }}
         />
       )}
@@ -228,7 +233,7 @@ const SinglePost = ({ post, id }) => {
         }}
         onPress={() => setModalVisible(true)}
       >
-        {post.likeCount > 0 && (
+        {postLikes.length > 0 && (
           <View
             style={{
               display: "flex",
@@ -240,14 +245,14 @@ const SinglePost = ({ post, id }) => {
             }}
           >
             <AntDesign
-              name={post.likeCount > 0 ? "like1" : "like2"}
+              name={postLikes.length > 0 ? "like1" : "like2"}
               size={16}
               color="black"
             />
 
             <Text style={{ marginLeft: 4 }}>
-              {likes.length > 0 &&
-              likes.length + " Likes"
+              {postLikes.length > 0 &&
+              postLikes.length + " Likes"
               }
             </Text>
 
@@ -274,7 +279,7 @@ const SinglePost = ({ post, id }) => {
           >
             <FontAwesome5 name="comment-dots" size={16} color="black" />
 
-            <Text style={{ marginLeft: 4 }}>{post.commentCount} comments</Text>
+            <Text style={{ marginLeft: 4 }}>{post.comments.length} comments</Text>
           </View>
         )}
       </TouchableOpacity>
@@ -353,7 +358,7 @@ const SinglePost = ({ post, id }) => {
         onShow={() => inputCommentRef.current.focus()}
       >
         <View style={styles.modalHeader}>
-          {post.likeCount > 0 && (
+          {postLikes.length > 0 && (
             <TouchableOpacity
               style={{
                 width: "80%",
@@ -369,7 +374,7 @@ const SinglePost = ({ post, id }) => {
               onPress={() => alert("Aziz")}
             >
               <AntDesign
-                name={post.likeCount > 0 ? "like1" : "like2"}
+                name={postLikes.length > 0 ? "like1" : "like2"}
                 size={16}
                 color="black"
               />
@@ -446,7 +451,7 @@ const SinglePost = ({ post, id }) => {
                     objectFit: "cover",
                     borderRadius: 100,
                   }}
-                  source={require('../../../assets/placeholder.jpg')}
+                  source={source}
                 />
               </View>
               <View
@@ -459,7 +464,7 @@ const SinglePost = ({ post, id }) => {
                 }}
               >
                 <Text style={{ fontSize: 14, fontWeight: "bold" }}>
-                  {comment.username || 'Rizwan Ahmed'}
+                  {comment?.user.name}
                 </Text>
                 {showFullComment[id] ? (
                   <Text
