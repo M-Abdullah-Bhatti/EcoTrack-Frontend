@@ -5,6 +5,7 @@ import {
   Dimensions,
   TouchableOpacity,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import Slider from "@react-native-community/slider";
 import { useFocusEffect } from "@react-navigation/native";
@@ -12,6 +13,9 @@ import { CarbonCalculationAPI } from "../../axios/NetworkCalls";
 import { countries } from "../../data";
 import SelectDropDown from "../../components/Shared/SelectDropDown";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { toastShow } from "../../utils/helpers";
+import baseUrl from "../../utils/baseUrl";
 
 const { width } = Dimensions.get("screen");
 
@@ -31,6 +35,9 @@ const AddEmission = ({ navigation, route }) => {
   const [fuelCarbon, setFuelCarbon] = useState(false);
   const [foodCarbon, setFoodCarbon] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("");
+  const [loader, setLoader] = useState(false);
+
+  const { user } = useSelector((state) => state.user);
 
   const handleSelection = (selectedItem, index) => {
     setSelectedCountry(selectedItem);
@@ -66,7 +73,7 @@ const AddEmission = ({ navigation, route }) => {
       "https://carbonsutra1.p.rapidapi.com/vehicle_estimate_by_type",
       params
     );
-    
+
     setFuelCarbon(fuelCarbon?.data?.co2e_kg);
 
     console.log("Feul Carbon: ", fuelCarbon?.data?.co2e_kg);
@@ -74,27 +81,70 @@ const AddEmission = ({ navigation, route }) => {
   };
 
   const calculateFoodCarbon = async () => {
-    console.group("Quantity: ", foodQuantity)
     const requestBody = {
       food: params.subCategory.label,
       kg: foodQuantity,
     };
 
-    const response = await axios.post(
-      "https://ecotrack-dev.vercel.app/api/food/", requestBody
-    );
-    
+    const response = await axios.post(`${baseUrl}/api/food/`, requestBody);
+
+    console.log("response: ", response.data);
+
     setFoodCarbon(response.data.carbonFootprint);
 
     console.log("Food Carbon: ", response.data.carbonFootprint);
     setIsCalculated(true);
   };
 
+  const handleAddEmission = () => {
+    console.log("handle add emission called");
+    setLoader(true);
+
+    let carbonValue;
+    if (category == "Food" || category == "Meal") {
+      carbonValue = foodCarbon;
+    }
+    if (category == "Transportation") {
+      carbonValue = fuelCarbon;
+    } else {
+      carbonValue = electricityCarbon;
+    }
+
+    const requestBody = {
+      user: user?._id,
+      category: category,
+      subCategory: subCategory || "",
+      carbonEmitted: carbonValue,
+    };
+
+    axios
+      .post(`${baseUrl}/api/emission/addEmission`, requestBody, {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      })
+      .then((res) => {
+        if (res?.data?.success) {
+          setLoader(false);
+          toastShow("Emission added successfully");
+          navigation.navigate("Emissions");
+        }
+      })
+      .catch((err) => {
+        console.log(":err: ", err);
+        toastShow("An error occurred");
+        setLoader(false);
+      })
+      .finally(() => {
+        setLoader(false);
+      });
+  };
+
   useFocusEffect(
     React.useCallback(() => {
       setSubCategory(params?.subCategory?.text);
       setCategory(params?.category);
-      setVehicleType(params?.subCategory?.vehicle_type)
+      setVehicleType(params?.subCategory?.vehicle_type);
     }, [])
   );
 
@@ -143,9 +193,13 @@ const AddEmission = ({ navigation, route }) => {
               <View style={styles.addButtonContainer}>
                 <TouchableOpacity
                   style={styles.addButton}
-                  onPress={() => navigation.navigate("Emissions")}
+                  onPress={handleAddEmission}
                 >
-                  <Text style={styles.addButtonText}>Add this emission</Text>
+                  {loader ? (
+                    <ActivityIndicator size="small" color="white" />
+                  ) : (
+                    <Text style={styles.addButtonText}>Add this emission</Text>
+                  )}
                 </TouchableOpacity>
               </View>
             </>
@@ -210,9 +264,13 @@ const AddEmission = ({ navigation, route }) => {
               <View style={styles.addButtonContainer}>
                 <TouchableOpacity
                   style={styles.addButton}
-                  onPress={() => navigation.navigate("Emissions")}
+                  onPress={handleAddEmission}
                 >
-                  <Text style={styles.addButtonText}>Add this emission</Text>
+                  {loader ? (
+                    <ActivityIndicator size="small" color="white" />
+                  ) : (
+                    <Text style={styles.addButtonText}>Add this emission</Text>
+                  )}
                 </TouchableOpacity>
               </View>
             </>
@@ -263,9 +321,13 @@ const AddEmission = ({ navigation, route }) => {
               <View style={styles.addButtonContainer}>
                 <TouchableOpacity
                   style={styles.addButton}
-                  onPress={() => navigation.navigate("Emissions")}
+                  onPress={handleAddEmission}
                 >
-                  <Text style={styles.addButtonText}>Add this emission</Text>
+                  {loader ? (
+                    <ActivityIndicator size="small" color="white" />
+                  ) : (
+                    <Text style={styles.addButtonText}>Add this emission</Text>
+                  )}
                 </TouchableOpacity>
               </View>
             </>
@@ -301,9 +363,7 @@ const AddEmission = ({ navigation, route }) => {
             <View style={styles.addButtonContainer}>
               <TouchableOpacity
                 style={styles.addButton}
-                onPress={() => {
-                  setIsCalculated(true);
-                }}
+                onPress={calculateFoodCarbon}
               >
                 <Text style={styles.addButtonText}>Calculate Emission</Text>
               </TouchableOpacity>
@@ -318,9 +378,13 @@ const AddEmission = ({ navigation, route }) => {
               <View style={styles.addButtonContainer}>
                 <TouchableOpacity
                   style={styles.addButton}
-                  onPress={() => navigation.navigate("Emissions")}
+                  onPress={handleAddEmission}
                 >
-                  <Text style={styles.addButtonText}>Add this emission</Text>
+                  {loader ? (
+                    <ActivityIndicator size="small" color="white" />
+                  ) : (
+                    <Text style={styles.addButtonText}>Add this emission</Text>
+                  )}
                 </TouchableOpacity>
               </View>
             </>
