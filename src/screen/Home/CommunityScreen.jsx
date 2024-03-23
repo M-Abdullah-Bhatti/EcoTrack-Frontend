@@ -11,7 +11,7 @@ import {
   TextInput,
   Modal,
   Alert,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -47,7 +47,7 @@ const CommunityScreen = ({ navigation }) => {
 
   const handlePostUpload = async () => {
     setIsLoading(true);
-    
+
     try {
       const imageUrl = await uploadImage(toUploadImage);
       console.log("Image uploaded successfully:", imageUrl);
@@ -127,7 +127,33 @@ const CommunityScreen = ({ navigation }) => {
   }, [postsReloadHelper]);
 
   return (
-    <>
+    <View style={styles.container}>
+      <View
+        style={{
+          height: 50,
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "flex-start",
+          gap: 10,
+          borderBottomColor: "black",
+          borderBottomWidth: 0.5,
+          paddingLeft: 20,
+        }}
+      >
+        <Image
+          source={require("../../../assets/mainLogo.png")}
+          style={{
+            width: 25,
+            height: 25,
+            // borderRadius: 20,
+            objectFit: "fill",
+          }}
+        />
+        <Text style={{ fontSize: 16, fontWeight: "800" }}>
+          Eco Track Community
+        </Text>
+      </View>
       <View style={styles.header}>
         <TouchableOpacity
           style={{
@@ -155,7 +181,7 @@ const CommunityScreen = ({ navigation }) => {
                 marginTop: 2,
                 fontWeight: "bold",
                 color: "black",
-                textTransform: "capitalize"
+                textTransform: "capitalize",
               }}
             >
               {user.name}
@@ -298,11 +324,11 @@ const CommunityScreen = ({ navigation }) => {
                 onPress={handlePostUpload}
                 disabled={isLoading}
               >
-              {isLoading ? (
-                <ActivityIndicator size="small" color="white" />
-              ) : (
-                <Text style={{ color: "white", fontSize: 18 }}>Post</Text>
-              )}
+                {isLoading ? (
+                  <ActivityIndicator size="small" color="white" />
+                ) : (
+                  <Text style={{ color: "white", fontSize: 18 }}>Post</Text>
+                )}
               </TouchableOpacity>
             </View>
           ) : (
@@ -481,11 +507,7 @@ const CommunityScreen = ({ navigation }) => {
         ) : (
           <View style={styles.postsContainer}>
             {posts.map((post, id) => (
-              <SinglePost
-                post={post}
-                id={id}
-                key={id}
-              />
+              <SinglePost post={post} id={id} key={id} />
             ))}
           </View>
         )}
@@ -516,7 +538,7 @@ const CommunityScreen = ({ navigation }) => {
       </ScrollView>
 
       <ChatbotButton />
-    </>
+    </View>
   );
 };
 
@@ -538,22 +560,28 @@ export default CommunityScreen;
 </TouchableOpacity>; */
 }
 const styles = StyleSheet.create({
-  mainContainer: {
+  container: {
     flex: 1,
     paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : "0px",
     backgroundColor: "white",
-    // position: "relative",
-    // paddingBottom: 200,
+  },
+  mainContainer: {
+    // flex: 1,
+    // paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : "0px",
+    // backgroundColor: "white",
+    // // position: "relative",
+    // // paddingBottom: 200,
   },
   header: {
     display: "flex",
     flexDirection: "row",
-    marginTop: StatusBar.currentHeight,
+    // marginTop: StatusBar.currentHeight + 60,
     paddingHorizontal: 12,
     justifyContent: "space-around",
     backgroundColor: "#fff",
-    // backgroundColor: "",
-    position: "fixed",
+    marginBottom: 20,
+    borderBottomColor: "rgba(0,0,0,0.7)",
+    borderBottomWidth: 0.5,
   },
   stories: {
     display: "flex",
