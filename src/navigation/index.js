@@ -15,6 +15,7 @@ import ChatbotButton from "../components/Shared/ChatbotButton";
 import ChatScreen from "../screen/Home/ChatScreen";
 import ProfileScreen from "../screen/Home/ProfileScreen";
 import EditProfileScreen from "../screen/Home/EditProfile";
+import AppStack from "./AppStack";
 
 const Routes = () => {
   const MainStackNavigator = createNativeStackNavigator();
@@ -37,8 +38,8 @@ const Routes = () => {
           options={navOptionHandler}
         />
         <MainStackNavigator.Screen
-          name="Home"
-          component={BottomTab}
+          name="Main"
+          component={AppStack}
           options={{
             headerTransparent: true,
             title: "",

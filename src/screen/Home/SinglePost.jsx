@@ -451,7 +451,7 @@ const SinglePost = ({ post, id }) => {
                     objectFit: "cover",
                     borderRadius: 100,
                   }}
-                  source={source}
+                  source={comment.user.profilePic ? {uri: comment.user.profilePic} : {require: "../../../assets/placeholder.jpg"}}
                 />
               </View>
               <View

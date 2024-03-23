@@ -9,7 +9,7 @@ const SplashScreen = ({navigation}) => {
     setTimeout(() => {
       AsyncStorage.getItem('userToken').then(value => {
         if (value) {
-          navigation.replace('Home')
+          navigation.replace('Main')
         } else {
             navigation.replace('AuthNavigation')
           }

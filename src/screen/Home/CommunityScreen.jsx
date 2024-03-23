@@ -32,6 +32,7 @@ import axios from "axios";
 const CommunityScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
+  const [postsReloadHelper, setPostsReloadHelper] = useState(false);
   const [toUploadImage, setToUploadImage] = useState("");
   const [description, setDescription] = useState("");
   const [posts, setPosts] = useState([]);
@@ -79,6 +80,7 @@ const CommunityScreen = ({ navigation }) => {
 
       const responseData = await response.json();
       console.log("Post uploaded successfully!", responseData);
+      setPostsReloadHelper(true);
       setIsLoading(false);
       setModalVisible(false);
       toastShow("Post uploaded successfully!");
@@ -122,9 +124,7 @@ const CommunityScreen = ({ navigation }) => {
     };
 
     getData();
-  }, []);
-
-  console.log(user)
+  }, [postsReloadHelper]);
 
   return (
     <>
