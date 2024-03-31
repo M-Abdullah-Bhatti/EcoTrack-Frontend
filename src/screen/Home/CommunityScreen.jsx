@@ -26,6 +26,7 @@ import * as ImagePicker from "expo-image-picker";
 import { toastShow, uploadImage } from "../../utils/helpers";
 import ChatbotButton from "../../components/Shared/ChatbotButton";
 import axios from "axios";
+import StoryComponent from "../../components/StoryComponent";
 
 // https://www.pinterest.com/pin/254664553914369768/
 
@@ -499,6 +500,8 @@ const CommunityScreen = ({ navigation }) => {
             <Text style={{ opacity: 0.6 }}>What's On Your Mind</Text>
           </View>
         </TouchableOpacity>
+
+        <StoryComponent />
 
         {!posts ? (
           <View>

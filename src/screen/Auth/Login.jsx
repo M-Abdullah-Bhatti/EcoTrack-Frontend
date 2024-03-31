@@ -45,7 +45,7 @@ const Login = ({ navigation }) => {
         const responseData = await response.json(); // Parse the response body as JSON
         alert("Login successful!");
         dispatch(loginSuccess(responseData)); // Use responseData instead of response.data
-        navigation.replace('Home');
+        navigation.replace('Main');
       } else {
         const errorData = await response.json();
         alert(`Login failed: ${errorData.message}`);

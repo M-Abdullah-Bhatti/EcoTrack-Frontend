@@ -16,6 +16,7 @@ import ChatScreen from "../screen/Home/ChatScreen";
 import ProfileScreen from "../screen/Home/ProfileScreen";
 import EditProfileScreen from "../screen/Home/EditProfile";
 import AppStack from "./AppStack";
+import Story from "../screen/Story";
 
 const Routes = () => {
   const MainStackNavigator = createNativeStackNavigator();
@@ -70,6 +71,12 @@ const Routes = () => {
             headerShown: true,
             title: "Profile",
           }}
+        />
+
+        <MainStackNavigator.Screen
+          name="Story"
+          component={Story}
+          options={{ headerShown: false }}
         />
 
         <MainStackNavigator.Screen
