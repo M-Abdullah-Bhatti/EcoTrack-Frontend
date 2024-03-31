@@ -17,6 +17,7 @@ import ProfileScreen from "../screen/Home/ProfileScreen";
 import EditProfileScreen from "../screen/Home/EditProfile";
 import AppStack from "./AppStack";
 import Story from "../screen/Story";
+import RewardScreen from "../screen/RewardScreen";
 
 const Routes = () => {
   const MainStackNavigator = createNativeStackNavigator();
@@ -115,6 +116,13 @@ const Routes = () => {
         <MainStackNavigator.Screen
           name="UserDashboard"
           component={UserDashboard}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <MainStackNavigator.Screen
+          name="RewardScreen"
+          component={RewardScreen}
           options={{
             headerShown: false,
           }}

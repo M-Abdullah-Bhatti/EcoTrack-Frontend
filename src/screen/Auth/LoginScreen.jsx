@@ -125,7 +125,7 @@ const Login = ({ navigation }) => {
         const responseData = await response.json(); // Parse the response body as JSON
         toastShow("Login successful!");
         dispatch(loginSuccess(responseData)); // Use responseData instead of response.data
-        navigation.replace("Home");
+        navigation.replace("Main");
       } else {
         setLoader(false);
 
