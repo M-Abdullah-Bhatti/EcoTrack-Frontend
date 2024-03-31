@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Text, Image } from "react-native";
 import RewardsDetails from "../components/RewardsDetails";
 import RedemptionDetail from "../components/RedemptionDetail";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const RewardScreen = () => {
   const [rewardDetailsVisible, setrewardDetailsVisible] = useState(true);
@@ -11,7 +12,33 @@ const RewardScreen = () => {
   return (
     <View>
       <View style={styles.rewardHeader}>
-        <Text>Header of reward screen</Text>
+        <Image
+          source={require("../../assets/rewardheaderimg-removebg-preview.png")}
+          style={{ width: 100, height: 100, objectFit: "cover" }}
+        />
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 19,
+              fontWeight: "500",
+              color: "white",
+            }}
+          >
+            100
+          </Text>
+          <MaterialCommunityIcons
+            name="gold"
+            size={19}
+            style={{ marginLeft: 6 }}
+            color="#ffc53d"
+          />
+        </View>
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
@@ -78,15 +105,19 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
   },
+  // rewardHeader: {
+  //   height: 100,
+  //   backgroundColor: "red",
+  //   color: "white",
+  // },
   rewardHeader: {
-    height: 100,
-    backgroundColor: "red",
+    // height: 100,
+    backgroundColor: "#0c856e",
     color: "white",
-  },
-  rewardHeader: {
-    height: 100,
-    backgroundColor: "red",
-    color: "white",
+    width: "100%",
+    paddingVertical: 50,
+    display: "flex",
+    alignItems: "center",
   },
   activeButton: {
     borderBottomWidth: 2,
