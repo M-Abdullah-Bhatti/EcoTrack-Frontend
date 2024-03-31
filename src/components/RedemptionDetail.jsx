@@ -149,9 +149,7 @@ const RedemptionDetail = () => {
                   paddingHorizontal: 16,
                 },
               ]}
-              disabled={
-                !(rp.stock == "In stock" && totalUserWinPrice > rp.points)
-              }
+              disabled={rp.stock != "In stock" || totalUserWinPrice < rp.points}
             >
               <Text style={{ color: "white" }}>Redeem</Text>
             </TouchableOpacity>
