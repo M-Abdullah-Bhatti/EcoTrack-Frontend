@@ -95,13 +95,13 @@ const Story = ()=> {
   ]);
 
   return (
-    <View style={{flex: 1, backgroundColor: '#000'}}>
+    <View style={{flex: 1, backgroundColor: '#000', marginTop: 25}}>
       {content[current].type == 'video' ? 
       <Video
-      source={content[current].content}
-      resizeMode="cover"
-      paused={false}
-      style={{height: height, width: width}}
+        source={content[current].content}
+        resizeMode="cover"
+        paused={false}
+        style={{height: height, width: width}}
       />
       :
       <Image source={{uri: content[current].content}} style={{width: width, height: height*0.9, resizeMode: 'cover'}} onLoadEnd={()=> {
@@ -112,9 +112,9 @@ const Story = ()=> {
       <View style={{width: width, position: 'absolute', top: 10, justifyContent: 'space-evenly', alignItems: 'center', flexDirection: 'row'}}>
       {content.map((item, index)=> {
         return (
-          <View style={{flex: 1, height: 3, backgroundColor: 'rgba(255, 255, 255, 0.5)', marginLeft: 5, flexDirection: 'row'}}>
-          <Animated.View style={{flex: current == index ? progress : content[index].finish, height: 3, backgroundColor: 'rgba(255, 255, 255, 1)'}}>
-          </Animated.View>
+          <View style={{flex: 1, height: 3, backgroundColor: 'rgba(255, 255, 255, 0.5)', marginLeft: 5, flexDirection: 'row'}} key={index}>
+            <Animated.View style={{flex: current == index ? progress : content[index].finish, height: 3, backgroundColor: 'rgba(255, 255, 255, 1)'}}>
+            </Animated.View>
           </View>
         )
       })}

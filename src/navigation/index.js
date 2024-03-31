@@ -4,14 +4,12 @@ import { AuthStacks } from "./AuthStack";
 import Home from "../screen/Home";
 import BottomTab from "./BottomTab";
 import SetBudget from "../screen/SetBudget";
-import AddScreen from "../screen/Home/AddScreen";
 import AddEmissionCategory from "../screen/Home/AddEmissionCategory";
 import AddEmission from "../screen/Home/AddEmission";
 import SplashScreen from "../screen/SplashScreen";
 import EmissionDetailScreen from "../screen/Home/EmissionDetailScreen";
 import { StatusBar } from "expo-status-bar";
 import UserDashboard from "../screen/Home/UserDashboard";
-import ChatbotButton from "../components/Shared/ChatbotButton";
 import ChatScreen from "../screen/Home/ChatScreen";
 import ProfileScreen from "../screen/Home/ProfileScreen";
 import EditProfileScreen from "../screen/Home/EditProfile";
@@ -43,7 +41,7 @@ const Routes = () => {
           name="Main"
           component={AppStack}
           options={{
-            headerTransparent: true,
+            headerShown: false,
             title: "",
           }}
         />
@@ -124,7 +122,8 @@ const Routes = () => {
           name="RewardScreen"
           component={RewardScreen}
           options={{
-            headerShown: false,
+            headerTransparent: true,
+            title: ""
           }}
         />
       </MainStackNavigator.Navigator>

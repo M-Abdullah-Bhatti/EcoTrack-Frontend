@@ -10,7 +10,7 @@ export default function StoryComponent() {
     const navigation = useNavigation()
 
   return (
-    <ScrollView style={{paddingBottom: 10, paddingTop: 5, marginTop: 45, backgroundColor: 'white', flexDirection: 'row', borderBottomWidth: 0.75, borderBottomColor: '#ccc'}} 
+    <ScrollView style={{paddingBottom: 10, paddingTop: 5, backgroundColor: 'white', flexDirection: 'row'}} 
         horizontal 
         showsHorizontalScrollIndicator={false}
     >
@@ -29,7 +29,7 @@ export default function StoryComponent() {
             renderItem={({item})=> {
                 return (
                 <TouchableOpacity style={{width: 85, padding: 5}} onPress={()=> navigation.navigate("Story")}>
-                    <Image source={{uri: item.imgUrl}} style={{width: 70, borderWidth: 3, borderColor: 'pink', backgroundColor: 'pink', height: 70, borderRadius: 100}} />
+                    <Image source={{uri: item.imgUrl}} style={{width: 70, borderWidth: 2.5, borderColor: '#2DBAA0', backgroundColor: 'pink', height: 70, borderRadius: 100}} />
                     <Text style={styles.username}>{item.username}</Text>
                 </TouchableOpacity>
                 )
