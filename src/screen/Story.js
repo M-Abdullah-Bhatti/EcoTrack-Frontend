@@ -1,18 +1,23 @@
+import React, {useState, useRef, useEffect} from 'react'
 import {View, Text, Image, Dimensions, TouchableOpacity, Animated} from 'react-native'
-import React, {useState, useRef} from 'react'
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import axios from "axios";
 
 const {width, height} = Dimensions.get('screen')
 
-const Story = ()=> {
+const Story = ({route})=> {
   
-  const navigation = useNavigation()
+  const navigation = useNavigation();
+  const [content, setContent] = useState([]);
+
+  const { userId } = route.params;
+  
   const [current, setCurrent] = useState(0);
   const progress = useRef(new Animated.Value(0)).current;
   
   const start = ()=> {
-    if (content[current].type == 'video') {
+    if (content[current]?.type == 'video') {
       if (load) {
         Animated.timing(progress, {
         toValue: 1,
@@ -65,49 +70,35 @@ const Story = ()=> {
     progress.setValue(0);
     navigation.goBack();
   }
-  
-  const [content, setContent] = useState([
-  {
-    content: 'https://firebasestorage.googleapis.com/v0/b/clone-86962.appspot.com/o/IMG-20220831-WA0006.jpg?alt=media&token=8f4b0b18-0286-41f4-9578-34f3daba8fee',
-    type: 'image',
-    finish: 0
-  },
-  {
-    content: 'https://firebasestorage.googleapis.com/v0/b/clone-86962.appspot.com/o/puppy.jpg?alt=media&token=1f649d14-eb1d-43bc-9c81-62c199c3b4ea',
-    type: 'image',
-    finish: 0
-  },
-  {
-    content: 'https://firebasestorage.googleapis.com/v0/b/clone-86962.appspot.com/o/IMG-20220831-WA0006.jpg?alt=media&token=8f4b0b18-0286-41f4-9578-34f3daba8fee',
-    type: 'image',
-    finish: 0
-  },
-  {
-    content: 'https://firebasestorage.googleapis.com/v0/b/clone-86962.appspot.com/o/puppy.jpg?alt=media&token=1f649d14-eb1d-43bc-9c81-62c199c3b4ea',
-    type: 'image',
-    finish: 0
-  },
-  {
-    content: 'https://firebasestorage.googleapis.com/v0/b/clone-86962.appspot.com/o/IMG-20220831-WA0006.jpg?alt=media&token=8f4b0b18-0286-41f4-9578-34f3daba8fee',
-    type: 'image',
-    finish: 0
-  },
-  ]);
+
+  useEffect(() => {
+    const getStoriesOfUser = async () => {
+      const data = await axios.get(
+        `https://ecotrack-dev.vercel.app/api/story/${userId}`
+      );
+      setContent(data.data);
+      console.log("STORIESSSSSS: ", data.data[0]);
+    };
+
+    getStoriesOfUser();
+  }, []);
 
   return (
     <View style={{flex: 1, backgroundColor: '#000', marginTop: 25}}>
-      {content[current].type == 'video' ? 
-      <Video
-        source={content[current].content}
-        resizeMode="cover"
-        paused={false}
-        style={{height: height, width: width}}
-      />
-      :
-      <Image source={{uri: content[current].content}} style={{width: width, height: height*0.9, resizeMode: 'cover'}} onLoadEnd={()=> {
-        progress.setValue(0);
-        start();
-      }} />}
+      {
+        content[current]?.type == 'video' ? 
+        <Video
+          source={content[current].imageUrl}
+          resizeMode="cover"
+          paused={false}
+          style={{height: height, width: width}}
+        />
+        :
+        <Image source={{uri: content[current]?.imageUrl}} style={{width: width, height: height*0.9, resizeMode: 'cover'}} onLoadEnd={()=> {
+          progress.setValue(0);
+          start();
+        }} />
+      }
 
       <View style={{width: width, position: 'absolute', top: 10, justifyContent: 'space-evenly', alignItems: 'center', flexDirection: 'row'}}>
       {content.map((item, index)=> {
@@ -122,8 +113,8 @@ const Story = ()=> {
 
       <View style={{width: width, height: 50, flexDirection: 'row', justifyContent: 'space-between', position: 'absolute', top: 15}}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Image source={require('../storage/images/image1.jpg')} style={{width: 35, height: 35, borderRadius: 20, marginLeft: 10}} />
-          <Text style={{fontSize: 16, fontWeight: '600', marginLeft: 10, color: 'white'}}>rizwanahmed625</Text>
+          <Image source={{uri: content[0]?.user?.profilePic}} style={{width: 35, height: 35, borderRadius: 20, marginLeft: 10}} />
+          <Text style={{fontSize: 16, fontWeight: '600', marginLeft: 10, color: 'white'}}>{content[0]?.user?.name}</Text>
         </View>
         <TouchableOpacity style={{marginRight: 10, position: 'absolute', top: 15, right: 8}} onPress={()=> close()}>
           <Ionicons name="close" size={24} color="white" />

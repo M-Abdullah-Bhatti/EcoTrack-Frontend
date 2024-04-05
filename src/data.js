@@ -370,3 +370,31 @@ export const Users = [
       "following": [],
   }
 ];
+
+export const content = [
+  {
+    content: 'https://firebasestorage.googleapis.com/v0/b/clone-86962.appspot.com/o/IMG-20220831-WA0006.jpg?alt=media&token=8f4b0b18-0286-41f4-9578-34f3daba8fee',
+    type: 'image',
+    finish: 0
+  },
+  {
+    content: 'https://firebasestorage.googleapis.com/v0/b/clone-86962.appspot.com/o/puppy.jpg?alt=media&token=1f649d14-eb1d-43bc-9c81-62c199c3b4ea',
+    type: 'image',
+    finish: 0
+  },
+  {
+    content: 'https://firebasestorage.googleapis.com/v0/b/clone-86962.appspot.com/o/IMG-20220831-WA0006.jpg?alt=media&token=8f4b0b18-0286-41f4-9578-34f3daba8fee',
+    type: 'image',
+    finish: 0
+  },
+  {
+    content: 'https://firebasestorage.googleapis.com/v0/b/clone-86962.appspot.com/o/puppy.jpg?alt=media&token=1f649d14-eb1d-43bc-9c81-62c199c3b4ea',
+    type: 'image',
+    finish: 0
+  },
+  {
+    content: 'https://firebasestorage.googleapis.com/v0/b/clone-86962.appspot.com/o/IMG-20220831-WA0006.jpg?alt=media&token=8f4b0b18-0286-41f4-9578-34f3daba8fee',
+    type: 'image',
+    finish: 0
+  },
+];
