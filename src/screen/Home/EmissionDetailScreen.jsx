@@ -21,16 +21,17 @@ const EmissionDetailScreen = () => {
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   function formatDate(date) {
+    const datee = new Date(date);
     const options = {
       weekday: "long",
       year: "numeric",
       month: "long",
       day: "numeric",
     };
-    return date.toLocaleDateString("en-US", options);
+    return datee.toLocaleDateString("en-US", options);
   }
   const today = new Date();
-  const formattedDate = formatDate(today);
+  const formattedDate = formatDate(dataOfEmission.createdAt);
   const detailsHeadingToBeShown = [
     {
       id: 1,
@@ -42,7 +43,7 @@ const EmissionDetailScreen = () => {
       id: 2,
 
       heading: "Quantity",
-      text: dataOfEmission.carbon,
+      text: dataOfEmission.carbonEmitted + " " + "kgCO2eq",
     },
     {
       id: 3,
