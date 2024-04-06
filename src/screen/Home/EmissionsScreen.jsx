@@ -5,6 +5,7 @@ import {
   StatusBar,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { Ionicons, MaterialCommunityIcons, Fontisto } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
@@ -17,14 +18,76 @@ import { food } from "../../data";
 
 const EmissionsScreen = ({ navigation }) => {
   const [count, setCount] = useState(0);
+  const [loadingForFilteringEmissions, setloadingForFilteringEmissions] =
+    useState(false);
   const [emissionsData, setemissionsData] = useState([]);
+  const [filteredemissionsData, setfilteredemissionsData] = useState([]);
   const { user } = useSelector((state) => state.user);
   const onPress = () => setCount((prevCount) => prevCount + 1);
-  console.log("tokenn", user.token);
+
+  const [currentYear, setCurrentYear] = useState(0);
+  const [currentMonthIndex, setCurrentMonthIndex] = useState(10); // November is index 10
+  const [selectedMonthYear, setSelectedMonthYear] = useState("");
+
+  useEffect(() => {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonthIndex = currentDate.getMonth();
+    setCurrentYear(currentYear);
+    setCurrentMonthIndex(currentMonthIndex);
+    setSelectedMonthYear(
+      `${currentDate.toLocaleString("default", {
+        month: "long",
+      })} ${currentYear}`
+    );
+  }, []);
+
+  const changeMonth = (increment) => {
+    let newMonthIndex = currentMonthIndex + increment;
+    let newYear = currentYear;
+    // Ensure it doesn't go below November 2023
+    if (newYear === 2023 && newMonthIndex < 10) {
+      newMonthIndex = 10;
+    }
+    // console.log("object");
+
+    // // // Ensure it doesn't go beyond the current month
+    const currentDateCheck = new Date();
+    const currentYearCheck = currentDateCheck.getFullYear();
+    const currentMonthIndexCheck = currentDateCheck.getMonth();
+    // console.log("cc", newMonthIndex);
+    // console.log("cc", currentYearCheck);
+    // // console.log("cc", newYear);
+    if (
+      newYear === currentYearCheck &&
+      newMonthIndex > currentMonthIndexCheck
+    ) {
+      newMonthIndex = currentMonthIndex;
+    }
+    if (newMonthIndex < 0) {
+      newMonthIndex = 11; // December
+      newYear -= 1;
+      // console.log("new year", newYear);
+      // console.log("new motn", newMonthIndex);
+    } else if (newMonthIndex > 11) {
+      newMonthIndex = 0; // January
+      newYear += 1;
+    }
+    setCurrentYear(newYear);
+    setCurrentMonthIndex(newMonthIndex);
+    setSelectedMonthYear(
+      `${new Date(2023, newMonthIndex).toLocaleString("default", {
+        month: "long",
+      })} ${newYear}`
+    );
+  };
+
+  // console.log("tokenn", user.token);
+
   const getAllEmissions = async () => {
     try {
       const response = await axios.get(
-        "http://192.168.100.29:5000/api/emission/allMyEmission",
+        "https://ecotrack-dev.vercel.app//api/emission/allMyEmission",
         {
           headers: {
             authorization: `Bearer ${user.token}`,
@@ -43,7 +106,8 @@ const EmissionsScreen = ({ navigation }) => {
   useEffect(() => {
     getAllEmissions();
   }, []);
-  const dummyData = [];
+  console.log("objectss");
+  // const dummyData = [];
   // const dummyData = [
   //   {
   //     id: 1,
@@ -209,7 +273,31 @@ const EmissionsScreen = ({ navigation }) => {
   //     ),
   //   },
   // ];
+  useEffect(() => {
+    const filterEmissions = () => {
+      setloadingForFilteringEmissions(true);
 
+      const filteredEmissions = emissionsData.filter((emission) => {
+        const emissionDate = new Date(emission.createdAt);
+        const emissionYear = emissionDate.getFullYear();
+        const emissionMonth = emissionDate.getMonth() + 1;
+
+        return (
+          `${emissionDate.toLocaleString("default", {
+            month: "long",
+          })} ${emissionYear}` === selectedMonthYear
+        );
+      });
+      setloadingForFilteringEmissions(false);
+      console.log("object");
+      setfilteredemissionsData(filteredEmissions);
+    };
+
+    // Call the function to filter emissions on initial render
+    filterEmissions();
+
+    // Call the function to filter emissions whenever selectedMonthYear changes
+  }, [selectedMonthYear]);
   return (
     <ScrollView
       style={styles.container}
@@ -230,45 +318,19 @@ const EmissionsScreen = ({ navigation }) => {
 
       <View style={styles.emissionDataDiv}>
         <View style={styles.monthDiv2}>
+          <TouchableOpacity onPress={() => changeMonth(-1)}>
+            <Ionicons name="chevron-back" size={24} color="#2DBAA0" />
+          </TouchableOpacity>
           <Text style={{ fontSize: 18, fontWeight: "400", color: "black" }}>
-            December 2023
+            {selectedMonthYear}
           </Text>
-          <Ionicons name="chevron-forward" size={24} color="#2DBAA0" />
+          <TouchableOpacity onPress={() => changeMonth(1)}>
+            <Ionicons name="chevron-forward" size={24} color="#2DBAA0" />
+          </TouchableOpacity>
         </View>
-        {emissionsData.length > 0 ? (
-          emissionsData.map((data) => (
-            <TouchableOpacity
-              key={data.id}
-              style={styles.singleEmissionDiv}
-              onPress={() => navigation.navigate("EmissionDetail", { data })}
-            >
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-start",
-                  width: "50%",
-                  gap: 10,
-                  alignItems: "center",
-                }}
-              >
-                <View>
-                  {/* {renderEmissionIcon(data.category, data.subCategory)} */}
-                  {food[0].icon}
-                </View>
-                <View>
-                  <Text>{data.category}</Text>
-                  <Text style={{ opacity: 0.57 }}>
-                    {data.carbonEmitted} kgCO2eq
-                  </Text>
-                </View>
-              </View>
-              <View style={{ marginTop: 5 }}>
-                <Ionicons name="chevron-forward" size={24} color="#2DBAA0" />
-              </View>
-            </TouchableOpacity>
-          ))
-        ) : (
+        {loadingForFilteringEmissions ? (
+          <ActivityIndicator size="small" color="#0000ff" />
+        ) : emissionsData.length == 0 ? (
           <View
             style={{
               display: "flex",
@@ -276,7 +338,7 @@ const EmissionsScreen = ({ navigation }) => {
               paddingVertical: 100,
             }}
           >
-            <Text>You don't have added any emissions yet!</Text>
+            <Text>You don't have added any emissions</Text>
             <TouchableOpacity
               style={{
                 display: "flex",
@@ -300,6 +362,81 @@ const EmissionsScreen = ({ navigation }) => {
               <AntDesign name="arrowright" size={16} color="#a8a5a5" />
             </TouchableOpacity>
           </View>
+        ) : (
+          <>
+            {filteredemissionsData.length > 0 ? (
+              filteredemissionsData.map((data) => (
+                <TouchableOpacity
+                  key={data.id}
+                  style={styles.singleEmissionDiv}
+                  onPress={() =>
+                    navigation.navigate("EmissionDetail", { data })
+                  }
+                >
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "flex-start",
+                      width: "50%",
+                      gap: 10,
+                      alignItems: "center",
+                    }}
+                  >
+                    <View>
+                      {/* {renderEmissionIcon(data.category, data.subCategory)} */}
+                      {food[0].icon}
+                    </View>
+                    <View>
+                      <Text>{data.category}</Text>
+                      <Text style={{ opacity: 0.57 }}>
+                        {data.carbonEmitted} kgCO2eq
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={{ marginTop: 5 }}>
+                    <Ionicons
+                      name="chevron-forward"
+                      size={24}
+                      color="#2DBAA0"
+                    />
+                  </View>
+                </TouchableOpacity>
+              ))
+            ) : (
+              <View
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  paddingVertical: 100,
+                }}
+              >
+                <Text>You don't have emissions for {selectedMonthYear}</Text>
+                <TouchableOpacity
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    height: 50,
+                    justifyContent: "center",
+
+                    flexDirection: "row",
+                  }}
+                  onPress={() => navigation.navigate("Add")}
+                >
+                  <Text
+                    style={{
+                      color: "#a8a5a5",
+                      fontSize: 14,
+                      marginRight: 10,
+                    }}
+                  >
+                    Add emission
+                  </Text>
+                  <AntDesign name="arrowright" size={16} color="#a8a5a5" />
+                </TouchableOpacity>
+              </View>
+            )}
+          </>
         )}
       </View>
       <ChatbotButton />
