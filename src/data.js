@@ -383,28 +383,288 @@ export const Users = [
 
 export const content = [
   {
-    content: 'https://firebasestorage.googleapis.com/v0/b/clone-86962.appspot.com/o/IMG-20220831-WA0006.jpg?alt=media&token=8f4b0b18-0286-41f4-9578-34f3daba8fee',
-    type: 'image',
-    finish: 0
+    content:
+      "https://firebasestorage.googleapis.com/v0/b/clone-86962.appspot.com/o/IMG-20220831-WA0006.jpg?alt=media&token=8f4b0b18-0286-41f4-9578-34f3daba8fee",
+    type: "image",
+    finish: 0,
   },
   {
-    content: 'https://firebasestorage.googleapis.com/v0/b/clone-86962.appspot.com/o/puppy.jpg?alt=media&token=1f649d14-eb1d-43bc-9c81-62c199c3b4ea',
-    type: 'image',
-    finish: 0
+    content:
+      "https://firebasestorage.googleapis.com/v0/b/clone-86962.appspot.com/o/puppy.jpg?alt=media&token=1f649d14-eb1d-43bc-9c81-62c199c3b4ea",
+    type: "image",
+    finish: 0,
   },
   {
-    content: 'https://firebasestorage.googleapis.com/v0/b/clone-86962.appspot.com/o/IMG-20220831-WA0006.jpg?alt=media&token=8f4b0b18-0286-41f4-9578-34f3daba8fee',
-    type: 'image',
-    finish: 0
+    content:
+      "https://firebasestorage.googleapis.com/v0/b/clone-86962.appspot.com/o/IMG-20220831-WA0006.jpg?alt=media&token=8f4b0b18-0286-41f4-9578-34f3daba8fee",
+    type: "image",
+    finish: 0,
   },
   {
-    content: 'https://firebasestorage.googleapis.com/v0/b/clone-86962.appspot.com/o/puppy.jpg?alt=media&token=1f649d14-eb1d-43bc-9c81-62c199c3b4ea',
-    type: 'image',
-    finish: 0
+    content:
+      "https://firebasestorage.googleapis.com/v0/b/clone-86962.appspot.com/o/puppy.jpg?alt=media&token=1f649d14-eb1d-43bc-9c81-62c199c3b4ea",
+    type: "image",
+    finish: 0,
   },
   {
-    content: 'https://firebasestorage.googleapis.com/v0/b/clone-86962.appspot.com/o/IMG-20220831-WA0006.jpg?alt=media&token=8f4b0b18-0286-41f4-9578-34f3daba8fee',
-    type: 'image',
-    finish: 0
+    content:
+      "https://firebasestorage.googleapis.com/v0/b/clone-86962.appspot.com/o/IMG-20220831-WA0006.jpg?alt=media&token=8f4b0b18-0286-41f4-9578-34f3daba8fee",
+    type: "image",
+    finish: 0,
+  },
+];
+
+export const allEmissionItems = [
+  {
+    image: "",
+    text: "Train",
+    vehicle_type: "Train-Local",
+    icon: <Ionicons name="train" size={24} color="black" />,
+  },
+  {
+    image: "",
+    text: "Car",
+    vehicle_type: "Car-Size-Medium",
+    icon: <Ionicons name="ios-car-sharp" size={24} color="black" />,
+  },
+  {
+    image: "",
+    text: "Bus",
+    vehicle_type: "Bus-LocalAverage",
+    icon: <Ionicons name="ios-bus-sharp" size={24} color="black" />,
+  },
+  {
+    image: "",
+    text: "Plane",
+    vehicle_type: "train",
+    icon: <Entypo name="aircraft-take-off" size={24} color="black" />,
+  },
+  {
+    image: "",
+    text: "Boat",
+    vehicle_type: "train",
+    icon: <Fontisto name="sait-boat" size={24} color="black" />,
+  },
+  {
+    image: "",
+    text: "MotorBike",
+    vehicle_type: "Motorbike-Size-Medium",
+    icon: <FontAwesome5 name="motorcycle" size={24} color="black" />,
+  },
+  {
+    text: "Red Meat",
+    label: "beefBeefHerd",
+    icon: <MaterialCommunityIcons name="food-turkey" size={24} color="black" />,
+  },
+  {
+    text: "Black Meat",
+    label: "poultryMeat",
+    icon: <MaterialIcons name="set-meal" size={24} color="black" />,
+  },
+  {
+    text: "Fish",
+    label: "fishFarmed",
+    icon: <FontAwesome5 name="fish" size={24} color="black" />,
+  },
+  {
+    text: "Lamb",
+    label: "lambAndMutton",
+    icon: <MaterialIcons name="goat" size={24} color="black" />,
+  },
+  {
+    text: "Soy Milk",
+    label: "soymilk",
+    icon: <FontAwesome5 name="glass-whiskey" size={24} color="black" />,
+  },
+  {
+    text: "Tofu",
+    label: "tofu",
+    icon: <FontAwesome5 name="cheese" size={24} color="black" />,
+  },
+  {
+    text: "Coffee",
+    label: "coffee",
+    icon: <Fontisto name="coffeescript" size={24} color="black" />,
+  },
+  {
+    text: "Dark Chocolate",
+    label: "darkChocolate",
+    icon: <MaterialCommunityIcons name="spoon-sugar" size={24} color="black" />,
+  },
+  {
+    text: "Wheat",
+    label: "wheat",
+    icon: <MaterialCommunityIcons name="grain" size={24} color="black" />,
+  },
+  {
+    text: "Maize",
+    label: "maize",
+    icon: <MaterialCommunityIcons name="corn" size={24} color="black" />,
+  },
+  {
+    text: "Barley",
+    label: "barley",
+    icon: <MaterialCommunityIcons name="barley" size={24} color="black" />,
+  },
+  {
+    text: "Oatmeal",
+    label: "oatmeal",
+    icon: (
+      <MaterialCommunityIcons name="food-variant" size={24} color="black" />
+    ),
+  },
+  {
+    text: "Rice",
+    label: "rice",
+    icon: <MaterialCommunityIcons name="rice" size={24} color="black" />,
+  },
+  {
+    text: "Potatoes",
+    label: "potatoes",
+    icon: (
+      <MaterialCommunityIcons name="french-fries" size={24} color="black" />
+    ),
+  },
+  {
+    text: "Cane Sugar",
+    label: "caneSugar",
+    icon: <MaterialCommunityIcons name="spoon-sugar" size={24} color="black" />,
+  },
+  {
+    text: "Beet Sugar",
+    label: "beetSugar",
+    icon: <MaterialCommunityIcons name="spoon-sugar" size={24} color="black" />,
+  },
+  {
+    text: "Other Pulses",
+    label: "otherPulses",
+    icon: <MaterialCommunityIcons name="peanut" size={24} color="black" />,
+  },
+  {
+    text: "Peas",
+    label: "peas",
+    icon: <MaterialCommunityIcons name="peanut" size={24} color="black" />,
+  },
+  {
+    text: "Nuts",
+    label: "nuts",
+    icon: <MaterialCommunityIcons name="peanut" size={24} color="black" />,
+  },
+  {
+    text: "Groundnuts",
+    label: "groundnuts",
+    icon: <MaterialCommunityIcons name="peanut" size={24} color="black" />,
+  },
+  {
+    text: "Soybean Oil",
+    label: "soybeanOil",
+    icon: <MaterialCommunityIcons name="soy-sauce" size={24} color="black" />,
+  },
+  {
+    text: "Palm Oil",
+    label: "palmOil",
+    icon: <MaterialCommunityIcons name="palm-tree" size={24} color="black" />,
+  },
+  {
+    text: "Sunflower Oil",
+    label: "sunflowerOil",
+    icon: <FontAwesome5 name="oil-can" size={24} color="black" />,
+  },
+  {
+    text: "Rapeseed Oil",
+    label: "rapeseedOil",
+    icon: <FontAwesome5 name="oil-can" size={24} color="black" />,
+  },
+  {
+    text: "Olive Oil",
+    label: "oliveOil",
+    icon: (
+      <MaterialCommunityIcons
+        name="fruit-grapes-outline"
+        size={24}
+        color="black"
+      />
+    ),
+  },
+  {
+    text: "Tomatoes",
+    label: "tomatoes",
+    icon: <MaterialIcons name="food-bank" size={24} color="black" />,
+  },
+  {
+    text: "Onions and Leeks",
+    label: "onionsAndLeeks",
+    icon: <MaterialIcons name="food-bank" size={24} color="black" />,
+  },
+  {
+    text: "Root Vegetables",
+    label: "rootVegetables",
+    icon: <MaterialCommunityIcons name="carrot" size={24} color="black" />,
+  },
+  {
+    text: "Other Vegetables",
+    label: "otherVegetables",
+    icon: (
+      <MaterialCommunityIcons name="food-fork-drink" size={24} color="black" />
+    ),
+  },
+  {
+    text: "Citrus Fruit",
+    label: "citrusFruit",
+    icon: (
+      <MaterialCommunityIcons name="fruit-citrus" size={24} color="black" />
+    ),
+  },
+  {
+    text: "Bananas",
+    label: "bananas",
+    icon: (
+      <MaterialCommunityIcons name="fruit-citrus-off" size={24} color="black" />
+    ),
+  },
+  {
+    text: "Apples",
+    label: "apples",
+    icon: (
+      <MaterialCommunityIcons
+        name="food-apple-outline"
+        size={24}
+        color="black"
+      />
+    ),
+  },
+  {
+    text: "Berries and Grapes",
+    label: "berriesAndGrapes",
+    icon: (
+      <MaterialCommunityIcons name="fruit-grapes" size={24} color="black" />
+    ),
+  },
+  {
+    text: "Other Fruit",
+    label: "otherFruit",
+    icon: (
+      <MaterialCommunityIcons name="fruit-watermelon" size={24} color="black" />
+    ),
+  },
+  {
+    text: "Milk",
+    label: "milk",
+    icon: <Entypo name="box" size={24} color="black" />,
+  },
+  {
+    text: "Cheese",
+    label: "cheese",
+    icon: <MaterialCommunityIcons name="cheese" size={24} color="black" />,
+  },
+  {
+    text: "Eggs",
+    label: "eggs",
+    icon: <MaterialCommunityIcons name="egg" size={24} color="black" />,
+  },
+  {
+    text: "Shrimps (Farmed)",
+    label: "shrimpsFarmed",
+    icon: <FontAwesome5 name="fish" size={24} color="black" />,
   },
 ];

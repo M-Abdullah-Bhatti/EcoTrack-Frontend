@@ -14,7 +14,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { AntDesign } from "@expo/vector-icons";
 import { renderEmissionIcon } from "../../utils/renderIcon";
-import { food } from "../../data";
+import { allEmissionItems, food } from "../../data";
 
 const EmissionsScreen = ({ navigation }) => {
   const [count, setCount] = useState(0);
@@ -83,6 +83,11 @@ const EmissionsScreen = ({ navigation }) => {
   };
 
   // console.log("tokenn", user.token);
+
+  const renderEmissionIcon = (category, subCategory) => {
+    const item = allEmissionItems.find((i) => i.text == subCategory);
+    return item?.icon;
+  };
 
   const getAllEmissions = async () => {
     try {
@@ -384,8 +389,8 @@ const EmissionsScreen = ({ navigation }) => {
                     }}
                   >
                     <View>
-                      {/* {renderEmissionIcon(data.category, data.subCategory)} */}
-                      {food[0].icon}
+                      {renderEmissionIcon(data.category, data.subCategory)}
+                      {/* {food[0].icon} */}
                     </View>
                     <View>
                       <Text>{data.category}</Text>
