@@ -111,18 +111,13 @@ const SinglePost = ({ post, id }) => {
     }
   };
 
-  useEffect(() => {
-    console.log("Comment: ", post.comments[0])
-  }, [])
-
-
   return (
     <View
       key={id}
       style={{
         height: "auto",
         marginVertical: 20,
-        width: "96%",
+        width: "100%",
         shadowColor: "#000",
         backgroundColor: "white",
         shadowOffset: {
@@ -131,7 +126,6 @@ const SinglePost = ({ post, id }) => {
         },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-
         elevation: 10,
       }}
     >
@@ -184,6 +178,7 @@ const SinglePost = ({ post, id }) => {
           <Feather name="more-horizontal" size={20} color="black" />
         </TouchableOpacity>
       </View>
+      
       <View style={{ width: "100%" }}>
         {post.postDescription ?
           (viewFullDesc ? (
@@ -191,7 +186,6 @@ const SinglePost = ({ post, id }) => {
               style={{
                 fontSize: 13,
                 lineHeight: 18,
-
                 paddingHorizontal: 10,
                 marginBottom: 10,
               }}
@@ -205,7 +199,6 @@ const SinglePost = ({ post, id }) => {
                 fontSize: 13,
                 lineHeight: 18,
                 marginBottom: 10,
-
                 paddingHorizontal: 10,
               }}
             >
@@ -220,9 +213,10 @@ const SinglePost = ({ post, id }) => {
       {post.image && (
         <Image
           source={{ uri: post.image }}
-          style={{ height: 250, width: "94%", marginHorizontal: 10 }}
+          style={{ height: 275, width: "94%", marginHorizontal: 10, objectFit: 'contain' }}
         />
       )}
+      
       <TouchableOpacity
         style={{
           display: "flex",

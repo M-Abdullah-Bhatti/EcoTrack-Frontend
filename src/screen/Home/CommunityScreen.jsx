@@ -343,7 +343,6 @@ const CommunityScreen = ({ navigation }) => {
                   width: "46%",
                   gap: 10,
                   backgroundColor: "#f5f5f5",
-
                   padding: 10,
                   borderRadius: 12,
                 }}
@@ -380,7 +379,7 @@ const CommunityScreen = ({ navigation }) => {
         contentContainerStyle={{ paddingBottom: 30 }}
         style={styles.mainContainer}
       >
-        <View style={styles.stories}>
+        {/* <View style={styles.stories}>
           <FlatList
             horizontal
             ItemSeparatorComponent={() => <View style={{ width: 10 }}></View>}
@@ -456,7 +455,9 @@ const CommunityScreen = ({ navigation }) => {
               </TouchableOpacity>
             )}
           />
-        </View>
+        </View> */}
+
+        <StoryComponent />
 
         <TouchableOpacity
           style={{
@@ -500,8 +501,6 @@ const CommunityScreen = ({ navigation }) => {
             <Text style={{ opacity: 0.6 }}>What's On Your Mind</Text>
           </View>
         </TouchableOpacity>
-
-        <StoryComponent />
 
         {!posts ? (
           <View>
@@ -547,21 +546,6 @@ const CommunityScreen = ({ navigation }) => {
 
 export default CommunityScreen;
 
-{
-  /* <TouchableOpacity
-  style={{
-    backgroundColor: "#46A667",
-    marginTop: 18,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 6,
-    alignItems: "center",
-  }}
-  onPress={handleLogout}
->
-  <Text style={{ color: "white" }}>Logout</Text>
-</TouchableOpacity>; */
-}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -582,7 +566,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     justifyContent: "space-around",
     backgroundColor: "#fff",
-    marginBottom: 20,
+    // marginBottom: 10,
     borderBottomColor: "rgba(0,0,0,0.7)",
     borderBottomWidth: 0.5,
   },

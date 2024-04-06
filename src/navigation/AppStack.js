@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Home from '../screen/Home';
 import HabitsGuide from '../screen/HabitsGuide';
 import BottomTab from './BottomTab';
+import RewardScreen from '../screen/RewardScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -21,7 +22,7 @@ const AppStack = () => {
         drawerActiveTintColor: '#fff',
         drawerInactiveTintColor: '#333',
         drawerLabelStyle: {
-          marginLeft: -25,
+          // marginLeft: -25,
           fontSize: 15,
         },
       }}>
@@ -44,6 +45,17 @@ const AppStack = () => {
         }}
       />
       <Drawer.Screen
+        name="Rewardz"
+        component={RewardScreen}
+        options={{
+          drawerIcon: ({color}) => (
+            <Ionicons name="person-outline" size={22} color={color} />
+          ),
+          headerTransparent: true,
+          // title: ""
+        }}
+      />
+      <Drawer.Screen
         name="Messages"
         component={HabitsGuide}
         options={{
@@ -52,24 +64,6 @@ const AppStack = () => {
           ),
         }}
       />
-      {/* <Drawer.Screen
-        name="Moments"
-        component={MomentsScreen}
-        options={{
-          drawerIcon: ({color}) => (
-            <Ionicons name="timer-outline" size={22} color={color} />
-          ),
-        }}
-      />
-      <Drawer.Screen
-        name="Settings"
-        component={SettingsScreen}
-        options={{
-          drawerIcon: ({color}) => (
-            <Ionicons name="settings-outline" size={22} color={color} />
-          ),
-        }}
-      /> */}
     </Drawer.Navigator>
   );
 };

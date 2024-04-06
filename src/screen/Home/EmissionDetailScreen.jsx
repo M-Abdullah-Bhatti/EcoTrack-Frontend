@@ -8,7 +8,8 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { useRoute } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
+// import { MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 
 const EmissionDetailScreen = () => {
   const route = useRoute();
@@ -21,40 +22,47 @@ const EmissionDetailScreen = () => {
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   function formatDate(date) {
+    const datee = new Date(date);
     const options = {
       weekday: "long",
       year: "numeric",
       month: "long",
       day: "numeric",
     };
-    return date.toLocaleDateString("en-US", options);
+    return datee.toLocaleDateString("en-US", options);
   }
   const today = new Date();
-  const formattedDate = formatDate(today);
+  const formattedDate = formatDate(dataOfEmission.createdAt);
   const detailsHeadingToBeShown = [
     {
       id: 1,
-      heading: "Type",
+      heading: "Category",
       text: dataOfEmission.category,
-      text2: dataOfEmission.type,
+      // text2: dataOfEmission.type,
     },
     {
       id: 2,
-
-      heading: "Quantity",
-      text: dataOfEmission.carbon,
+      heading: "Sub category",
+      text: dataOfEmission.subCategory,
+      // text2: dataOfEmission.type,
     },
     {
       id: 3,
 
-      heading: "Mitigation",
-      textOfMitigation,
-      switchBtn: true,
+      heading: "Quantity",
+      text: dataOfEmission.carbonEmitted + " " + "kgCO2eq",
     },
+    // {
+    //   id: 4,
+
+    //   heading: "Mitigation",
+    //   textOfMitigation,
+    //   switchBtn: true,
+    // },
     {
       id: 4,
 
-      heading: "Date",
+      heading: "Added On",
       text: formattedDate,
     },
   ];
@@ -69,7 +77,7 @@ const EmissionDetailScreen = () => {
             </Text>
             <Text style={{ fontSize: 14, opacity: 0.5, marginTop: 10 }}>
               {d.text && d.text}
-              {d.text2 && ` - ${d.text2}`}
+              {/* {d.text2 && ` - ${d.text2}`} */}
               {d.textOfMitigation && d.textOfMitigation}
             </Text>
             {d.switchBtn && (
@@ -99,9 +107,9 @@ const EmissionDetailScreen = () => {
         }}
       >
         <Text style={{ color: "white", fontSize: 18, fontWeight: "600" }}>
-          Delete
+          Mitigate
         </Text>
-        <Ionicons name="trash-outline" size={24} color="white" />
+        <FontAwesome name="heartbeat" size={24} color="white" />
       </TouchableOpacity>
     </View>
   );
