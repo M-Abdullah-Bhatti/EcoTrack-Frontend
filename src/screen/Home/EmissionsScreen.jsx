@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import { AntDesign } from "@expo/vector-icons";
 import { renderEmissionIcon } from "../../utils/renderIcon";
 import { allEmissionItems, food } from "../../data";
+import { useFocusEffect } from "@react-navigation/native";
 
 const EmissionsScreen = ({ navigation }) => {
   const [count, setCount] = useState(0);
@@ -82,15 +83,23 @@ const EmissionsScreen = ({ navigation }) => {
     );
   };
 
-  // console.log("tokenn", user.token);
-
   const renderEmissionIcon = (category, subCategory) => {
     const item = allEmissionItems.find((i) => i.text == subCategory);
-    return item?.icon;
+    return item ? (
+      item.icon
+    ) : (
+      <MaterialCommunityIcons
+        name="power-plug-outline"
+        size={30}
+        color="black"
+      />
+    );
   };
 
   const getAllEmissions = async () => {
     try {
+      setloadingForFilteringEmissions(true);
+
       const response = await axios.get(
         "https://ecotrack-dev.vercel.app//api/emission/allMyEmission",
         {
@@ -100,7 +109,20 @@ const EmissionsScreen = ({ navigation }) => {
         }
       );
       setemissionsData(response.data);
-      console.log("dtaa of emsison", response.data);
+
+      const currentMonth = new Date().getMonth();
+      const currentYear = new Date().getFullYear();
+
+      const filteredData = response.data.filter((emission) => {
+        const emissionDate = new Date(emission.createdAt);
+        return (
+          emissionDate.getMonth() === currentMonth &&
+          emissionDate.getFullYear() === currentYear
+        );
+      });
+
+      setfilteredemissionsData(filteredData);
+      setloadingForFilteringEmissions(false);
     } catch (error) {
       console.log(
         "an error occur while getting emissions data",
@@ -108,10 +130,14 @@ const EmissionsScreen = ({ navigation }) => {
       );
     }
   };
-  useEffect(() => {
-    getAllEmissions();
-  }, []);
-  console.log("objectss");
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getAllEmissions();
+    }, [])
+  );
+
+  // console.log("objectss: ", newDate);
   // const dummyData = [];
   // const dummyData = [
   //   {
@@ -280,8 +306,6 @@ const EmissionsScreen = ({ navigation }) => {
   // ];
   useEffect(() => {
     const filterEmissions = () => {
-      setloadingForFilteringEmissions(true);
-
       const filteredEmissions = emissionsData.filter((emission) => {
         const emissionDate = new Date(emission.createdAt);
         const emissionYear = emissionDate.getFullYear();
@@ -293,7 +317,7 @@ const EmissionsScreen = ({ navigation }) => {
           })} ${emissionYear}` === selectedMonthYear
         );
       });
-      setloadingForFilteringEmissions(false);
+
       console.log("object");
       setfilteredemissionsData(filteredEmissions);
     };

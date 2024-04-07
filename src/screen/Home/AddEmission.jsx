@@ -43,6 +43,7 @@ const AddEmission = ({ navigation, route }) => {
     setSelectedCountry(selectedItem);
   };
 
+  // electricity
   const calculateCarbon = async () => {
     console.log("eletricity cons: ");
     const params = {
@@ -83,7 +84,7 @@ const AddEmission = ({ navigation, route }) => {
   const calculateFoodCarbon = async () => {
     const requestBody = {
       food: params.subCategory.label,
-      kg: foodQuantity,
+      kg: category == "Meal" ? mealQuantity : foodQuantity,
     };
 
     const response = await axios.post(`${baseUrl}/api/food/`, requestBody);
@@ -103,12 +104,18 @@ const AddEmission = ({ navigation, route }) => {
     let carbonValue;
     if (category == "Food" || category == "Meal") {
       carbonValue = foodCarbon;
+      console.log("foodCarbon1: ", carbonValue);
     }
     if (category == "Transportation") {
       carbonValue = fuelCarbon;
-    } else {
-      carbonValue = electricityCarbon;
+      console.log("foodCarbon2: ", carbonValue);
     }
+
+    if (category == "Electricity") {
+      carbonValue = electricityCarbon;
+      console.log("foodCarbon3: ", carbonValue);
+    }
+    console.log("foodCarbon4: ", carbonValue);
 
     const requestBody = {
       user: user?._id,
@@ -116,6 +123,8 @@ const AddEmission = ({ navigation, route }) => {
       subCategory: subCategory || "",
       carbonEmitted: carbonValue,
     };
+
+    console.log("requestBody: ", requestBody);
 
     axios
       .post(`${baseUrl}/api/emission/addEmission`, requestBody, {
@@ -372,7 +381,7 @@ const AddEmission = ({ navigation, route }) => {
             <>
               <View style={{ marginBottom: 30 }}>
                 <Text style={styles.totalText}>Total</Text>
-                <Text style={styles.totalValue}>10.2 kgCO2eq</Text>
+                <Text style={styles.totalValue}>{foodCarbon} kgCO2eq</Text>
               </View>
 
               <View style={styles.addButtonContainer}>
