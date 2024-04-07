@@ -6,24 +6,15 @@ import {
   Platform,
   StatusBar,
   Image,
-  FlatList,
   ScrollView,
-  TextInput,
-  Modal,
   Alert,
   ActivityIndicator,
 } from "react-native";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../redux/userSlice";
-import { Ionicons } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
+import React, { useState } from "react";
+import { useFocusEffect } from '@react-navigation/native';
+import { useSelector } from "react-redux";
+import { Ionicons, Feather } from "@expo/vector-icons";
 import SinglePost from "./SinglePost";
-import { pickVideos } from "../../utils/pickImage";
-import { stories } from "../../utils/Data";
-import * as ImagePicker from "expo-image-picker";
-import { toastShow, uploadImage } from "../../utils/helpers";
 import ChatbotButton from "../../components/Shared/ChatbotButton";
 import axios from "axios";
 import StoryComponent from "../../components/StoryComponent";
@@ -31,101 +22,30 @@ import StoryComponent from "../../components/StoryComponent";
 // https://www.pinterest.com/pin/254664553914369768/
 
 const CommunityScreen = ({ navigation }) => {
-  const dispatch = useDispatch();
-  const [modalVisible, setModalVisible] = useState(false);
-  const [postsReloadHelper, setPostsReloadHelper] = useState(false);
-  const [toUploadImage, setToUploadImage] = useState("");
-  const [description, setDescription] = useState("");
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const { user } = useSelector((state) => state.user);
 
-  function handleLogout() {
-    dispatch(logout());
-    navigation.replace("AuthNavigation");
-  }
-
-  const handlePostUpload = async () => {
-    setIsLoading(true);
-
-    try {
-      const imageUrl = await uploadImage(toUploadImage);
-      console.log("Image uploaded successfully:", imageUrl);
-
-      const requestBody = {
-        userId: user._id,
-        postDescription: description,
-        image: imageUrl,
-      };
-
-      const response = await fetch(
-        "https://ecotrack-dev.vercel.app/api/posts/add/",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
-          },
-          body: JSON.stringify(requestBody),
+  useFocusEffect(
+    React.useCallback(() => {
+      const getData = async () => {
+        setIsLoading(true);
+        try {
+          const postData = await axios.get("https://ecotrack-dev.vercel.app/api/posts/");
+          setPosts(postData.data);
+          setIsLoading(false);
+          console.log("POSTS: ", postData.data);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        } finally {
+          setIsLoading(false);
         }
-      );
-
-      if (response.status === 401) Alert.alert("Unauthorized Access");
-
-      if (!response.ok) {
-        setModalVisible(false);
-        toastShow("Couldn't upload post. Try again later.");
-        throw new Error("Failed to upload post. Please try again later.");
-      }
-
-      const responseData = await response.json();
-      console.log("Post uploaded successfully!", responseData);
-      setPostsReloadHelper(true);
-      setIsLoading(false);
-      setModalVisible(false);
-      toastShow("Post uploaded successfully!");
-    } catch (error) {
-      console.error("Error uploading post:", error.message);
-      setModalVisible(false);
-      toastShow("Couldn't upload post. Try again later.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const pickMedia = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      console.log("result: ", result);
-      console.log("result: ", result.uri);
-      setToUploadImage(result.uri);
-
-      // setUploadingImage(true);
-      const image = await uploadImage(result.uri);
-      console.log("image: ", image);
-      setImage(image);
-      // setUploadingImage(false);
-    }
-  };
-
-  useEffect(() => {
-    const getData = async () => {
-      const postData = await axios.get(
-        "https://ecotrack-dev.vercel.app/api/posts/"
-      );
-      setPosts(postData.data);
-      console.log("POSTS: ", postData.data);
-    };
-
-    getData();
-  }, [postsReloadHelper]);
+      };
+  
+      getData();
+    }, [])
+  );  
 
   return (
     <View style={styles.container}>
@@ -232,231 +152,9 @@ const CommunityScreen = ({ navigation }) => {
         </View>
       </View>
 
-      {/* Add Image Modal */}
-      <Modal
-        animationType="slide"
-        // transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}
-        presentationStyle="fullScreen"
-        style={{ position: "relative" }}
-      >
-        <View style={styles.modalHeader}>
-          <TouchableOpacity
-            style={{
-              width: "80%",
-              display: "flex",
-              flexDirection: "row",
-              height: 60,
-              justifyContent: "flex-start",
-              alignItems: "center",
-
-              gap: 10,
-            }}
-            onPress={() => Alert.alert("Aziz")}
-          >
-            <View style={{ width: 40, height: 40, borderRadius: 20 }}>
-              <Image
-                source={require("../../../assets/prof.png")}
-                style={{ width: 40, height: 40, borderRadius: 20 }}
-              />
-            </View>
-            <View
-              style={{
-                display: "flex",
-                alignItems: "flex-start",
-                width: "70%",
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 13,
-                  marginTop: 2,
-                  fontWeight: "bold",
-                  color: "black",
-                }}
-              >
-                {user.name}
-              </Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            onPress={() => setModalVisible(false)}
-          >
-            <Entypo name="circle-with-cross" size={24} color="black" />
-          </TouchableOpacity>
-        </View>
-        <TextInput
-          placeholder="Say Something..."
-          style={{ fontSize: 24, margin: 12, height: 60 }}
-          multiline
-          onChangeText={(e) => setDescription(e)}
-        />
-        <View style={styles.modalMediaBtns}>
-          {toUploadImage ? (
-            <View
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Image
-                source={{ uri: toUploadImage }}
-                style={{ width: "100%", height: 250 }}
-              />
-              <TouchableOpacity
-                style={{
-                  backgroundColor: "#04753E",
-                  marginTop: 20,
-                  minWidth: 150,
-                  alignItems: "center",
-                  paddingVertical: 12,
-                  borderRadius: 12,
-                }}
-                onPress={handlePostUpload}
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <ActivityIndicator size="small" color="white" />
-                ) : (
-                  <Text style={{ color: "white", fontSize: 18 }}>Post</Text>
-                )}
-              </TouchableOpacity>
-            </View>
-          ) : (
-            <>
-              <TouchableOpacity
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "46%",
-                  gap: 10,
-                  backgroundColor: "#f5f5f5",
-                  padding: 10,
-                  borderRadius: 12,
-                }}
-                onPress={pickMedia}
-              >
-                <Entypo name="images" size={24} color="red" />
-
-                <Text>Add Images</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "46%",
-                  gap: 10,
-                  backgroundColor: "#f5f5f5",
-                  // borderColor: "black",
-                  // borderWidth: 0.5,
-                  borderRadius: 12,
-                }}
-                onPress={pickVideos}
-              >
-                <Entypo name="folder-video" size={24} color="blue" />
-                <Text>Add Videos</Text>
-              </TouchableOpacity>
-            </>
-          )}
-        </View>
-      </Modal>
-
       <ScrollView
-        contentContainerStyle={{ paddingBottom: 30 }}
-        style={styles.mainContainer}
+        contentContainerStyle={{ paddingBottom: 20 }}
       >
-        {/* <View style={styles.stories}>
-          <FlatList
-            horizontal
-            ItemSeparatorComponent={() => <View style={{ width: 10 }}></View>}
-            showsHorizontalScrollIndicator={false}
-            style={{ height: 130, gap: 30 }}
-            data={stories}
-            renderItem={({ item }) => (
-              <TouchableOpacity style={styles.singleStory}>
-                <View
-                  style={{ width: "100%", height: "100%", borderRadius: 10 }}
-                >
-                  <Image
-                    style={{ width: "100%", height: "100%", borderRadius: 10 }}
-                    source={item.story}
-                  />
-                </View>
-                {item.user != "LoggedIn" && (
-                  <Text
-                    style={{ textAlign: "center", marginTop: 10, fontSize: 12 }}
-                  >
-                    {item.user}
-                  </Text>
-                )}
-
-                <View
-                  style={{
-                    position: "absolute",
-                    backgroundColor: "black",
-                    height: 24,
-                    width: 24,
-                    bottom: -10,
-                    borderRadius: 12,
-                    alignSelf: "center",
-                    marginTop: 40,
-                    zIndex: 20,
-                  }}
-                >
-                  {item.icon ? (
-                    <View
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        height: 24,
-                        width: 24,
-                      }}
-                    >
-                      {item.icon}
-                    </View>
-                  ) : (
-                    <Image
-                      source={item.pic}
-                      style={{
-                        height: 24,
-                        width: 24,
-                        borderRadius: 12,
-                      }}
-                    />
-                  )}
-                </View>
-                {item.user != "LoggedIn" && (
-                  <View
-                    style={{
-                      position: "absolute",
-                      width: "100%",
-                      height: "100%",
-                      backgroundColor: "rgba(0, 0, 0, 0.3)",
-                      borderRadius: 10,
-                      zIndex: 2,
-                    }}
-                  ></View>
-                )}
-              </TouchableOpacity>
-            )}
-          />
-        </View> */}
-
         <StoryComponent />
 
         <TouchableOpacity
@@ -474,7 +172,7 @@ const CommunityScreen = ({ navigation }) => {
             padding: 5,
             borderRadius: 20,
           }}
-          onPress={() => setModalVisible(true)}
+          onPress={() => navigation.navigate("Upload")}
         >
           <View
             style={{
@@ -491,7 +189,6 @@ const CommunityScreen = ({ navigation }) => {
               style={{
                 width: 25,
                 height: 25,
-                // borderRadius: 20,
                 objectFit: "fill",
               }}
             />
@@ -502,7 +199,9 @@ const CommunityScreen = ({ navigation }) => {
           </View>
         </TouchableOpacity>
 
-        {!posts ? (
+        {isLoading ? (
+          <ActivityIndicator size="large" color="black" style={{marginTop: 50}} />
+        ) : !posts || posts.length === 0 ? (
           <View>
             <Text>No posts found</Text>
           </View>
@@ -513,30 +212,6 @@ const CommunityScreen = ({ navigation }) => {
             ))}
           </View>
         )}
-
-        {/* Logout */}
-        <View
-          style={{
-            marginLeft: 20,
-            alignItems: "center",
-            justifyContent: "center",
-            marginVertical: 20,
-          }}
-        >
-          <TouchableOpacity
-            style={{
-              backgroundColor: "#000111",
-              paddingVertical: 8,
-              alignItems: "center",
-              justifyContent: "center",
-              paddingHorizontal: 16,
-              borderRadius: 12,
-            }}
-            onPress={handleLogout}
-          >
-            <Text style={{ color: "#fff", fontSize: 16 }}>Logout</Text>
-          </TouchableOpacity>
-        </View>
       </ScrollView>
 
       <ChatbotButton />
@@ -544,20 +219,11 @@ const CommunityScreen = ({ navigation }) => {
   );
 };
 
-export default CommunityScreen;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : "0px",
     backgroundColor: "white",
-  },
-  mainContainer: {
-    // flex: 1,
-    // paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : "0px",
-    // backgroundColor: "white",
-    // // position: "relative",
-    // // paddingBottom: 200,
   },
   header: {
     display: "flex",
@@ -566,83 +232,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     justifyContent: "space-around",
     backgroundColor: "#fff",
-    // marginBottom: 10,
     borderBottomColor: "rgba(0,0,0,0.7)",
     borderBottomWidth: 0.5,
-  },
-  stories: {
-    display: "flex",
-    flexDirection: "row",
-    // overflow: "scroll",
-    justifyContent: "space-around",
-    gap: 20,
-    paddingHorizontal: 10,
-    marginTop: 2,
-    position: "relative",
-  },
-
-  addStory: {
-    width: "20%",
-    height: 100,
-  },
-  singleStory: {
-    width: 70,
-    height: 100,
-    position: "relative",
   },
   postsContainer: {
     flex: 1,
     paddingHorizontal: 10,
-    // flexDirection: "row",
     width: "100%",
     alignItems: "center",
-  },
-  postheader: {
-    display: "flex",
-    flexDirection: "row",
-    // marginTop: StatusBar.currentHeight,
-    paddingHorizontal: 10,
-    justifyContent: "space-between",
-    backgroundColor: "white",
-    // position: "fixed",
-    alignItems: "center",
-    width: "100%",
-    marginBottom: 10,
-  },
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 0.3,
-    padding: 10,
-    borderRadius: 12,
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
-  },
-  modalll: {
-    width: 1000,
-    height: 100,
-  },
-
-  modalHeader: {
-    display: "flex",
-    flexDirection: "row",
-    width: "100%",
-    // paddingHorizontal: 4,
-    justifyContent: "space-around",
-    // backgroundColor: "#2DBAA0",
-    borderBottomWidth: 0.3,
-  },
-  modalMediaBtns: {
-    // position: "absolute",
-    width: "100%",
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    // bottom: "50%",
-    marginTop: 50,
   },
 });
+
+export default CommunityScreen;

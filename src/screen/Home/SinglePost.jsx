@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   View,
   Text,
@@ -129,7 +129,7 @@ const SinglePost = ({ post, id }) => {
         elevation: 10,
       }}
     >
-      <View style={styles.postheader}>
+      <View style={styles.postHeader}>
         <TouchableOpacity
           style={{
             width: "60%",
@@ -267,7 +267,6 @@ const SinglePost = ({ post, id }) => {
               marginVertical: 10,
               alignSelf: "flex-end",
               alignItems: "center",
-
               width: "38%",
             }}
           >
@@ -277,7 +276,7 @@ const SinglePost = ({ post, id }) => {
           </View>
         )}
       </TouchableOpacity>
-      <View style={styles.postMEdiaBtns}>
+      <View style={styles.postMediaBtns}>
         <TouchableOpacity
           style={{
             display: "flex",
@@ -309,8 +308,6 @@ const SinglePost = ({ post, id }) => {
             width: "30%",
             gap: 8,
             backgroundColor: "#2DBAA0",
-            // borderColor: "black",
-            // borderWidth: 0.5,
             borderRadius: 12,
           }}
           onPress={() => {
@@ -330,8 +327,6 @@ const SinglePost = ({ post, id }) => {
             width: "30%",
             gap: 8,
             backgroundColor: "#2DBAA0",
-            // borderColor: "black",
-            // borderWidth: 0.5,
             borderRadius: 12,
           }}
         >
@@ -356,7 +351,6 @@ const SinglePost = ({ post, id }) => {
             <TouchableOpacity
               style={{
                 width: "80%",
-                // backgroundColor: "red",
                 display: "flex",
                 flexDirection: "row",
                 height: 60,
@@ -508,45 +502,29 @@ const SinglePost = ({ post, id }) => {
 };
 
 const styles = StyleSheet.create({
-  postheader: {
+  postHeader: {
     display: "flex",
     flexDirection: "row",
-    // marginTop: StatusBar.currentHeight,
     paddingHorizontal: 10,
     justifyContent: "space-between",
     backgroundColor: "white",
-    // position: "fixed",
     alignItems: "center",
     width: "100%",
     marginBottom: 10,
   },
-  postMEdiaBtns: {
-    // position: "absolute",
+  postMediaBtns: {
     width: "100%",
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-evenly",
-    // bottom: "50%",
     marginVertical: 10,
   },
   modalHeader: {
     display: "flex",
     flexDirection: "row",
     width: "100%",
-    // paddingHorizontal: 4,
     justifyContent: "flex-end",
-    // backgroundColor: "#2DBAA0",
-    // borderBottomWidth: 0.3,
     marginTop: 10,
-  },
-  modalMEdiaBtns: {
-    // position: "absolute",
-    width: "100%",
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    // bottom: "50%",
-    marginTop: 50,
   },
   commentBox: {
     position: "absolute",

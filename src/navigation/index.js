@@ -16,6 +16,7 @@ import EditProfileScreen from "../screen/Home/EditProfile";
 import AppStack from "./AppStack";
 import Story from "../screen/Story";
 import RewardScreen from "../screen/RewardScreen";
+import Upload from "../screen/Upload";
 
 const Routes = () => {
   const MainStackNavigator = createNativeStackNavigator();
@@ -51,6 +52,15 @@ const Routes = () => {
           options={{
             headerShown: true,
             title: "Monthly Budget",
+          }}
+        />
+
+        <MainStackNavigator.Screen
+          name="Upload"
+          component={Upload}
+          options={{
+            headerShown: true,
+            title: "Uplaod",
           }}
         />
 
