@@ -135,7 +135,7 @@ const AddScreen = ({ navigation }) => {
           ))}
         </View>
       </View>
-      <ChatbotButton />
+      {/* <ChatbotButton /> */}
     </SafeAreaView>
   );
 };

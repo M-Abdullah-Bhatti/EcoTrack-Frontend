@@ -113,7 +113,7 @@ const FoodGuide = () => {
           </Text>
         </TouchableOpacity>
       </View>
-      <ChatbotButton />
+      {/* <ChatbotButton /> */}
     </SafeAreaView>
   );
 };

@@ -358,7 +358,17 @@ const EmissionsScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
         {loadingForFilteringEmissions ? (
-          <ActivityIndicator size="small" color="#0000ff" />
+          <View
+            style={{
+              // height: "100%",
+              // display: "flex",
+              // justifyContent: "center",
+              // alignItems: "center",
+              marginVertical: "60%",
+            }}
+          >
+            <ActivityIndicator size="small" color="#0000ff" />
+          </View>
         ) : emissionsData.length == 0 ? (
           <View
             style={{
@@ -468,7 +478,7 @@ const EmissionsScreen = ({ navigation }) => {
           </>
         )}
       </View>
-      <ChatbotButton />
+      {/* <ChatbotButton /> */}
     </ScrollView>
   );
 };

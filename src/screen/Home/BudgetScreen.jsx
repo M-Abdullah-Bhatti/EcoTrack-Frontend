@@ -151,7 +151,7 @@ const BudgetScreen = ({ navigation }) => {
         </Text>
       </TouchableOpacity>
 
-      <ChatbotButton />
+      {/* <ChatbotButton /> */}
     </View>
   );
 };
