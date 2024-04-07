@@ -45,7 +45,7 @@ const CommunityScreen = ({ navigation }) => {
   
       getData();
     }, [])
-  );  
+  );
 
   return (
     <View style={styles.container}>
@@ -172,7 +172,7 @@ const CommunityScreen = ({ navigation }) => {
             padding: 5,
             borderRadius: 20,
           }}
-          onPress={() => navigation.navigate("Upload")}
+          onPress={() => navigation.navigate("Upload", {type: "post"})}
         >
           <View
             style={{

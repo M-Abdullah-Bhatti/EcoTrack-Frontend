@@ -103,7 +103,7 @@ const Story = ({route})=> {
       <View style={{width: width, position: 'absolute', top: 10, justifyContent: 'space-evenly', alignItems: 'center', flexDirection: 'row'}}>
       {content.map((item, index)=> {
         return (
-          <View style={{flex: 1, height: 3, backgroundColor: 'rgba(255, 255, 255, 0.5)', marginLeft: 5, flexDirection: 'row'}} key={index}>
+          <View style={{flex: 1, height: 3, backgroundColor: 'rgba(255, 255, 255, 0.5)', marginHorizontal: 5, flexDirection: 'row'}} key={index}>
             <Animated.View style={{flex: current == index ? progress : content[index].finish, height: 3, backgroundColor: 'rgba(255, 255, 255, 1)'}}>
             </Animated.View>
           </View>

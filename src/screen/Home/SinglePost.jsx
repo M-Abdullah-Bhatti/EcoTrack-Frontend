@@ -9,11 +9,8 @@ import {
   Modal,
   ScrollView
 } from "react-native";
-
-import { Feather, Entypo } from "@expo/vector-icons";
+import { Feather, Entypo, AntDesign, FontAwesome, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { formatDateLikeFacebook } from "../../utils/helpers";
-
-import { AntDesign, FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 
 const SinglePost = ({ post, id }) => {
@@ -72,10 +69,10 @@ const SinglePost = ({ post, id }) => {
         throw new Error("Failed to add comment. Please try again later.");
       }
 
+      setComment("");
       const responseData = await response.json();
       setComments(responseData.comments)
       console.log("Comment added successfully!", responseData);
-      setComment("")
     } catch (error) {
       console.error("Error adding comment:", error.message);
     }
@@ -464,7 +461,7 @@ const SinglePost = ({ post, id }) => {
                 ) : (
                   <Text
                     onPress={() => toggleComment(id)}
-                    style={{ fontSize: 10 }}
+                    style={{ fontSize: 12 }}
                   >
                     {comment.comment.length > 80
                       ? comment.comment.substr(0, 80)
@@ -488,11 +485,11 @@ const SinglePost = ({ post, id }) => {
             onChangeText={(e)=> setComment(e)}
           />
           <TouchableOpacity onPress={addComment}>
-            <AntDesign
-              name="caretright"
+            <Ionicons
+              name="send-sharp"
               size={24}
               color="black"
-              style={{ marginRight: 30 }}
+              style={{ marginRight: 15 }}
             />
           </TouchableOpacity>
         </View>
