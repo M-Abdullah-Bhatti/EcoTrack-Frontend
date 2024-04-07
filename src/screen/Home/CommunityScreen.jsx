@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import SinglePost from "./SinglePost";
@@ -32,7 +32,9 @@ const CommunityScreen = ({ navigation }) => {
       const getData = async () => {
         setIsLoading(true);
         try {
-          const postData = await axios.get("https://ecotrack-dev.vercel.app/api/posts/");
+          const postData = await axios.get(
+            "https://ecotrack-dev.vercel.app/api/posts/"
+          );
           setPosts(postData.data);
           setIsLoading(false);
           console.log("POSTS: ", postData.data);
@@ -42,10 +44,10 @@ const CommunityScreen = ({ navigation }) => {
           setIsLoading(false);
         }
       };
-  
+
       getData();
     }, [])
-  );  
+  );
 
   return (
     <View style={styles.container}>
@@ -152,9 +154,7 @@ const CommunityScreen = ({ navigation }) => {
         </View>
       </View>
 
-      <ScrollView
-        contentContainerStyle={{ paddingBottom: 20 }}
-      >
+      <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
         <StoryComponent />
 
         <TouchableOpacity
@@ -200,7 +200,11 @@ const CommunityScreen = ({ navigation }) => {
         </TouchableOpacity>
 
         {isLoading ? (
-          <ActivityIndicator size="large" color="black" style={{marginTop: 50}} />
+          <ActivityIndicator
+            size="large"
+            color="black"
+            style={{ marginTop: 50 }}
+          />
         ) : !posts || posts.length === 0 ? (
           <View>
             <Text>No posts found</Text>
@@ -214,7 +218,7 @@ const CommunityScreen = ({ navigation }) => {
         )}
       </ScrollView>
 
-      <ChatbotButton />
+      {/* <ChatbotButton /> */}
     </View>
   );
 };

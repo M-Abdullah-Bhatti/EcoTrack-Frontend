@@ -17,6 +17,7 @@ import AppStack from "./AppStack";
 import Story from "../screen/Story";
 import RewardScreen from "../screen/RewardScreen";
 import Upload from "../screen/Upload";
+import ChatbotButton from "../components/Shared/ChatbotButton";
 
 const Routes = () => {
   const MainStackNavigator = createNativeStackNavigator();
@@ -133,11 +134,11 @@ const Routes = () => {
           component={RewardScreen}
           options={{
             headerTransparent: true,
-            title: ""
+            title: "",
           }}
         />
       </MainStackNavigator.Navigator>
-      {/* <ChatbotButton /> */}
+      <ChatbotButton />
     </>
   );
 };

@@ -105,7 +105,7 @@ const HabitsGuide = () => {
           </Text>
         </TouchableOpacity>
       </View>
-      <ChatbotButton />
+      {/* <ChatbotButton /> */}
     </View>
   );
 };
