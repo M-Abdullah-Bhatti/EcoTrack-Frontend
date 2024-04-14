@@ -116,7 +116,7 @@ const ForgotPassword = ({ navigation }) => {
         setLoader(false);
         const responseData = await response.json(); // Parse the response body as JSON
         console.log("responseData: ", responseData);
-        navigation.navigate("VerificationCode");
+        navigation.navigate("VerificationCode", { email });
       } else {
         setLoader(false);
 

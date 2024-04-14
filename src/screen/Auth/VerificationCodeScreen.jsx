@@ -17,7 +17,7 @@ import {
   KeyboardAvoidingView,
   ActivityIndicator,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SafeAreaView } from "react-native";
 import {
   FontAwesome,
@@ -34,10 +34,12 @@ import SuccessModal from "../../components/Shared/SuccessModal";
 import { toastShow } from "../../utils/helpers";
 import baseUrl from "../../utils/baseUrl";
 
-const VerificationCode = ({ navigation }) => {
+const VerificationCode = ({ navigation, route }) => {
+  const { email } = route.params;
+
   const imgSrc = require("../../../assets/logo-text.png");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  //   const [email, setEmail] = useState("");
+
   const [passwordVisible, setPasswordVisible] = useState(false);
   const { width, height } = Dimensions.get("screen");
   const [errors, setErrors] = useState({});
@@ -50,8 +52,11 @@ const VerificationCode = ({ navigation }) => {
 
   const [error, setError] = useState("");
 
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+
   const toggleErrorModal = () => {
     setShowErrorModal(!showErrorModal);
+    console.log("handle");
   };
 
   const validateForm = () => {
@@ -94,33 +99,30 @@ const VerificationCode = ({ navigation }) => {
       easing: Easing.linear,
     }).start();
   }, []);
-  const handleLogin = async () => {
-    if (!validateForm()) {
-      return; // Exit if the form is not valid
-    }
 
+  const handleOtpSubmit = async (body) => {
     try {
       setLoader(true);
       // dispatch(loginStart());
-      const response = await fetch(`${baseUrl}/api/users/forgotPassword`, {
-        method: "PUT",
+      const response = await fetch(`${baseUrl}/api/users/verifyCode`, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          email: email,
-        }),
+        body: body,
       });
 
       if (response.ok) {
         setLoader(false);
         const responseData = await response.json(); // Parse the response body as JSON
         console.log("responseData: ", responseData);
-        // navigation.navigate("VerificationCode");
+        toastShow("otp matched");
+        navigation.navigate("NewPassword");
       } else {
         setLoader(false);
 
         const errorData = await response.json();
+        console.log("errorData: ", errorData);
         setError(`Login failed: ${errorData.message}`);
         toggleErrorModal();
       }
@@ -130,6 +132,35 @@ const VerificationCode = ({ navigation }) => {
       setLoader(false);
     }
   };
+
+  const inputRefs = useRef([]);
+
+  const handleChange = (index, value) => {
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+    if (value && index < otp.length - 1) {
+      inputRefs.current[index + 1].focus();
+    }
+  };
+
+  const handleBackspace = (index) => {
+    if (index > 0 && otp[index] === "") {
+      inputRefs.current[index - 1].focus();
+    }
+  };
+
+  useEffect(() => {
+    if (otp.every((digit) => digit !== "")) {
+      const body = JSON.stringify({
+        email: email,
+        otp: otp.join(""),
+      });
+
+      handleOtpSubmit(body);
+      //   console.log("otp: ", otp.join(""));
+    }
+  }, [otp]);
 
   return (
     <View
@@ -204,59 +235,34 @@ const VerificationCode = ({ navigation }) => {
           </Text>
         </View>
         <View style={{ width: "100%", display: "flex", alignItems: "center" }}>
-          {errors.email && (
-            <View style={{ width: "90%" }}>
-              <Text
-                style={{
-                  color: "red",
-
-                  marginBottom: -10,
-                  fontSize: 12,
-                  marginTop: 10,
-                  textAlign: "left",
+          <View style={styles.otpContainer}>
+            {otp.map((value, index) => (
+              <TextInput
+                key={index}
+                ref={(el) => (inputRefs.current[index] = el)}
+                style={styles.otpInput}
+                value={value}
+                onChangeText={(text) => handleChange(index, text)}
+                maxLength={1}
+                keyboardType="numeric"
+                returnKeyType="done"
+                onKeyPress={({ nativeEvent }) => {
+                  if (nativeEvent.key === "Backspace") {
+                    handleBackspace(index);
+                  }
                 }}
-              >
-                {errors.email}
-              </Text>
-            </View>
-          )}
-          <View
-            style={[
-              styles.inputContainer,
-              errors.email && { borderColor: "red", borderWidth: 1 },
-            ]}
-          >
-            {/* <Ionicons
-                  name="mail"
-                  size={17}
-                  style={{ paddingLeft: 11 }}
-                  color="#04753E"
-                /> */}
-            <MaterialIcons
-              name="email"
-              size={20}
-              style={{ marginLeft: 13 }}
-              color="#04753E"
-            />
-
-            <TextInput
-              style={styles.input}
-              onChangeText={(value) => setEmail(value)}
-              value={email}
-              placeholder="Enter Your Email..."
-              placeholderTextColor="#04753E"
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-            />
+              />
+            ))}
           </View>
 
+          {/*          
           <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
             {loader ? (
               <ActivityIndicator size="small" color="white" />
             ) : (
               <Text style={styles.loginTExt}>Send Mail</Text>
             )}
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
 
         {/* Error Modal */}
@@ -369,6 +375,22 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     color: "#04753E",
+  },
+
+  otpContainer: {
+    flexDirection: "row",
+    // justifyContent: "space-around",
+    paddingTop: 20,
+    gap: 10,
+  },
+  otpInput: {
+    width: 50,
+    height: 60,
+    borderWidth: 1,
+    borderColor: "gray",
+    textAlign: "center",
+    borderRadius: 10,
+    fontSize: 20,
   },
 });
 
