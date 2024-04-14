@@ -138,7 +138,7 @@ const Routes = () => {
           }}
         />
       </MainStackNavigator.Navigator>
-      <ChatbotButton />
+      {/* <ChatbotButton /> */}
     </>
   );
 };

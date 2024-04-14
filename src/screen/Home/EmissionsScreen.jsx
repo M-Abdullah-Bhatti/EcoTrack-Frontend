@@ -328,158 +328,160 @@ const EmissionsScreen = ({ navigation }) => {
     // Call the function to filter emissions whenever selectedMonthYear changes
   }, [selectedMonthYear]);
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={{ paddingBottom: 80 }}
-    >
-      <View style={styles.monthDiv}>
-        <Text
-          style={{
-            fontSize: 24,
-            fontWeight: "900",
-            color: "#2DBAA0",
-            color: "#000",
-          }}
-        >
-          Emissions
-        </Text>
-      </View>
-
-      <View style={styles.emissionDataDiv}>
-        <View style={styles.monthDiv2}>
-          <TouchableOpacity onPress={() => changeMonth(-1)}>
-            <Ionicons name="chevron-back" size={24} color="#2DBAA0" />
-          </TouchableOpacity>
-          <Text style={{ fontSize: 18, fontWeight: "400", color: "black" }}>
-            {selectedMonthYear}
+    <View style={styles.container}>
+      <ScrollView
+        // style={styles.container}
+        contentContainerStyle={{ paddingBottom: 80 }}
+      >
+        <View style={styles.monthDiv}>
+          <Text
+            style={{
+              fontSize: 24,
+              fontWeight: "900",
+              color: "#2DBAA0",
+              color: "#000",
+            }}
+          >
+            Emissions
           </Text>
-          <TouchableOpacity onPress={() => changeMonth(1)}>
-            <Ionicons name="chevron-forward" size={24} color="#2DBAA0" />
-          </TouchableOpacity>
         </View>
-        {loadingForFilteringEmissions ? (
-          <View
-            style={{
-              // height: "100%",
-              // display: "flex",
-              // justifyContent: "center",
-              // alignItems: "center",
-              marginVertical: "60%",
-            }}
-          >
-            <ActivityIndicator size="small" color="#0000ff" />
+
+        <View style={styles.emissionDataDiv}>
+          <View style={styles.monthDiv2}>
+            <TouchableOpacity onPress={() => changeMonth(-1)}>
+              <Ionicons name="chevron-back" size={24} color="#2DBAA0" />
+            </TouchableOpacity>
+            <Text style={{ fontSize: 18, fontWeight: "400", color: "black" }}>
+              {selectedMonthYear}
+            </Text>
+            <TouchableOpacity onPress={() => changeMonth(1)}>
+              <Ionicons name="chevron-forward" size={24} color="#2DBAA0" />
+            </TouchableOpacity>
           </View>
-        ) : emissionsData.length == 0 ? (
-          <View
-            style={{
-              display: "flex",
-              alignItems: "center",
-              paddingVertical: 100,
-            }}
-          >
-            <Text>You don't have added any emissions</Text>
-            <TouchableOpacity
+          {loadingForFilteringEmissions ? (
+            <View
+              style={{
+                // height: "100%",
+                // display: "flex",
+                // justifyContent: "center",
+                // alignItems: "center",
+                marginVertical: "60%",
+              }}
+            >
+              <ActivityIndicator size="small" color="#0000ff" />
+            </View>
+          ) : emissionsData.length == 0 ? (
+            <View
               style={{
                 display: "flex",
                 alignItems: "center",
-                height: 50,
-                justifyContent: "center",
-
-                flexDirection: "row",
+                paddingVertical: 100,
               }}
-              onPress={() => navigation.navigate("Add")}
             >
-              <Text
-                style={{
-                  color: "#a8a5a5",
-                  fontSize: 14,
-                  marginRight: 10,
-                }}
-              >
-                Add your first emission
-              </Text>
-              <AntDesign name="arrowright" size={16} color="#a8a5a5" />
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <>
-            {filteredemissionsData.length > 0 ? (
-              filteredemissionsData.map((data) => (
-                <TouchableOpacity
-                  key={data.id}
-                  style={styles.singleEmissionDiv}
-                  onPress={() =>
-                    navigation.navigate("EmissionDetail", { data })
-                  }
-                >
-                  <View
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "flex-start",
-                      width: "50%",
-                      gap: 10,
-                      alignItems: "center",
-                    }}
-                  >
-                    <View>
-                      {renderEmissionIcon(data.category, data.subCategory)}
-                      {/* {food[0].icon} */}
-                    </View>
-                    <View>
-                      <Text>{data.category}</Text>
-                      <Text style={{ opacity: 0.57 }}>
-                        {data.carbonEmitted} kgCO2eq
-                      </Text>
-                    </View>
-                  </View>
-                  <View style={{ marginTop: 5 }}>
-                    <Ionicons
-                      name="chevron-forward"
-                      size={24}
-                      color="#2DBAA0"
-                    />
-                  </View>
-                </TouchableOpacity>
-              ))
-            ) : (
-              <View
+              <Text>You don't have added any emissions</Text>
+              <TouchableOpacity
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  paddingVertical: 100,
+                  height: 50,
+                  justifyContent: "center",
+
+                  flexDirection: "row",
                 }}
+                onPress={() => navigation.navigate("Add")}
               >
-                <Text>You don't have emissions for {selectedMonthYear}</Text>
-                <TouchableOpacity
+                <Text
+                  style={{
+                    color: "#a8a5a5",
+                    fontSize: 14,
+                    marginRight: 10,
+                  }}
+                >
+                  Add your first emission
+                </Text>
+                <AntDesign name="arrowright" size={16} color="#a8a5a5" />
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <>
+              {filteredemissionsData.length > 0 ? (
+                filteredemissionsData.map((data) => (
+                  <TouchableOpacity
+                    key={data.id}
+                    style={styles.singleEmissionDiv}
+                    onPress={() =>
+                      navigation.navigate("EmissionDetail", { data })
+                    }
+                  >
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "flex-start",
+                        width: "50%",
+                        gap: 10,
+                        alignItems: "center",
+                      }}
+                    >
+                      <View>
+                        {renderEmissionIcon(data.category, data.subCategory)}
+                        {/* {food[0].icon} */}
+                      </View>
+                      <View>
+                        <Text>{data.category}</Text>
+                        <Text style={{ opacity: 0.57 }}>
+                          {data.carbonEmitted} kgCO2eq
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={{ marginTop: 5 }}>
+                      <Ionicons
+                        name="chevron-forward"
+                        size={24}
+                        color="#2DBAA0"
+                      />
+                    </View>
+                  </TouchableOpacity>
+                ))
+              ) : (
+                <View
                   style={{
                     display: "flex",
                     alignItems: "center",
-                    height: 50,
-                    justifyContent: "center",
-
-                    flexDirection: "row",
+                    paddingVertical: 100,
                   }}
-                  onPress={() => navigation.navigate("Add")}
                 >
-                  <Text
+                  <Text>You don't have emissions for {selectedMonthYear}</Text>
+                  <TouchableOpacity
                     style={{
-                      color: "#a8a5a5",
-                      fontSize: 14,
-                      marginRight: 10,
+                      display: "flex",
+                      alignItems: "center",
+                      height: 50,
+                      justifyContent: "center",
+
+                      flexDirection: "row",
                     }}
+                    onPress={() => navigation.navigate("Add")}
                   >
-                    Add emission
-                  </Text>
-                  <AntDesign name="arrowright" size={16} color="#a8a5a5" />
-                </TouchableOpacity>
-              </View>
-            )}
-          </>
-        )}
-      </View>
-      {/* <ChatbotButton /> */}
-    </ScrollView>
+                    <Text
+                      style={{
+                        color: "#a8a5a5",
+                        fontSize: 14,
+                        marginRight: 10,
+                      }}
+                    >
+                      Add emission
+                    </Text>
+                    <AntDesign name="arrowright" size={16} color="#a8a5a5" />
+                  </TouchableOpacity>
+                </View>
+              )}
+            </>
+          )}
+        </View>
+      </ScrollView>
+      <ChatbotButton />
+    </View>
   );
 };
 const styles = StyleSheet.create({
@@ -487,6 +489,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : "0px",
     backgroundColor: "white",
+    position: "relative",
   },
   monthDiv: {
     height: 60,

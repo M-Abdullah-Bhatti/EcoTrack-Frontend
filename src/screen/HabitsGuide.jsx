@@ -31,7 +31,14 @@ const technologyHabits = [
 
 const HabitsGuide = () => {
   return (
-    <View style={{ flex: 1, backgroundColor: "white", alignItems: "center" }}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: "white",
+        alignItems: "center",
+        position: "relative",
+      }}
+    >
       <Text
         style={{
           textAlign: "center",
@@ -105,7 +112,7 @@ const HabitsGuide = () => {
           </Text>
         </TouchableOpacity>
       </View>
-      {/* <ChatbotButton /> */}
+      <ChatbotButton />
     </View>
   );
 };

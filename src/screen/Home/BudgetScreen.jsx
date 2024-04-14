@@ -22,6 +22,7 @@ const BudgetScreen = ({ navigation }) => {
         alignItems: "center",
         backgroundColor: "white",
         marginTop: 30,
+        position: "relative",
       }}
     >
       <View
@@ -151,7 +152,7 @@ const BudgetScreen = ({ navigation }) => {
         </Text>
       </TouchableOpacity>
 
-      {/* <ChatbotButton /> */}
+      <ChatbotButton />
     </View>
   );
 };

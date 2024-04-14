@@ -37,7 +37,12 @@ const vegetableHabits = [
 const FoodGuide = () => {
   return (
     <SafeAreaView
-      style={{ flex: 1, backgroundColor: "white", alignItems: "center" }}
+      style={{
+        flex: 1,
+        backgroundColor: "white",
+        alignItems: "center",
+        position: "relative",
+      }}
     >
       <StatusBar style="dark" />
       <Text
@@ -113,7 +118,7 @@ const FoodGuide = () => {
           </Text>
         </TouchableOpacity>
       </View>
-      {/* <ChatbotButton /> */}
+      <ChatbotButton />
     </SafeAreaView>
   );
 };

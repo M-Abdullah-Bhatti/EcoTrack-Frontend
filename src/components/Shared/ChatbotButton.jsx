@@ -22,7 +22,7 @@ const ChatbotButton = () => {
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    bottom: 60,
+    bottom: 30,
     right: 15,
   },
   button: {

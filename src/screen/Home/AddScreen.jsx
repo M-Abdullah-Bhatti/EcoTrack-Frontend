@@ -69,6 +69,7 @@ const AddScreen = ({ navigation }) => {
       style={{
         backgroundColor: "white",
         height: "100%",
+        position: "relative",
 
         // paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : "0px",
       }}
@@ -135,7 +136,7 @@ const AddScreen = ({ navigation }) => {
           ))}
         </View>
       </View>
-      {/* <ChatbotButton /> */}
+      <ChatbotButton />
     </SafeAreaView>
   );
 };
