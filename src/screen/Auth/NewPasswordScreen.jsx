@@ -17,7 +17,7 @@ import {
   KeyboardAvoidingView,
   ActivityIndicator,
 } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native";
 import {
   FontAwesome,
@@ -29,54 +29,53 @@ import {
 import { useDispatch } from "react-redux";
 import Svg, { Path, Rect } from "react-native-svg";
 import { loginStart, loginSuccess } from "../../redux/userSlice";
-import ErrorModal from "../../components/Shared/ErrorModal";
-import SuccessModal from "../../components/Shared/SuccessModal";
 import { toastShow } from "../../utils/helpers";
+import ErrorModal from "../../components/Shared/ErrorModal";
 import baseUrl from "../../utils/baseUrl";
+// const AnimatedChart = () => {
+//   return (
+//     <View style={styles.container}>
+//       <Svg width={chartWidth} height={chartHeight} style={styles.svg}>
+//         <Path
+//           d={`M${start} C${controlPointA} ${controlPointB} ${end} v${end}`}
+//           stroke={"black"}
+//           fill={"yellow"}
+//           strokeWidth={3}
+//         />
+//         <AnimatedRect
+//           x={originX}
+//           y={0}
+//           width={chartWidth}
+//           height={chartHeight}
+//           fill={"white"}
+//         />
+//       </Svg>
+//     </View>
+//   );
+// };
 
 const NewPasswordScreen = ({ navigation, route }) => {
-  //   const { email } = route.params;
-
   const imgSrc = require("../../../assets/logo-text.png");
-  //   const [email, setEmail] = useState("");
-
+  const { email } = route.params;
+  const [password, setPassword] = useState("");
+  const [confirmpassword, setconfirmPassword] = useState("");
+  const [username, setusername] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmpasswordVisible, setconfirmPasswordVisible] = useState(false);
   const { width, height } = Dimensions.get("screen");
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch();
   const AnimatedRect = Animated.createAnimatedComponent(Rect);
   const animatedVal = React.useRef(new Animated.Value(0)).current;
   const [keyboardPadding, setKeyboardPadding] = useState(0);
+
   const [loader, setLoader] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
 
   const [error, setError] = useState("");
 
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-
   const toggleErrorModal = () => {
     setShowErrorModal(!showErrorModal);
-    navigation.navigate("ForgotPassword");
-  };
-
-  const validateForm = () => {
-    let errors = {};
-    if (!email) errors.email = "Email is required";
-
-    setErrors(errors);
-
-    return Object.keys(errors).length === 0;
-  };
-  const handleFocus = () => {
-    Keyboard.addListener("keyboardDidShow", (e) => {
-      setKeyboardPadding(e.endCoordinates.height);
-    });
-  };
-
-  const handleBlur = () => {
-    Keyboard.addListener("keyboardDidHide", () => {
-      setKeyboardPadding(0);
-    });
   };
 
   const chartWidth = width;
@@ -100,67 +99,68 @@ const NewPasswordScreen = ({ navigation, route }) => {
     }).start();
   }, []);
 
-  const handleOtpSubmit = async (body) => {
+  const validateForm = () => {
+    let errors = {};
+    if (!password) errors.password = "Password is required";
+    if (!confirmpassword) errors.confirmpassword = "Confirm your password";
+    if (confirmpassword && !(confirmpassword == password))
+      errors.confirmpasswordSimilarity = "Passwords are not same";
+
+    setErrors(errors);
+
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleFocus = () => {
+    Keyboard.addListener("keyboardDidShow", (e) => {
+      setKeyboardPadding(e.endCoordinates.height);
+    });
+  };
+
+  const handleBlur = () => {
+    Keyboard.addListener("keyboardDidHide", () => {
+      setKeyboardPadding(0);
+    });
+  };
+
+  const handleRegister = async () => {
+    if (!validateForm()) {
+      return; // Exit if the form is not valid
+    }
+
     try {
       setLoader(true);
+      console.log(":password ", password);
       // dispatch(loginStart());
-      const response = await fetch(`${baseUrl}/api/users/verifyCode`, {
-        method: "POST",
+      const response = await fetch(`${baseUrl}/api/users/resetPassword`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: body,
+        body: JSON.stringify({
+          email: email,
+          newPassword: password,
+        }),
       });
 
       if (response.ok) {
         setLoader(false);
         const responseData = await response.json(); // Parse the response body as JSON
-        console.log("responseData: ", responseData);
-        toastShow("otp matched");
-        navigation.navigate("NewPassword");
+        toastShow("Password changed");
+        // dispatch(loginSuccess(responseData));
+        navigation.navigate("Login");
       } else {
         setLoader(false);
-
         const errorData = await response.json();
-        console.log("errorData: ", errorData);
-        setError(`Login failed: ${errorData.message}`);
+        setError(`Signup failed: ${errorData.message}`);
         toggleErrorModal();
       }
     } catch (error) {
+      setLoader(false);
       setError(`An error occurred. Please try again.`);
       toggleErrorModal();
-      setLoader(false);
     }
   };
-
-  const inputRefs = useRef([]);
-
-  const handleChange = (index, value) => {
-    const newOtp = [...otp];
-    newOtp[index] = value;
-    setOtp(newOtp);
-    if (value && index < otp.length - 1) {
-      inputRefs.current[index + 1].focus();
-    }
-  };
-
-  const handleBackspace = (index) => {
-    if (index > 0 && otp[index] === "") {
-      inputRefs.current[index - 1].focus();
-    }
-  };
-
-  useEffect(() => {
-    if (otp.every((digit) => digit !== "")) {
-      const body = JSON.stringify({
-        email: "muhammadabdullahimdad10@gmail.com",
-        otp: otp.join(""),
-      });
-
-      handleOtpSubmit(body);
-      //   console.log("otp: ", otp.join(""));
-    }
-  }, [otp]);
 
   return (
     <View
@@ -176,10 +176,12 @@ const NewPasswordScreen = ({ navigation, route }) => {
       <ScrollView
         style={[
           styles.container,
-          { marginTop: keyboardPadding > 0 ? -keyboardPadding + 20 : 0 },
+          { marginTop: keyboardPadding > 0 ? -keyboardPadding + 150 : 0 },
         ]}
         // contentContainerStyle={{ paddingBottom: keyboardPadding }}
       >
+        {/* <View style={styles.headerDiv}></View> */}
+
         <View style={styles.headerDiv}>
           <Svg width={chartWidth} height={chartHeight} style={styles.svg}>
             <Path
@@ -189,12 +191,12 @@ const NewPasswordScreen = ({ navigation, route }) => {
               strokeWidth={0}
             />
             {/* <AnimatedRect
-                    x={originX}
-                    y={0}
-                    width={chartWidth}
-                    height={chartHeight}
-                    fill={"white"}
-                  /> */}
+              x={originX}
+              y={0}
+              width={chartWidth}
+              height={chartHeight}
+              fill={"white"}
+            /> */}
           </Svg>
           <View
             style={{
@@ -218,51 +220,194 @@ const NewPasswordScreen = ({ navigation, route }) => {
           </View>
         </View>
 
-        <View style={{ alignItems: "center", justifyContent: "center" }}>
+        <View
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            position: "relative",
+            marginVertical: 30,
+          }}
+        >
           <Text
             style={{
               fontSize: 28,
               color: "#04753E",
               fontWeight: "bold",
               marginBottom: 6,
-              marginTop: -10,
+              //   marginTop: -10,
             }}
           >
             Eco Track
           </Text>
-          <Text style={{ fontSize: 14, color: "black", marginBottom: 30 }}>
-            Please check your mail and enter the otp below
+          <Text style={{ fontSize: 14, color: "black", marginBottom: 5 }}>
+            Make your new password now
           </Text>
+          <Image
+            source={require("../../../assets/hello.png")}
+            style={{
+              width: 100,
+              height: 100,
+              objectFit: "fill",
+              position: "absolute",
+              right: -10,
+              top: 10,
+              zIndex: 10,
+              transform: [{ rotateX: "35deg" }],
+            }}
+          />
         </View>
         <View style={{ width: "100%", display: "flex", alignItems: "center" }}>
-          <View style={styles.otpContainer}>
-            {otp.map((value, index) => (
-              <TextInput
-                key={index}
-                ref={(el) => (inputRefs.current[index] = el)}
-                style={styles.otpInput}
-                value={value}
-                onChangeText={(text) => handleChange(index, text)}
-                maxLength={1}
-                keyboardType="numeric"
-                returnKeyType="done"
-                onKeyPress={({ nativeEvent }) => {
-                  if (nativeEvent.key === "Backspace") {
-                    handleBackspace(index);
-                  }
+          {errors.password && (
+            <View style={{ width: "90%" }}>
+              <Text
+                style={{
+                  color: "red",
+
+                  marginBottom: -10,
+                  marginTop: 10,
+                  textAlign: "left",
+                  fontSize: 12,
                 }}
-              />
-            ))}
+              >
+                {errors.password}
+              </Text>
+            </View>
+          )}
+
+          <View
+            style={[
+              styles.inputContainer,
+              errors.password && { borderColor: "red", borderWidth: 1 },
+            ]}
+          >
+            <FontAwesome
+              name="lock"
+              size={20}
+              style={{ marginLeft: 15 }}
+              color="#04753E"
+            />
+            <TextInput
+              style={styles.input}
+              onChangeText={(value) => setPassword(value)}
+              value={password}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              placeholder="Enter Your Password..."
+              placeholderTextColor="#04753E"
+              secureTextEntry={!passwordVisible ? true : false}
+            />
+            {passwordVisible ? (
+              <TouchableOpacity
+                style={{
+                  position: "absolute",
+                  right: 20,
+                }}
+                onPress={() => setPasswordVisible(false)}
+              >
+                <Feather name="eye-off" size={18} color="#04753E" />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={{
+                  position: "absolute",
+                  right: 20,
+                }}
+                onPress={() => setPasswordVisible(true)}
+              >
+                <AntDesign name="eye" size={18} color="#04753E" />
+              </TouchableOpacity>
+            )}
           </View>
 
-          {/*          
-            <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
-              {loader ? (
-                <ActivityIndicator size="small" color="white" />
-              ) : (
-                <Text style={styles.loginTExt}>Send Mail</Text>
-              )}
-            </TouchableOpacity> */}
+          {errors.confirmpassword && (
+            <View style={{ width: "90%" }}>
+              <Text
+                style={{
+                  color: "red",
+
+                  marginBottom: -10,
+                  marginTop: 10,
+                  textAlign: "left",
+                  fontSize: 12,
+                }}
+              >
+                {errors.confirmpassword}
+              </Text>
+            </View>
+          )}
+          {errors.confirmpasswordSimilarity && (
+            <View style={{ width: "90%" }}>
+              <Text
+                style={{
+                  color: "red",
+
+                  marginBottom: -10,
+                  marginTop: 10,
+                  textAlign: "left",
+                  fontSize: 12,
+                }}
+              >
+                {errors.confirmpasswordSimilarity}
+              </Text>
+            </View>
+          )}
+
+          <View
+            style={[
+              styles.inputContainer,
+              errors.confirmpassword && { borderColor: "red", borderWidth: 1 },
+              errors.confirmpasswordSimilarity && {
+                borderColor: "red",
+                borderWidth: 1,
+              },
+            ]}
+          >
+            <FontAwesome
+              name="lock"
+              size={20}
+              style={{ marginLeft: 15 }}
+              color="#04753E"
+            />
+            <TextInput
+              style={styles.input}
+              onChangeText={(value) => setconfirmPassword(value)}
+              value={confirmpassword}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              placeholder="Confirm Password..."
+              placeholderTextColor="#04753E"
+              secureTextEntry={!confirmpasswordVisible ? true : false}
+            />
+            {confirmpasswordVisible ? (
+              <TouchableOpacity
+                style={{
+                  position: "absolute",
+                  right: 20,
+                }}
+                onPress={() => setconfirmPasswordVisible(false)}
+              >
+                <Feather name="eye-off" size={18} color="#04753E" />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={{
+                  position: "absolute",
+                  right: 20,
+                }}
+                onPress={() => setconfirmPasswordVisible(true)}
+              >
+                <AntDesign name="eye" size={18} color="#04753E" />
+              </TouchableOpacity>
+            )}
+          </View>
+
+          <TouchableOpacity style={styles.loginBtn} onPress={handleRegister}>
+            {loader ? (
+              <ActivityIndicator size="small" color="white" />
+            ) : (
+              <Text style={styles.loginTExt}>Change Password</Text>
+            )}
+          </TouchableOpacity>
         </View>
 
         {/* Error Modal */}
@@ -284,6 +429,7 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : "0px",
     backgroundColor: "white",
   },
+
   headerDiv: {
     height: 215,
     backgroundColor: "#2DBAA0",
@@ -293,13 +439,10 @@ const styles = StyleSheet.create({
   },
   input: {
     height: "100%",
-    margin: 5,
-
-    // padding: 10,
+    margin: 12,
     borderRadius: 8,
     borderColor: "#acacac",
     width: "78%",
-    // borderWidth: 1,
 
     fontSize: 13,
   },
@@ -314,7 +457,7 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 10,
+    marginTop: 30,
   },
   loginTExt: {
     fontSize: 14,
@@ -375,22 +518,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     color: "#04753E",
-  },
-
-  otpContainer: {
-    flexDirection: "row",
-    // justifyContent: "space-around",
-    paddingTop: 20,
-    gap: 10,
-  },
-  otpInput: {
-    width: 50,
-    height: 60,
-    borderWidth: 1,
-    borderColor: "gray",
-    textAlign: "center",
-    borderRadius: 10,
-    fontSize: 20,
   },
 });
 

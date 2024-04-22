@@ -117,7 +117,7 @@ const VerificationCode = ({ navigation, route }) => {
         const responseData = await response.json(); // Parse the response body as JSON
         console.log("responseData: ", responseData);
         toastShow("otp matched");
-        navigation.navigate("NewPassword");
+        navigation.navigate("NewPassword", { email });
       } else {
         setLoader(false);
 

@@ -31,6 +31,7 @@ import Svg, { Path, Rect } from "react-native-svg";
 import { loginStart, loginSuccess } from "../../redux/userSlice";
 import { toastShow } from "../../utils/helpers";
 import ErrorModal from "../../components/Shared/ErrorModal";
+import baseUrl from "../../utils/baseUrl";
 // const AnimatedChart = () => {
 //   return (
 //     <View style={styles.container}>
@@ -115,20 +116,17 @@ const Signup = ({ navigation }) => {
     try {
       setLoader(true);
       // dispatch(loginStart());
-      const response = await fetch(
-        "https://ecotrack-dev.vercel.app/api/users/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: username,
-            email: email,
-            password: password,
-          }),
-        }
-      );
+      const response = await fetch(`${baseUrl}/api/users/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: username,
+          email: email,
+          password: password,
+        }),
+      });
 
       if (response.ok) {
         setLoader(false);

@@ -32,6 +32,7 @@ import { loginStart, loginSuccess } from "../../redux/userSlice";
 import ErrorModal from "../../components/Shared/ErrorModal";
 import SuccessModal from "../../components/Shared/SuccessModal";
 import { toastShow } from "../../utils/helpers";
+import baseUrl from "../../utils/baseUrl";
 
 const Login = ({ navigation }) => {
   const imgSrc = require("../../../assets/logo-text.png");
@@ -106,19 +107,16 @@ const Login = ({ navigation }) => {
     try {
       setLoader(true);
       // dispatch(loginStart());
-      const response = await fetch(
-        "https://ecotrack-dev.vercel.app/api/users/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-          }),
-        }
-      );
+      const response = await fetch(`${baseUrl}/api/users/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
 
       if (response.ok) {
         setLoader(false);
