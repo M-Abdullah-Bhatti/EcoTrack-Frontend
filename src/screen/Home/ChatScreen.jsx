@@ -24,7 +24,6 @@ const ChatScreen = () => {
   const scrollViewRef = useRef();
 
   const sendMessage = () => {
-    console.log("send message: ", message);
     if (!message) {
       return;
     }
@@ -41,7 +40,6 @@ const ChatScreen = () => {
         question: message,
       });
 
-      console.log("body: ", body);
       const config = {
         headers: {
           "Content-Type": "application/json",
@@ -54,7 +52,6 @@ const ChatScreen = () => {
           updatedMessages[updatedMessages.length - 1].answer =
             res?.data?.answer;
           setMessages(updatedMessages);
-          console.log("res: ", res?.data?.answer);
         })
         .catch((err) => console.log("err: ", err))
         .finally(() => setLoader(false)); // Use finally to set loader to false after the request completes
@@ -63,17 +60,18 @@ const ChatScreen = () => {
 
   useEffect(() => {
     setLoading(true);
+
     const body = JSON.stringify({
       user_id: 23324345435,
     });
 
-    console.log("body: ", body);
     const config = {
       headers: {
         "Content-Type": "application/json",
       },
     };
-    const response = axios
+
+    axios
       .post(
         "http://ecotrack.pythonanywhere.com/app/chat-history/",
         body,
@@ -97,7 +95,9 @@ const ChatScreen = () => {
             <Image style={styles.botPicture} source={bot} alt="bot" />
           </View>
           {loading ? (
-            <ActivityIndicator size="large" color="#00ff00" />
+            <View style={{ marginTop: 30 }}>
+              <ActivityIndicator size="large" color="#00ff00" />
+            </View>
           ) : (
             // <Text>Loading</Text>
             <>
@@ -178,23 +178,3 @@ const styles = StyleSheet.create({
 });
 
 export default ChatScreen;
-
-// const body = JSON.stringify({
-//   user_id: 23324345435,
-// });
-
-// console.log("body: ", body);
-// const config = {
-//   headers: {
-//     "Content-Type": "application/json",
-//   },
-// };
-// const response = axios
-//   .post(
-//     "http://ecotrack.pythonanywhere.com/app/chat-history/",
-//     body,
-//     config
-//   )
-//   .then((res) => console.log("res: ", res?.data?.chat_history))
-//   .catch((err) => console.log("err: ", err));
-// console.log("response: ", response);

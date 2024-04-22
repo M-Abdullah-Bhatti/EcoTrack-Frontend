@@ -1,8 +1,7 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 
-const Message = ({ item, key }) => {
-  // console.log("item: ", item);
+const Message = ({ item }) => {
   return (
     <>
       {/* question */}
