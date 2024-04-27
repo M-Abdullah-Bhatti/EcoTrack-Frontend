@@ -30,18 +30,20 @@ const EmissionsScreen = ({ navigation }) => {
   const [currentMonthIndex, setCurrentMonthIndex] = useState(10); // November is index 10
   const [selectedMonthYear, setSelectedMonthYear] = useState("");
 
-  useEffect(() => {
-    const currentDate = new Date();
-    const currentYear = currentDate.getFullYear();
-    const currentMonthIndex = currentDate.getMonth();
-    setCurrentYear(currentYear);
-    setCurrentMonthIndex(currentMonthIndex);
-    setSelectedMonthYear(
-      `${currentDate.toLocaleString("default", {
-        month: "long",
-      })} ${currentYear}`
-    );
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      const currentMonthIndex = currentDate.getMonth();
+      setCurrentYear(currentYear);
+      setCurrentMonthIndex(currentMonthIndex);
+      setSelectedMonthYear(
+        `${currentDate.toLocaleString("default", {
+          month: "long",
+        })} ${currentYear}`
+      );
+    }, [])
+  );
 
   const changeMonth = (increment) => {
     let newMonthIndex = currentMonthIndex + increment;
@@ -407,7 +409,7 @@ const EmissionsScreen = ({ navigation }) => {
               {filteredemissionsData.length > 0 ? (
                 filteredemissionsData.map((data) => (
                   <TouchableOpacity
-                    key={data.id}
+                    key={data._id}
                     style={styles.singleEmissionDiv}
                     onPress={() =>
                       navigation.navigate("EmissionDetail", { data })
