@@ -18,6 +18,8 @@ import Story from "../screen/Story";
 import RewardScreen from "../screen/RewardScreen";
 import Upload from "../screen/Upload";
 import ChatbotButton from "../components/Shared/ChatbotButton";
+import RewardsDetails from "../components/RewardsDetails";
+import RewardsScreen from "../screen/Home/RewardsScreen";
 
 const Routes = () => {
   const MainStackNavigator = createNativeStackNavigator();
@@ -134,6 +136,14 @@ const Routes = () => {
           component={RewardScreen}
           options={{
             headerTransparent: true,
+            title: "",
+          }}
+        />
+        <MainStackNavigator.Screen
+          name="RewardsScreen"
+          component={RewardsScreen}
+          options={{
+            headerTransparent: false,
             title: "",
           }}
         />
