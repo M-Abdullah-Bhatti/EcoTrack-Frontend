@@ -48,18 +48,6 @@ export const transport = [
   },
   {
     image: "",
-    text: "Plane",
-    vehicle_type: "train",
-    icon: <Entypo name="aircraft-take-off" size={24} color="white" />,
-  },
-  {
-    image: "",
-    text: "Boat",
-    vehicle_type: "train",
-    icon: <Fontisto name="sait-boat" size={24} color="white" />,
-  },
-  {
-    image: "",
     text: "MotorBike",
     vehicle_type: "Motorbike-Size-Medium",
     icon: <FontAwesome5 name="motorcycle" size={24} color="white" />,
