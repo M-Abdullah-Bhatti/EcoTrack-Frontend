@@ -13,7 +13,7 @@ import { Feather, Entypo, AntDesign, FontAwesome, FontAwesome5, Ionicons } from 
 import { formatDateLikeFacebook } from "../../utils/helpers";
 import { useSelector } from "react-redux";
 
-const SinglePost = ({ post, id }) => {
+const SinglePost = ({ post, id, onPressShare }) => {
   const [viewFullDesc, setViewFullDesc] = useState(false);
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState(post.comments);
@@ -112,8 +112,8 @@ const SinglePost = ({ post, id }) => {
     <View
       key={id}
       style={{
-        height: "auto",
-        marginVertical: 20,
+        // height: "auto",
+        marginVertical: 12,
         width: "100%",
         shadowColor: "#000",
         backgroundColor: "white",
@@ -170,7 +170,7 @@ const SinglePost = ({ post, id }) => {
             alignItems: "center",
             justifyContent: "center",
           }}
-          onPress={() => alert("hello")}
+          onPress={() => onPressShare(post._id)}
         >
           <Feather name="more-horizontal" size={20} color="black" />
         </TouchableOpacity>
@@ -312,7 +312,7 @@ const SinglePost = ({ post, id }) => {
             // inputCommentRef.current.focus();
           }}
         >
-          <FontAwesome5 name="comment-dots" size={18} color="white" />
+          <AntDesign name="message1" size={18} color="white" />
           <Text style={{ color: "white" }}>Comment</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -327,7 +327,7 @@ const SinglePost = ({ post, id }) => {
             borderRadius: 12,
           }}
         >
-          <FontAwesome name="share" size={18} color="white" />
+          <Feather name="send" size={18} color="white" />
           <Text style={{ color: "white" }}>Share</Text>
         </TouchableOpacity>
       </View>
@@ -478,11 +478,12 @@ const SinglePost = ({ post, id }) => {
 
         <View style={styles.commentBox}>
           <TextInput
+            value={comment}
             placeholder="Add a comment..."
             style={{ fontSize: 16, margin: 12, height: "auto", width: "80%" }}
             multiline
             ref={inputCommentRef}
-            onChangeText={(e)=> setComment(e)}
+            onChangeText={(text)=> setComment(text)}
           />
           <TouchableOpacity onPress={addComment}>
             <Ionicons
