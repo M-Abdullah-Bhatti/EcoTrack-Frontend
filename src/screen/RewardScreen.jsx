@@ -4,7 +4,7 @@ import RewardsDetails from "../components/RewardsDetails";
 import RedemptionDetail from "../components/RedemptionDetail";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-const RewardScreen = () => {
+const RewardScreen = ({ navigation }) => {
   const [rewardDetailsVisible, setrewardDetailsVisible] = useState(true);
   //   const [redemptionDetailsVisible, setredemptionDetailsVisible] =
   //     useState(false);
@@ -39,6 +39,21 @@ const RewardScreen = () => {
             color="#ffc53d"
           />
         </View>
+        <TouchableOpacity
+          style={[
+            {
+              backgroundColor: "white",
+              paddingVertical: 6,
+              borderRadius: 15,
+              paddingHorizontal: 20,
+              marginTop: 20,
+            },
+          ]}
+          onPress={() => navigation.navigate("RewardsScreen")}
+          // disabled={rp.stock != "In stock" || totalUserWinPrice < rp.points}
+        >
+          <Text style={{ color: "#0c856e", fontSize: 14 }}>Redeem</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
@@ -115,9 +130,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#0c856e",
     color: "white",
     width: "100%",
-    paddingVertical: 50,
+    paddingTop: 50,
     display: "flex",
     alignItems: "center",
+    paddingBottom: 20,
   },
   activeButton: {
     borderBottomWidth: 2,
