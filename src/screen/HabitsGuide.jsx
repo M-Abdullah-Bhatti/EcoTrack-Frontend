@@ -50,8 +50,8 @@ const HabitsGuide = () => {
       >
         House
       </Text>
-      {houseHabits.map((data) => (
-        <GuideItem data={data} />
+      {houseHabits.map((data, index) => (
+        <GuideItem data={data} key={index} />
       ))}
       <TouchableOpacity
         style={{
@@ -87,8 +87,8 @@ const HabitsGuide = () => {
         >
           Technology
         </Text>
-        {technologyHabits.map((data) => (
-          <GuideItem data={data} />
+        {technologyHabits.map((data, index) => (
+          <GuideItem data={data} key={index} />
         ))}
         <TouchableOpacity
           style={{

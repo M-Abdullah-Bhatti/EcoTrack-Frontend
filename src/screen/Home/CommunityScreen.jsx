@@ -161,7 +161,6 @@ const CommunityScreen = ({ navigation }) => {
               alignItems: "center",
               justifyContent: "center",
             }}
-            onPress={() => console.log("hello")}
           >
             <Ionicons name="settings-sharp" size={20} color="black" />
           </TouchableOpacity>
@@ -175,6 +174,7 @@ const CommunityScreen = ({ navigation }) => {
               alignItems: "center",
               justifyContent: "center",
             }}
+            onPress={() => navigation.navigate("Search", {posts: posts})}
           >
             <Feather name="search" size={20} color="black" />
           </TouchableOpacity>

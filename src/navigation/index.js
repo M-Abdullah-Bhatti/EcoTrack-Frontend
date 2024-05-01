@@ -20,6 +20,7 @@ import Upload from "../screen/Upload";
 import ChatbotButton from "../components/Shared/ChatbotButton";
 import RewardsDetails from "../components/RewardsDetails";
 import RewardsScreen from "../screen/Home/RewardsScreen";
+import SearchScreen from "../screen/SearchScreen";
 
 const Routes = () => {
   const MainStackNavigator = createNativeStackNavigator();
@@ -50,6 +51,14 @@ const Routes = () => {
           }}
         />
         <MainStackNavigator.Screen
+          name="Search"
+          component={SearchScreen}
+          // options={{
+          //   headerShown: false,
+          //   title: "",
+          // }}
+        />
+        <MainStackNavigator.Screen
           name="SetBudget"
           component={SetBudget}
           options={{
@@ -57,7 +66,6 @@ const Routes = () => {
             title: "Monthly Budget",
           }}
         />
-
         <MainStackNavigator.Screen
           name="Upload"
           component={Upload}
