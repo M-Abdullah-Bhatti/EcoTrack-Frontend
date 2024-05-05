@@ -29,7 +29,7 @@ export default function StoryComponent() {
     );
   
     return (
-        <ScrollView style={{paddingBottom: 10, paddingTop: 5, backgroundColor: 'white', flexDirection: 'row'}} 
+        <ScrollView style={{paddingBottom: 10, paddingTop: 5, backgroundColor: '#f1f1f1', flexDirection: 'row'}} 
             horizontal
             showsHorizontalScrollIndicator={false}
         >

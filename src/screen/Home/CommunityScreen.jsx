@@ -18,6 +18,8 @@ import SinglePost from "./SinglePost";
 import ChatbotButton from "../../components/Shared/ChatbotButton";
 import axios from "axios";
 import StoryComponent from "../../components/StoryComponent";
+import PostOptions from "../../components/PostOptions";
+import { DeleteSingleData } from "../../axios/NetworkCalls";
 
 // https://www.pinterest.com/pin/254664553914369768/
 
@@ -26,6 +28,30 @@ const CommunityScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { user } = useSelector((state) => state.user);
+
+  const [postOptionsVisible, setPostOptionsVisible] = useState(false);
+  const [postIdToDelete, setPostIdToDelete] = useState(null); // Add state for post ID to delete
+
+  const togglePostOptions = (postId) => {
+    setPostOptionsVisible(!postOptionsVisible);
+    setPostIdToDelete(postId); // Set the post ID to delete
+  };
+
+  // Function to delete the post
+  const handleDeletePost = async () => {
+    try {
+      console.log("Deleting post with ID:", postIdToDelete);
+      const deletedPost = await DeleteSingleData(`/api/post/${postIdToDelete}`);
+      // await axios.delete(`https://ecotrack-dev.vercel.app/api/post/${postIdToDelete}`);
+      // console.log("Post deleted successfully");
+      console.log("Deleted post:", deletedPost);
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    } finally {
+      setPostIdToDelete(null);
+      setPostOptionsVisible(false);
+    }
+  };
 
   useFocusEffect(
     React.useCallback(() => {
@@ -51,6 +77,7 @@ const CommunityScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <StatusBar backgroundColor="#f1f1f1" />
       <View
         style={{
           height: 50,
@@ -134,7 +161,6 @@ const CommunityScreen = ({ navigation }) => {
               alignItems: "center",
               justifyContent: "center",
             }}
-            onPress={() => console.log("hello")}
           >
             <Ionicons name="settings-sharp" size={20} color="black" />
           </TouchableOpacity>
@@ -148,6 +174,7 @@ const CommunityScreen = ({ navigation }) => {
               alignItems: "center",
               justifyContent: "center",
             }}
+            onPress={() => navigation.navigate("Search", {posts: posts})}
           >
             <Feather name="search" size={20} color="black" />
           </TouchableOpacity>
@@ -164,11 +191,11 @@ const CommunityScreen = ({ navigation }) => {
             flexDirection: "row",
             justifyContent: "space-around",
             alignItems: "center",
-            marginVertical: 10,
+            marginTop: 10,
+            marginBottom: 16,
             borderColor: "black",
             borderWidth: 1,
             width: "90%",
-            // marginHorizontal: "auto",
             padding: 5,
             borderRadius: 20,
           }}
@@ -212,13 +239,17 @@ const CommunityScreen = ({ navigation }) => {
         ) : (
           <View style={styles.postsContainer}>
             {posts.map((post, id) => (
-              <SinglePost post={post} id={id} key={id} />
+              <SinglePost post={post} id={id} key={id} onPressShare={(postId) => togglePostOptions(postId)} />
             ))}
           </View>
         )}
       </ScrollView>
 
       <ChatbotButton />
+
+      {postOptionsVisible && <PostOptions handleDelete={handleDeletePost} setPostOptionsVisible={setPostOptionsVisible} />}
+
+      {/* <PostOptions /> */}
     </View>
   );
 };
@@ -227,15 +258,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : "0px",
-    backgroundColor: "white",
+    backgroundColor: "#f1f1f1",
   },
   header: {
     display: "flex",
     flexDirection: "row",
-    // marginTop: StatusBar.currentHeight + 60,
     paddingHorizontal: 12,
     justifyContent: "space-around",
-    backgroundColor: "#fff",
+    backgroundColor: "#f1f1f1",
     borderBottomColor: "rgba(0,0,0,0.7)",
     borderBottomWidth: 0.5,
   },

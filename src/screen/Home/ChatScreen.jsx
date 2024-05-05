@@ -14,12 +14,15 @@ import send from "../../.././assets/send.png";
 import Message from "../../components/Chats/Message";
 import axios from "axios";
 import ThreeDotLoader from "../../components/ThreeDotLoader";
+import { useSelector } from "react-redux";
 
 const ChatScreen = () => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [loader, setLoader] = useState(false);
+
+  const { user } = useSelector((state) => state.user);
 
   const scrollViewRef = useRef();
 
@@ -36,7 +39,7 @@ const ChatScreen = () => {
       setLoader(true); // Set loader to true before the request
       // hit the api here
       const body = JSON.stringify({
-        user_id: 23324345435,
+        user_id: user?._id,
         question: message,
       });
 
@@ -48,6 +51,7 @@ const ChatScreen = () => {
       axios
         .post("http://ecotrack.pythonanywhere.com/app/bot/", body, config)
         .then((res) => {
+          console.log("response: ", res);
           const updatedMessages = [...newMessage];
           updatedMessages[updatedMessages.length - 1].answer =
             res?.data?.answer;
@@ -62,7 +66,7 @@ const ChatScreen = () => {
     setLoading(true);
 
     const body = JSON.stringify({
-      user_id: 23324345435,
+      user_id: user?._id,
     });
 
     const config = {
