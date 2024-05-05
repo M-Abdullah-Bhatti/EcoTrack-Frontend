@@ -11,6 +11,11 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
+import Entypo from "react-native-vector-icons/Entypo";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 const MainScreen = ({ navigation }) => {
   return (
@@ -31,13 +36,62 @@ const MainScreen = ({ navigation }) => {
       </View>
       <View style={styles.CardContainer}>
         <View style={styles.Card}>
-          
+          <Text style={styles.cardText}>Calculate your Carbon Footprint</Text>
+          <Image style={styles.cardImg} source={require('../../../assets/foot.png')} />
+          <TouchableOpacity style={styles.cardBtn}>
+            <Text style={styles.cardBtnText}>Calculate Now</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.Card}>
+        <Text style={styles.cardText}>Get Personalized Recommendations</Text>
+          <Image style={styles.cardImg} source={require('../../../assets/bot2.png')} />
+          <TouchableOpacity style={styles.cardBtn}>
+            <Text style={styles.cardBtnText}>Talk Now</Text>
+          </TouchableOpacity>
+        </View> 
+      </View>
 
+      <View style={styles.itemContainer}>
+        <Text style={{fontFamily: 'PoppinsMedium', fontSize: 15}}>More with EcoTrack</Text>
+        <View style={styles.secondCard}>
+          {/* First Row */}
+      <View style={styles.row}>
+        <TouchableOpacity style={styles.item}>
+          
+          <AntDesign size={30} color="black" name="areachart" />
+          <Text style={styles.itemText}>Set Goal</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity style={styles.item}>
+          <Ionicons size={30} color="black" name="people-sharp" />
+          <Text style={styles.itemText}>Social Community</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity style={styles.item}>
+
+        <MaterialCommunityIcons size={30} color="black" name="foot-print"/>
+          <Text style={styles.itemText}>Emissions</Text>
+        </TouchableOpacity>
+      </View>
+      
+      {/* Second Row */}
+      <View style={styles.row}>
+        <TouchableOpacity style={styles.item}>
+        <Entypo size={30} color="black" name="trophy"/>
+          <Text style={styles.itemText}>Check Rewards</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity style={styles.item}>
+        <MaterialCommunityIcons size={30} color="black" name="database-sync"/>
+          <Text style={styles.itemText}>Visualize Data</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity style={styles.item}>
+          <MaterialIcons size={30} color="black" name="article" />
+          <Text style={styles.itemText}>Read Blogs</Text>
+        </TouchableOpacity>
+      </View>
         </View>
-       
-
       </View>
     </ScrollView>
   );
@@ -65,7 +119,7 @@ const styles = StyleSheet.create({
   },
   curvedContainer: {
     width: '100%',
-    height: 230,
+    height: 250,
     backgroundColor: '#46A667',
     borderBottomLeftRadius: 150, // Adjust the value for more curve
     borderBottomRightRadius: 30, // No curve on the right
@@ -108,19 +162,69 @@ const styles = StyleSheet.create({
     fontFamily: "PoppinsMedium"
   },
   CardContainer:{
-    marginTop: '-10%',
+    marginTop: '-12%',
     marginHorizontal: 5,
     display: 'flex',
     flexDirection: 'row'
   },
   Card:{
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent:'center',
     borderColor: 'black',
     borderWidth: 1,
-    height: 200,
+    height: 220,
     width: '45%',
     marginHorizontal: 3,
     borderRadius: 10
-  }
+  },
+  cardImg:{
+    height: 100,
+    width: '40%'
+  },
+  cardText: {
+    textAlign: 'center',
+    fontFamily: 'PoppinsMedium',
+    marginVertical: 5
+  },
+  cardBtn:{
+    height: 40,
+    width: '90%',
+    backgroundColor: '#46A667',
+    borderRadius: 5,
+    marginVertical: '10%',
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  cardBtnText: {
+    textAlign: 'center',
+    fontFamily: 'PoppinsRegular',
+    color: 'white'
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 10,
+  },
+  itemContainer: {
+    marginTop: '5%'
+  },
+  item: {
+    display: 'flex',
+    backgroundColor: 'lightblue',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: '2%',
+    paddingVertical: '5%',
+    borderRadius: 10,
+    width: '28%',
+  },
+  itemText: {
+    marginTop: 5,
+    textAlign: 'center',
+    fontFamily: 'PoppinsRegular'
+  },
 });
 
 export default MainScreen;
