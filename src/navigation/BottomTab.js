@@ -10,6 +10,7 @@ import AddScreen from "../screen/Home/AddScreen";
 import { Ionicons, Foundation } from "@expo/vector-icons";
 import FoodGuide from "../screen/FoodGuide";
 import HabitsGuide from "../screen/HabitsGuide";
+import MainScreen from "../screen/Home/MainScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -37,6 +38,16 @@ function BottomTab() {
     >
       <Tab.Screen
         name="Budget"
+        component={MainScreen}
+        options={{
+          title: "Home",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home" color={color} size={size} />
+          ),
+        }}
+      />
+      {/* <Tab.Screen
+        name="Budget"
         component={BudgetScreen}
         options={{
           title: "Carbon Budget",
@@ -44,7 +55,7 @@ function BottomTab() {
             <Ionicons name="calculator" color={color} size={size} />
           ),
         }}
-      />
+      /> */}
       <Tab.Screen
         name="Emissions"
         component={EmissionsScreen}

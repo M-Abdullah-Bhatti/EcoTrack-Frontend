@@ -53,14 +53,14 @@ const MainScreen = ({ navigation }) => {
         <View style={styles.Card}>
           <Text style={styles.cardText}>Calculate your Carbon Footprint</Text>
           <Image style={styles.cardImg} source={require('../../../assets/foot.png')} />
-          <TouchableOpacity style={styles.cardBtn}>
+          <TouchableOpacity style={styles.cardBtn} onPress={() => navigation.navigate("Add")}>
             <Text style={styles.cardBtnText}>Calculate Now</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.Card}>
         <Text style={styles.cardText}>Get Personalized Recommendations</Text>
           <Image style={styles.cardImg} source={require('../../../assets/bot2.png')} />
-          <TouchableOpacity style={styles.cardBtn}>
+          <TouchableOpacity style={styles.cardBtn} onPress={() => navigation.navigate('ChatScreen')}>
             <Text style={styles.cardBtnText}>Talk Now</Text>
           </TouchableOpacity>
         </View> 
@@ -77,12 +77,12 @@ const MainScreen = ({ navigation }) => {
           <Text style={styles.itemText}>Set Goal</Text>
         </TouchableOpacity>
         
-        <TouchableOpacity style={styles.item}>
+        <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Community')}>
           <Ionicons size={30} color="black" name="people-sharp" />
           <Text style={styles.itemText}>Social Community</Text>
         </TouchableOpacity>
         
-        <TouchableOpacity style={styles.item}>
+        <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Emissions')}>
 
         <MaterialCommunityIcons size={30} color="black" name="foot-print"/>
           <Text style={styles.itemText}>Emissions</Text>
@@ -91,7 +91,7 @@ const MainScreen = ({ navigation }) => {
       
       {/* Second Row */}
       <View style={styles.row}>
-        <TouchableOpacity style={styles.item}>
+        <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('RewardScreen')}>
         <Entypo size={30} color="black" name="trophy"/>
           <Text style={styles.itemText}>Check Rewards</Text>
         </TouchableOpacity>
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   },
   curvedContainer: {
     width: '100%',
-    height: 250,
+    height: 200,
     backgroundColor: '#46A667',
     borderBottomLeftRadius: 150, // Adjust the value for more curve
     borderBottomRightRadius: 30, // No curve on the right
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     fontFamily: "PoppinsMedium"
   },
   CardContainer:{
-    marginTop: '-12%',
+    marginTop: '3%',
     marginHorizontal: 5,
     display: 'flex',
     flexDirection: 'row'
