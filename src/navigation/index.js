@@ -54,10 +54,10 @@ const Routes = () => {
         <MainStackNavigator.Screen
           name="Search"
           component={SearchScreen}
-          // options={{
-          //   headerShown: false,
-          //   title: "",
-          // }}
+          options={{
+            headerShown: false,
+            title: "",
+          }}
         />
         <MainStackNavigator.Screen
           name="SetBudget"
