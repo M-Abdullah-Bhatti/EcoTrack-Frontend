@@ -148,27 +148,27 @@ const CommunityScreen = ({ navigation }) => {
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "flex-end",
-            gap: 13,
+            gap: 14,
           }}
         >
           <TouchableOpacity
             style={{
               height: 28,
               width: 28,
-              backgroundColor: "white",
+              // backgroundColor: "white",
               borderRadius: 14,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
             }}
           >
-            <Ionicons name="settings-sharp" size={20} color="black" />
+            <Ionicons name="settings-sharp" size={24} color="black" />
           </TouchableOpacity>
           <TouchableOpacity
             style={{
               height: 28,
               width: 28,
-              backgroundColor: "white",
+              // backgroundColor: "white",
               borderRadius: 14,
               display: "flex",
               alignItems: "center",
@@ -176,7 +176,7 @@ const CommunityScreen = ({ navigation }) => {
             }}
             onPress={() => navigation.navigate("Search", {posts: posts})}
           >
-            <Feather name="search" size={20} color="black" />
+            <Feather name="search" size={24} color="black" />
           </TouchableOpacity>
         </View>
       </View>

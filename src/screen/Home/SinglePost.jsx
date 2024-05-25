@@ -9,7 +9,7 @@ import {
   Modal,
   ScrollView
 } from "react-native";
-import { Feather, Entypo, AntDesign, FontAwesome, FontAwesome5, Ionicons } from "@expo/vector-icons";
+import { Feather, Entypo, AntDesign, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { formatDateLikeFacebook } from "../../utils/helpers";
 import { useSelector } from "react-redux";
 

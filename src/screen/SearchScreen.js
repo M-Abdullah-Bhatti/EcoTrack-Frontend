@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import SinglePost from '../screen/Home/SinglePost';
 
-const SearchScreen = ({ route }) => {
+const SearchScreen = ({ route, navigation }) => {
   const [searchText, setSearchText] = useState('');
   const [filteredPosts, setFilteredPosts] = useState([]);
   const { posts } = route.params;
@@ -37,6 +38,9 @@ const SearchScreen = ({ route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
+        <TouchableOpacity onPress={()=> navigation.goBack()} style={styles.backButton}>
+          <Ionicons name="arrow-back-outline" size={24} color="black" />
+        </TouchableOpacity>
         <TextInput
           style={styles.searchBar}
           placeholder="Search..."
@@ -81,6 +85,10 @@ const styles = StyleSheet.create({
   clearButton: {
     marginLeft: 5,
     padding: 8,
+  },
+  backButton: {
+    marginRight: 6,
+    padding: 4,
   },
   emptyText: {
     textAlign: 'center',
