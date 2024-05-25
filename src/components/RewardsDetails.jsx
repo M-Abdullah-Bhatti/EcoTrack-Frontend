@@ -138,6 +138,7 @@ const RewardsDetails = () => {
               marginVertical: 1,
               paddingBottom: 10,
             }}
+            key={i}
           >
             <Text
               style={{

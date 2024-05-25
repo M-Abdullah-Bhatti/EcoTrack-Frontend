@@ -1,9 +1,7 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { AuthStacks } from "./AuthStack";
-import Home from "../screen/Home";
 import BottomTab from "./BottomTab";
-import SetBudget from "../screen/SetBudget";
 import AddEmissionCategory from "../screen/Home/AddEmissionCategory";
 import AddEmission from "../screen/Home/AddEmission";
 import SplashScreen from "../screen/SplashScreen";
@@ -12,14 +10,12 @@ import { StatusBar } from "expo-status-bar";
 import UserDashboard from "../screen/Home/UserDashboard";
 import ChatScreen from "../screen/Home/ChatScreen";
 import ProfileScreen from "../screen/Home/ProfileScreen";
-import EditProfileScreen from "../screen/Home/EditProfile";
 import AppStack from "./AppStack";
 import Story from "../screen/Story";
 import RewardScreen from "../screen/RewardScreen";
 import Upload from "../screen/Upload";
 import ChatbotButton from "../components/Shared/ChatbotButton";
 import MainScreen from "../screen/Home/MainScreen";
-import RewardsDetails from "../components/RewardsDetails";
 import RewardsScreen from "../screen/Home/RewardsScreen";
 import SearchScreen from "../screen/SearchScreen";
 
@@ -57,14 +53,6 @@ const Routes = () => {
           options={{
             headerShown: false,
             title: "",
-          }}
-        />
-        <MainStackNavigator.Screen
-          name="SetBudget"
-          component={SetBudget}
-          options={{
-            headerShown: true,
-            title: "Monthly Budget",
           }}
         />
         <MainStackNavigator.Screen
@@ -109,14 +97,14 @@ const Routes = () => {
           options={{ headerShown: false }}
         />
 
-        <MainStackNavigator.Screen
+        {/* <MainStackNavigator.Screen
           name="EditProfile"
           component={EditProfileScreen}
           options={{
             headerShown: true,
             title: "Edit Profile",
           }}
-        />
+        /> */}
 
         <MainStackNavigator.Screen
           name="AddEmissionCategory"

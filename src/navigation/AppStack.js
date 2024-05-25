@@ -3,12 +3,12 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 
 import CustomDrawer from '../components/CustomDrawer';
 
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, Feather } from '@expo/vector-icons';
 
-import Home from '../screen/Home';
 import HabitsGuide from '../screen/HabitsGuide';
 import BottomTab from './BottomTab';
 import RewardScreen from '../screen/RewardScreen';
+import EditProfileScreen from '../screen/Home/EditProfile';
 
 const Drawer = createDrawerNavigator();
 
@@ -36,8 +36,8 @@ const AppStack = () => {
         }}
       />
       <Drawer.Screen
-        name="Profile"
-        component={Home}
+        name="Edit Profile"
+        component={EditProfileScreen}
         options={{
           drawerIcon: ({color}) => (
             <Ionicons name="person-outline" size={22} color={color} />
@@ -45,17 +45,17 @@ const AppStack = () => {
         }}
       />
       <Drawer.Screen
-        name="Rewardz"
+        name="Rewards"
         component={RewardScreen}
         options={{
           drawerIcon: ({color}) => (
-            <Ionicons name="person-outline" size={22} color={color} />
+            <Feather name="award" size={22} color={color} />
           ),
           headerTransparent: true,
           // title: ""
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="Messages"
         component={HabitsGuide}
         options={{
@@ -63,7 +63,7 @@ const AppStack = () => {
             <Ionicons name="chatbox-ellipses-outline" size={22} color={color} />
           ),
         }}
-      />
+      /> */}
     </Drawer.Navigator>
   );
 };

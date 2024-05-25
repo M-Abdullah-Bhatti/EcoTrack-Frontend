@@ -9,7 +9,7 @@ import {
   DrawerItemList,
 } from '@react-navigation/drawer';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from '../redux/userSlice';
 
 import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
@@ -17,6 +17,8 @@ import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 const CustomDrawer = (props) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+
+  const { user } = useSelector((state) => state.user);
 
   function handleLogout() {
     dispatch(logout());
@@ -32,7 +34,7 @@ const CustomDrawer = (props) => {
           // source={require('../../assets/images/menu-bg.jpeg')}
           style={{padding: 20}}>
           <Image
-            source={require('../../assets/images/user-profile.jpg')}
+            source={user.profilePic ? {uri: user.profilePic} : require('../../assets/images/user-profile.jpg')}
             style={{height: 80, width: 80, borderRadius: 40, marginBottom: 10}}
           />
           <Text
@@ -41,7 +43,7 @@ const CustomDrawer = (props) => {
               fontSize: 18,
               marginBottom: 5,
             }}>
-            John Doe
+            {user.name}
           </Text>
           <View style={{flexDirection: 'row'}}>
             <Text
@@ -49,7 +51,7 @@ const CustomDrawer = (props) => {
                 color: '#fff',
                 marginRight: 5,
               }}>
-              280 Coins
+              {user?.virtualCoins} Coins
             </Text>
             <FontAwesome5 name="coins" size={14} color="#fff" />
           </View>

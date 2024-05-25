@@ -2,7 +2,6 @@ import { SafeAreaView, StatusBar, Text } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import BudgetScreen from "../screen/Home/BudgetScreen";
 import EmissionsScreen from "../screen/Home/EmissionsScreen";
 import CommunityScreen from "../screen/Home/CommunityScreen";
 import AddScreen from "../screen/Home/AddScreen";
@@ -46,16 +45,6 @@ function BottomTab() {
           ),
         }}
       />
-      {/* <Tab.Screen
-        name="Budget"
-        component={BudgetScreen}
-        options={{
-          title: "Carbon Budget",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="calculator" color={color} size={size} />
-          ),
-        }}
-      /> */}
       <Tab.Screen
         name="Emissions"
         component={EmissionsScreen}

@@ -21,7 +21,6 @@ const EditProfileScreen = ({ navigation }) => {
 
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
-  const [contact, setContact] = useState(user.contact);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [image, setImage] = useState(null);
@@ -45,7 +44,6 @@ const EditProfileScreen = ({ navigation }) => {
       console.log("User DATA ", userData)
       setName(userData.name);
       setEmail(userData.email);
-      setContact(userData.contact);
     } catch (error) {
       console.error('Error fetching user profile:', error);
     }
@@ -64,7 +62,7 @@ const EditProfileScreen = ({ navigation }) => {
       quality: 1,
     });
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       setImage(result.uri);
     }
   };
@@ -82,7 +80,6 @@ const EditProfileScreen = ({ navigation }) => {
       const userData = {
         name,
         email,
-        contact,
         password,
         image,
       };
@@ -129,14 +126,6 @@ const EditProfileScreen = ({ navigation }) => {
           style={styles.input}
           value={email}
           onChangeText={(text) => setEmail(text)}
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>Contact</Text>
-        <TextInput
-          style={styles.input}
-          value={contact}
-          onChangeText={(text) => setContact(text)}
         />
       </View>
       <View style={styles.inputContainer}>

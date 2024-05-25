@@ -5,7 +5,7 @@ import { MaterialIcons, AntDesign, FontAwesome } from '@expo/vector-icons';
 
 const PostOptions = ({handleDelete, setPostOptionsVisible}) => {
     
-    const snapPoints = ["25%"];
+    const snapPoints = ["30%"];
     const options = [
         {
             icon: <FontAwesome name="share" size={24} color="black" />,
