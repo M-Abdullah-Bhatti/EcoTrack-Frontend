@@ -16,7 +16,7 @@ import RewardScreen from "../screen/RewardScreen";
 import Upload from "../screen/Upload";
 import ChatbotButton from "../components/Shared/ChatbotButton";
 import MainScreen from "../screen/Home/MainScreen";
-import RewardsScreen from "../screen/Home/RewardsScreen";
+import RedemptionsScreen from "../screen/Home/RedemptionsScreen";
 import SearchScreen from "../screen/SearchScreen";
 
 const Routes = () => {
@@ -147,7 +147,7 @@ const Routes = () => {
         />
         <MainStackNavigator.Screen
           name="RewardsScreen"
-          component={RewardsScreen}
+          component={RedemptionsScreen}
           options={{
             headerTransparent: false,
             title: "",

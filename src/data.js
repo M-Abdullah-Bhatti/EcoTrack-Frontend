@@ -6,7 +6,6 @@ import {
   Entypo,
   Ionicons,
 } from "@expo/vector-icons";
-import { FontAwesome6 } from "@expo/vector-icons";
 
 export const countries = [
   "Australia",
@@ -654,5 +653,190 @@ export const allEmissionItems = [
     text: "Shrimps (Farmed)",
     label: "shrimpsFarmed",
     icon: <FontAwesome5 name="fish" size={24} color="black" />,
+  },
+];
+
+export const redemptionProducts = [
+  {
+    id: 1,
+    name: "Reusable Bamboo Utensil Set",
+    description:
+      "A set of reusable utensils made from sustainable bamboo, including a fork, knife, spoon, and carrying case.",
+    points: 51, // Points required for redemption
+    imageUrl:
+      "https://www.bambooswitch.com/cdn/shop/products/6pc-bamboo-kitchen-utensil-holder-set-249467.jpg?v=1688603513",
+    category: "Product",
+    stock: "In stock",
+    quantity: 38,
+  },
+  {
+    id: 2,
+    name: "Organic Cotton Tote Bag",
+    description:
+      "A durable tote bag made from organic cotton, perfect for shopping or carrying essentials.",
+    points: 350,
+    imageUrl:
+      "https://www.oneworld-zerowaste.com/cdn/shop/products/IMG_4830.jpg?v=1544563046",
+    category: "Product",
+    stock: "Out of stock",
+    quantity: 30,
+  },
+  {
+    id: 3,
+    name: "Discount Voucher - Eco-Friendly Clothing Store",
+    description:
+      "Receive a 20% discount voucher for your next purchase at an eco-friendly clothing store.",
+    points: 200,
+    category: "Voucher",
+    stock: "In stock",
+    quantity: 13,
+    imageUrl:
+      "https://www.printlab.my/uploads/6/7/2/0/6720900/gift-voucher-discount-voucher-2-01_orig.jpg",
+  },
+  {
+    id: 4,
+    quantity: 50,
+    name: "Digital E-Book - Sustainable Living Guide",
+    description:
+      "Download a comprehensive guide to sustainable living, packed with tips and advice for reducing your environmental footprint.",
+    points: 30,
+    category: "Download",
+    stock: "Out of stock",
+    imageUrl:
+      "https://i0.wp.com/blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEga_xC0wojUoZfoWA4PNWidJhxm0Eh6MyYZRoqor0oe0vuUjOms3aKDGOhh1SEVrQ4oH7j2mMAuDeyVrn56ngRwLk7bqhawQkY_MTexw6IabhN5ZjvdiZSZ_P9PxbFC5I4qHl0hnCphBKRf-NDiNjqwcSpaDi0rl2kjlAHjVAFDDrA069XwKslXOZIEX-0/s3000/pexels-perfecto-capucine-1329571.jpg?ssl=1",
+  },
+  {
+    id: 5,
+    quantity: 83,
+    name: "Donation to Reforestation Project",
+    description:
+      "Support a reforestation project by redeeming points to plant trees and restore ecosystems.",
+    points: 16,
+    category: "Cause",
+    stock: "In stock",
+    imageUrl:
+      "https://images.mid-day.com/images/images/2022/jul/TreePlantation_d.jpg",
+  },
+];
+
+export const rewardData = [
+  {
+    month: "January",
+    winnings: [
+      {
+        rewardType: "Comment",
+        winningPrice: 8.1,
+      },
+      {
+        rewardType: "Like",
+        winningPrice: 10,
+      },
+      {
+        rewardType: "Comment",
+        winningPrice: 1,
+      },
+    ],
+  },
+  {
+    month: "January",
+    winnings: [
+      {
+        rewardType: "Comment",
+        winningPrice: 8.1,
+      },
+      {
+        rewardType: "Like",
+        winningPrice: 10,
+      },
+      {
+        rewardType: "Comment",
+        winningPrice: 1,
+      },
+    ],
+  },
+  {
+    month: "January",
+    winnings: [
+      {
+        rewardType: "Comment",
+        winningPrice: 8.1,
+      },
+      {
+        rewardType: "Like",
+        winningPrice: 10,
+      },
+      {
+        rewardType: "Comment",
+        winningPrice: 1,
+      },
+    ],
+  },
+  {
+    month: "January",
+    winnings: [
+      {
+        rewardType: "Comment",
+        winningPrice: 8.1,
+      },
+      {
+        rewardType: "Like",
+        winningPrice: 10,
+      },
+      {
+        rewardType: "Comment",
+        winningPrice: 1,
+      },
+    ],
+  },
+  {
+    month: "January",
+    winnings: [
+      {
+        rewardType: "Comment",
+        winningPrice: 8.1,
+      },
+      {
+        rewardType: "Like",
+        winningPrice: 10,
+      },
+      {
+        rewardType: "Comment",
+        winningPrice: 1,
+      },
+    ],
+  },
+  {
+    month: "January",
+    winnings: [
+      {
+        rewardType: "Comment",
+        winningPrice: 8.1,
+      },
+      {
+        rewardType: "Like",
+        winningPrice: 10,
+      },
+      {
+        rewardType: "Comment",
+        winningPrice: 1,
+      },
+    ],
+  },
+  {
+    month: "February",
+    winnings: [
+      {
+        rewardType: "Comment",
+        winningPrice: 8.1,
+      },
+      {
+        rewardType: "Like",
+        winningPrice: 10,
+      },
+      {
+        rewardType: "Comment",
+        winningPrice: 1,
+      },
+    ],
   },
 ];

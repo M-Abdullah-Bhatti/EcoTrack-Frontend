@@ -66,3 +66,14 @@ export function toastShow(text) {
     Toast.showWithGravityAndOffset(text, Toast.SHORT, Toast.BOTTOM, 0, 75);
   }
 }
+
+export const groupByDate = (rewards) => {
+  return rewards.reduce((acc, reward) => {
+    const date = new Date(reward.createdAt).toDateString();
+    if (!acc[date]) {
+      acc[date] = [];
+    }
+    acc[date].push(reward);
+    return acc;
+  }, {});
+};

@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity, Text, Image } from "react-native";
-import RewardsDetails from "../components/RewardsDetails";
-import RedemptionDetail from "../components/RedemptionDetail";
+import RewardsDetails from "../components/Rewards/RewardsDetails";
+import RedemptionDetail from "../components/Rewards/RedemptionDetail";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
 
 const RewardScreen = ({ navigation }) => {
   const [rewardDetailsVisible, setrewardDetailsVisible] = useState(true);
-  //   const [redemptionDetailsVisible, setredemptionDetailsVisible] =
-  //     useState(false);
   const [activeTab, setActiveTab] = useState("Rewards");
+
+  const { user } = useSelector((state) => state.user);
+  
   return (
     <View>
       <View style={styles.rewardHeader}>
@@ -30,7 +32,7 @@ const RewardScreen = ({ navigation }) => {
               color: "white",
             }}
           >
-            100
+            {user?.virtualCoins}
           </Text>
           <MaterialCommunityIcons
             name="gold"
@@ -116,17 +118,10 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "slate",
     width: "50%",
-    // textAlign: "center",
     display: "flex",
     alignItems: "center",
   },
-  // rewardHeader: {
-  //   height: 100,
-  //   backgroundColor: "red",
-  //   color: "white",
-  // },
   rewardHeader: {
-    // height: 100,
     backgroundColor: "#0c856e",
     color: "white",
     width: "100%",
@@ -137,10 +132,10 @@ const styles = StyleSheet.create({
   },
   activeButton: {
     borderBottomWidth: 2,
-    borderBottomColor: "#2DBAA0", // Change this to your desired active color
+    borderBottomColor: "#2DBAA0",
   },
   activeText: {
-    color: "#2DBAA0", // Change this to your desired active color
+    color: "#2DBAA0",
   },
 });
 
