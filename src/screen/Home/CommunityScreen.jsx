@@ -134,10 +134,10 @@ const CommunityScreen = ({ navigation }) => {
                 textTransform: "capitalize",
               }}
             >
-              {user.name}
+              {user?.name}
             </Text>
             <Text style={{ fontSize: 11, marginTop: 2, color: "black" }}>
-              @{user.name}
+              @{user?.name}
             </Text>
           </View>
         </TouchableOpacity>

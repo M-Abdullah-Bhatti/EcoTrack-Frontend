@@ -13,7 +13,7 @@ export default function StoryComponent() {
     const [users, setUsers] = useState([]);
 
     const { user } = useSelector((state) => state.user);
-    const currentUserProfilePic = user.profilePic ? user.profilePic : 'https://firebasestorage.googleapis.com/v0/b/eco-track-37da4.appspot.com/o/placeholder.jpg?alt=media&token=c66ff328-dc76-4ea4-8cbe-6e5d454de3ff';
+    const currentUserProfilePic = user?.profilePic ? user?.profilePic : 'https://firebasestorage.googleapis.com/v0/b/eco-track-37da4.appspot.com/o/placeholder.jpg?alt=media&token=c66ff328-dc76-4ea4-8cbe-6e5d454de3ff';
     const currentStoryOwnerProfilePic = (item) => { return item.profilePic ? item.profilePic : 'https://firebasestorage.googleapis.com/v0/b/eco-track-37da4.appspot.com/o/placeholder.jpg?alt=media&token=c66ff328-dc76-4ea4-8cbe-6e5d454de3ff' };
 
     useFocusEffect(

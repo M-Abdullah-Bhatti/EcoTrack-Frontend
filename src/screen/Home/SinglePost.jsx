@@ -11,7 +11,8 @@ import {
 } from "react-native";
 import { Feather, Entypo, AntDesign, FontAwesome5, Ionicons } from "@expo/vector-icons";
 import { formatDateLikeFacebook } from "../../utils/helpers";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { refreshUser } from "../../redux/userSlice";
 
 const SinglePost = ({ post, id, onPressShare }) => {
   const [viewFullDesc, setViewFullDesc] = useState(false);
@@ -20,10 +21,11 @@ const SinglePost = ({ post, id, onPressShare }) => {
   const [postLikes, setPostLikes] = useState(post.likes);
   const inputCommentRef = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
-  // Initialize showFullComment state
   const [showFullComment, setShowFullComment] = useState(
     new Array(post.comments.length).fill(false)
   );
+
+  const dispatch = useDispatch()
 
   // Function to toggle the state of a specific comment
   const toggleComment = (id) => {
@@ -41,7 +43,7 @@ const SinglePost = ({ post, id, onPressShare }) => {
   const { user } = useSelector((state) => state.user);
   
   // Check if the current user has liked the post
-  const liked = postLikes.includes(user._id);
+  const liked = postLikes.includes(user?._id);
   
   const addComment = async () => {
 
@@ -49,21 +51,23 @@ const SinglePost = ({ post, id, onPressShare }) => {
     
     try {
       const requestBody = {
-        userId: user._id,
+        userId: user?._id,
         comment: comment,
       };
 
       const response = await fetch(
-        `https://ecotrack-dev.vercel.app/api/posts/${post._id}/comments`,
+        `https://ecotrack-dev.vercel.app/api/posts/${post?._id}/comments`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${user?.token}`,
           },
           body: JSON.stringify(requestBody),
         }
       );
+
+      dispatch(refreshUser())
 
       if (!response.ok) {
         throw new Error("Failed to add comment. Please try again later.");
@@ -81,11 +85,11 @@ const SinglePost = ({ post, id, onPressShare }) => {
   const likePost = async () => {
     try {
       const requestBody = {
-        userId: user._id,
+        userId: user?._id,
       };
   
       const response = await fetch(
-        `https://ecotrack-dev.vercel.app/api/posts/${post._id}/like`,
+        `https://ecotrack-dev.vercel.app/api/posts/${post?._id}/like`,
         {
           method: "PUT",
           headers: {
@@ -170,7 +174,7 @@ const SinglePost = ({ post, id, onPressShare }) => {
             alignItems: "center",
             justifyContent: "center",
           }}
-          onPress={() => onPressShare(post._id)}
+          onPress={() => onPressShare(post?._id)}
         >
           <Feather name="more-horizontal" size={20} color="black" />
         </TouchableOpacity>

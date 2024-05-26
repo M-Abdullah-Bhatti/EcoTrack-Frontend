@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
 const initialState = {
     user: null,
@@ -43,8 +44,22 @@ const userSlice = createSlice({
             state.loading = false;
             state.error = true;
         },
+        refreshUser: async (state, action) => {
+            state.loading = true;
+            try {
+                const response = await axios.get(`https://ecotrack-dev.vercel.app/api/users/${state.user._id}`);
+                state.user = response.data.userWithoutPassword;
+                console.log("CURRENT USERRR: ", response.data.userWithoutPassword);
+                console.log("STATE USERRR: ", state.user);
+            } catch (error) {
+                state.error = true;
+                console.error('Error fetching user data:', error);
+            } finally {
+                state.loading = false;
+            }
+        },
     }
 });
 
-export const { loginStart, loginSuccess, loginFailure, logout, signupStart, signupSuccess, signupFailure } = userSlice.actions;
+export const { loginStart, loginSuccess, loginFailure, logout, signupStart, signupSuccess, signupFailure, refreshUser } = userSlice.actions;
 export default userSlice.reducer;

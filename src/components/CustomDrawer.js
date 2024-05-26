@@ -34,7 +34,7 @@ const CustomDrawer = (props) => {
           // source={require('../../assets/images/menu-bg.jpeg')}
           style={{padding: 20}}>
           <Image
-            source={user.profilePic ? {uri: user.profilePic} : require('../../assets/images/user-profile.jpg')}
+            source={user?.profilePic ? {uri: user?.profilePic} : require('../../assets/images/user-profile.jpg')}
             style={{height: 80, width: 80, borderRadius: 40, marginBottom: 10}}
           />
           <Text
@@ -43,7 +43,7 @@ const CustomDrawer = (props) => {
               fontSize: 18,
               marginBottom: 5,
             }}>
-            {user.name}
+            {user?.name}
           </Text>
           <View style={{flexDirection: 'row'}}>
             <Text

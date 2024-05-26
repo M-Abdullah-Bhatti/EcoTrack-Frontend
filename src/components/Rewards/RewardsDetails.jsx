@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import axios from "axios";
 import { groupByDate } from "../../utils/helpers";
