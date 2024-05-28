@@ -1,5 +1,5 @@
-// const environment = "dev";
-const environment = "production";
+const environment = "dev";
+// const environment = "production";
 
 let baseUrl;
 if (environment === "production") {

@@ -7,12 +7,19 @@ import {
   Image,
   TextInput,
   Modal,
-  ScrollView
+  ScrollView,
 } from "react-native";
-import { Feather, Entypo, AntDesign, FontAwesome5, Ionicons } from "@expo/vector-icons";
+import {
+  Feather,
+  Entypo,
+  AntDesign,
+  FontAwesome5,
+  Ionicons,
+} from "@expo/vector-icons";
 import { formatDateLikeFacebook } from "../../utils/helpers";
 import { useDispatch, useSelector } from "react-redux";
 import { refreshUser } from "../../redux/userSlice";
+import baseUrl from "../../utils/baseUrl";
 
 const SinglePost = ({ post, id, onPressShare }) => {
   const [viewFullDesc, setViewFullDesc] = useState(false);
@@ -25,7 +32,7 @@ const SinglePost = ({ post, id, onPressShare }) => {
     new Array(post.comments.length).fill(false)
   );
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   // Function to toggle the state of a specific comment
   const toggleComment = (id) => {
@@ -39,24 +46,27 @@ const SinglePost = ({ post, id, onPressShare }) => {
   } else {
     source = require("../../../assets/placeholder.jpg");
   }
-  
+
   const { user } = useSelector((state) => state.user);
-  
+
+  console.log("user: ", user);
+
   // Check if the current user has liked the post
   const liked = postLikes.includes(user?._id);
-  
-  const addComment = async () => {
 
+  const addComment = async () => {
     if (!comment) return;
-    
+
     try {
       const requestBody = {
         userId: user?._id,
         comment: comment,
       };
 
+      console.log("requestBody: ", requestBody);
+
       const response = await fetch(
-        `https://ecotrack-dev.vercel.app/api/posts/${post?._id}/comments`,
+        `${baseUrl}/api/posts/${post?._id}/comments`,
         {
           method: "PUT",
           headers: {
@@ -67,15 +77,16 @@ const SinglePost = ({ post, id, onPressShare }) => {
         }
       );
 
-      dispatch(refreshUser())
-
       if (!response.ok) {
         throw new Error("Failed to add comment. Please try again later.");
       }
 
       setComment("");
       const responseData = await response.json();
-      setComments(responseData.comments)
+      console.log("responseData: ", responseData.post.comments);
+      setComments(responseData.post.comments);
+      dispatch(refreshUser(responseData.user));
+
       console.log("Comment added successfully!", responseData);
     } catch (error) {
       console.error("Error adding comment:", error.message);
@@ -87,7 +98,7 @@ const SinglePost = ({ post, id, onPressShare }) => {
       const requestBody = {
         userId: user?._id,
       };
-  
+
       const response = await fetch(
         `https://ecotrack-dev.vercel.app/api/posts/${post?._id}/like`,
         {
@@ -99,13 +110,13 @@ const SinglePost = ({ post, id, onPressShare }) => {
           body: JSON.stringify(requestBody),
         }
       );
-  
+
       if (!response.ok) {
         throw new Error("Failed to like post. Please try again later.");
       }
-  
+
       const responseData = await response.json();
-      setPostLikes(responseData.likes)
+      setPostLikes(responseData.likes);
       console.log("Post Liked successfully!", responseData);
     } catch (error) {
       console.error("Error liking post:", error.message);
@@ -179,10 +190,10 @@ const SinglePost = ({ post, id, onPressShare }) => {
           <Feather name="more-horizontal" size={20} color="black" />
         </TouchableOpacity>
       </View>
-      
+
       <View style={{ width: "100%" }}>
-        {post.postDescription ?
-          (viewFullDesc ? (
+        {post.postDescription ? (
+          viewFullDesc ? (
             <Text
               style={{
                 fontSize: 13,
@@ -205,19 +216,24 @@ const SinglePost = ({ post, id, onPressShare }) => {
             >
               {post.postDescription}
             </Text>
-          ))
-          :
+          )
+        ) : (
           ""
-          }
+        )}
       </View>
 
       {post.image && (
         <Image
           source={{ uri: post.image }}
-          style={{ height: 275, width: "94%", marginHorizontal: 10, objectFit: 'contain' }}
+          style={{
+            height: 275,
+            width: "94%",
+            marginHorizontal: 10,
+            objectFit: "contain",
+          }}
         />
       )}
-      
+
       <TouchableOpacity
         style={{
           display: "flex",
@@ -246,9 +262,7 @@ const SinglePost = ({ post, id, onPressShare }) => {
             />
 
             <Text style={{ marginLeft: 4 }}>
-              {postLikes.length > 0 &&
-              postLikes.length + " Likes"
-              }
+              {postLikes.length > 0 && postLikes.length + " Likes"}
             </Text>
 
             {/* <Text style={{ marginLeft: 4 }}>
@@ -273,7 +287,9 @@ const SinglePost = ({ post, id, onPressShare }) => {
           >
             <FontAwesome5 name="comment-dots" size={16} color="black" />
 
-            <Text style={{ marginLeft: 4 }}>{post.comments.length} comments</Text>
+            <Text style={{ marginLeft: 4 }}>
+              {post.comments.length} comments
+            </Text>
           </View>
         )}
       </TouchableOpacity>
@@ -292,11 +308,7 @@ const SinglePost = ({ post, id, onPressShare }) => {
           }}
           onPress={likePost}
         >
-          <AntDesign
-            name={liked ? "like1" : "like2"}
-            size={18}
-            color="white"
-          />
+          <AntDesign name={liked ? "like1" : "like2"} size={18} color="white" />
 
           {!liked && <Text style={{ color: "white" }}>Like</Text>}
         </TouchableOpacity>
@@ -440,7 +452,11 @@ const SinglePost = ({ post, id, onPressShare }) => {
                     objectFit: "cover",
                     borderRadius: 100,
                   }}
-                  source={comment.user.profilePic ? {uri: comment.user.profilePic} : {require: "../../../assets/placeholder.jpg"}}
+                  source={
+                    comment.user.profilePic
+                      ? { uri: comment.user.profilePic }
+                      : { require: "../../../assets/placeholder.jpg" }
+                  }
                 />
               </View>
               <View
@@ -487,7 +503,7 @@ const SinglePost = ({ post, id, onPressShare }) => {
             style={{ fontSize: 16, margin: 12, height: "auto", width: "80%" }}
             multiline
             ref={inputCommentRef}
-            onChangeText={(text)=> setComment(text)}
+            onChangeText={(text) => setComment(text)}
           />
           <TouchableOpacity onPress={addComment}>
             <Ionicons
