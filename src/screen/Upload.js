@@ -9,19 +9,21 @@ import {
     Alert,
     ActivityIndicator,
 } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Entypo } from "@expo/vector-icons";
 import { toastShow, uploadImage } from "../utils/helpers";
 import { pickVideos } from "../utils/pickImage";
 import * as ImagePicker from "expo-image-picker";
+import { refreshUser } from "../redux/userSlice";
 
 const Upload = ({navigation, route}) => {
     const [toUploadImage, setToUploadImage] = useState("");
     const [description, setDescription] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
-    const { user } = useSelector((state) => state.user);
+    const { user, token } = useSelector((state) => state.user);
     const { type } = route.params;
+    const dispatch = useDispatch();
 
     const handlePostUpload = async () => {
         setIsLoading(true);
@@ -42,7 +44,7 @@ const Upload = ({navigation, route}) => {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${user.token}`,
+                Authorization: `Bearer ${token}`,
               },
               body: JSON.stringify(requestBody),
             }
@@ -60,6 +62,7 @@ const Upload = ({navigation, route}) => {
           console.log("Post uploaded successfully!", responseData);
           setIsLoading(false);
           navigation.goBack();
+          dispatch(refreshUser(user._id));
           toastShow("Post uploaded successfully!");
         } catch (error) {
           navigation.goBack();

@@ -17,7 +17,8 @@ import { FontAwesome5 } from 'react-native-vector-icons';
 
 const EditProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.user);
+  
+  const { user, token } = useSelector((state) => state.user);
 
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
@@ -28,7 +29,7 @@ const EditProfileScreen = ({ navigation }) => {
   // Function to fetch user profile data
   const getProfile = async () => {
     try {
-      const token = user.token;
+      const token = token;
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -70,7 +71,6 @@ const EditProfileScreen = ({ navigation }) => {
   // Function to handle profile update
   const handleUpdateProfile = async () => {
     try {
-      const token = user.token; 
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,

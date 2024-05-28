@@ -85,7 +85,7 @@ const SinglePost = ({ post, id, onPressShare }) => {
       const responseData = await response.json();
       console.log("responseData: ", responseData.post.comments);
       setComments(responseData.post.comments);
-      dispatch(refreshUser(responseData.user));
+      dispatch(refreshUser(user._id));
 
       console.log("Comment added successfully!", responseData);
     } catch (error) {

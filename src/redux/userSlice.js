@@ -1,6 +1,19 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+
+// Define the refreshUser thunk
+export const refreshUser = createAsyncThunk(
+  'user/refreshUser',
+  async (userId, thunkAPI) => {
+    try {
+      const response = await axios.get(`https://ecotrack-dev.vercel.app/api/users/${userId}`);
+      return response.data.userWithoutPassword;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
 
 const initialState = {
   user: null,
@@ -44,27 +57,20 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = true;
     },
-    refreshUser: (state, action) => {
-      console.log("action payload: ", action.payload);
-      state.user = action.payload;
-    },
-    // refreshUser: async (state, action) => {
-    //   state.loading = true;
-    //   try {
-    //     const response = await axios.get(
-    //       `https://ecotrack-dev.vercel.app/api/users/${state.user._id}`
-    //     );
-    //     console.log("CURRENT USERRR: ", response.data.userWithoutPassword);
-    //     console.log("STATE USERRR1: ", state.user);
-    //     state.user = response.data.userWithoutPassword;
-    //     console.log("STATE USERRR2: ", state.user);
-    //   } catch (error) {
-    //     state.error = true;
-    //     console.error("Error fetching user data:", error);
-    //   } finally {
-    //     state.loading = false;
-    //   }
-    // },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(refreshUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(refreshUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(refreshUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 
@@ -76,6 +82,6 @@ export const {
   signupStart,
   signupSuccess,
   signupFailure,
-  refreshUser,
 } = userSlice.actions;
+
 export default userSlice.reducer;
