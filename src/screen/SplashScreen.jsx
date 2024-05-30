@@ -1,19 +1,19 @@
 import { useEffect } from 'react'
 import { View, Text } from 'react-native'
 import LottieView from 'lottie-react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSelector } from 'react-redux';
 
 const SplashScreen = ({navigation}) => {
   
   useEffect(() => {
+    const { token } = useSelector((state)=> state.user);
+    
     setTimeout(() => {
-      AsyncStorage.getItem('userToken').then(value => {
-        if (value) {
-          navigation.replace('Main')
-        } else {
-            navigation.replace('AuthNavigation')
-          }
-        })
+      if (token) {
+        navigation.replace('Main')
+      } else {
+        navigation.replace('AuthNavigation')
+      }
     }, 3000);
   }, []);
 

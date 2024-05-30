@@ -1,6 +1,6 @@
 import axios from "axios";
 import baseUrl from "../utils/baseUrl";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useSelector } from "react-redux";
 
 const axiosInstance = axios.create({
   baseURL: baseUrl,
@@ -8,8 +8,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async function (config) {
-    const user = localStorage.getItem("userToken");
-    const token = AsyncStorage.getItem("userToken");
+    const { token } = useSelector((state)=> state.user);
     console.log("TOKEN: ", token)
 
     if (user) {

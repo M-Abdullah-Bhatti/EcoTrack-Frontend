@@ -33,16 +33,13 @@ const userSlice = createSlice({
       state.loading = false;
       state.user = action.payload;
       state.token = action.payload.token;
-      console.log(action.payload);
-
-      AsyncStorage.setItem("userToken", action.payload.token);
     },
     loginFailure: (state) => {
       state.loading = false;
       state.error = true;
     },
     logout: (state) => {
-      AsyncStorage.removeItem("userToken");
+      state.token = null;
       return initialState;
     },
     signupStart: (state) => {
