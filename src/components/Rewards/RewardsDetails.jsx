@@ -28,7 +28,7 @@ const RewardsDetails = () => {
           setRewardsData(sortedData);
           setGroupedRewards(groupByDate(sortedData));
           setIsLoading(false);
-          console.log("GROUPED REWARDSSSSSS: ", groupByDate(sortedData));
+          // console.log("GROUPED REWARDSSSSSS: ", groupByDate(sortedData));
         } catch (error) {
           console.error("Error fetching data:", error);
         } finally {

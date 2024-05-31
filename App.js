@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useFonts } from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
 import Routes from "./src/navigation";
@@ -28,7 +28,7 @@ function App() {
 
   if (!fontsLoaded) {
     return null;
-  }
+  };
 
   return (
     <Provider store={store}>

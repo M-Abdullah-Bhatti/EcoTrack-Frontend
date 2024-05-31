@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -57,9 +56,13 @@ const userSlice = createSlice({
     },
     setGoals: (state, action) => {
       state.goals = action.payload;
+
+      console.log("GOALS STATEEE: ", state.goals);
     },
     setEmissions: (state, action) => {
       state.emissions = action.payload;
+
+      console.log("EMISSIONS STATEEE: ", state.emissions);
     },
   },
   extraReducers: (builder) => {
@@ -86,6 +89,8 @@ export const {
   signupStart,
   signupSuccess,
   signupFailure,
+  setGoals,
+  setEmissions
 } = userSlice.actions;
 
 export default userSlice.reducer;

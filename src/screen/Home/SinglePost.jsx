@@ -49,8 +49,6 @@ const SinglePost = ({ post, id, onPressShare }) => {
 
   const { user } = useSelector((state) => state.user);
 
-  console.log("user: ", user);
-
   // Check if the current user has liked the post
   const liked = postLikes.includes(user?._id);
 

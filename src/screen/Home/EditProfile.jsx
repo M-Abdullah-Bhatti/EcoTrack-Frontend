@@ -29,7 +29,6 @@ const EditProfileScreen = ({ navigation }) => {
   // Function to fetch user profile data
   const getProfile = async () => {
     try {
-      const token = token;
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
