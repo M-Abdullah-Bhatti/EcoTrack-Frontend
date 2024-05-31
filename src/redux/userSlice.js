@@ -18,6 +18,8 @@ export const refreshUser = createAsyncThunk(
 const initialState = {
   user: null,
   token: null,
+  goals: null,
+  emissions: null,
   loading: false,
   error: false,
 };
@@ -39,7 +41,6 @@ const userSlice = createSlice({
       state.error = true;
     },
     logout: (state) => {
-      state.token = null;
       return initialState;
     },
     signupStart: (state) => {
@@ -53,6 +54,12 @@ const userSlice = createSlice({
     signupFailure: (state) => {
       state.loading = false;
       state.error = true;
+    },
+    setGoals: (state, action) => {
+      state.goals = action.payload;
+    },
+    setEmissions: (state, action) => {
+      state.emissions = action.payload;
     },
   },
   extraReducers: (builder) => {

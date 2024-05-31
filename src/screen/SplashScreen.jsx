@@ -5,8 +5,9 @@ import { useSelector } from 'react-redux';
 
 const SplashScreen = ({navigation}) => {
   
+  const { token } = useSelector((state)=> state.user);
+  
   useEffect(() => {
-    const { token } = useSelector((state)=> state.user);
     
     setTimeout(() => {
       if (token) {

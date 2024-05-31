@@ -1,6 +1,5 @@
 import axios from "axios";
 import baseUrl from "../utils/baseUrl";
-import { useSelector } from "react-redux";
 
 const axiosInstance = axios.create({
   baseURL: baseUrl,
@@ -8,9 +7,6 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async function (config) {
-    const { token } = useSelector((state)=> state.user);
-    console.log("TOKEN: ", token)
-
     if (user) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
