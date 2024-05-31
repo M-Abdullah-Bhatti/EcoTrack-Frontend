@@ -18,6 +18,7 @@ import ChatbotButton from "../components/Shared/ChatbotButton";
 import MainScreen from "../screen/Home/MainScreen";
 import RedemptionsScreen from "../screen/Home/RedemptionsScreen";
 import SearchScreen from "../screen/SearchScreen";
+import GoalsStatusScreen from "../screen/Home/GoalsStatusScreen";
 
 const Routes = () => {
   const MainStackNavigator = createNativeStackNavigator();
@@ -148,6 +149,14 @@ const Routes = () => {
         <MainStackNavigator.Screen
           name="RewardsScreen"
           component={RedemptionsScreen}
+          options={{
+            headerTransparent: false,
+            title: "",
+          }}
+        />
+        <MainStackNavigator.Screen
+          name="GoalsScreen"
+          component={GoalsStatusScreen}
           options={{
             headerTransparent: false,
             title: "",
