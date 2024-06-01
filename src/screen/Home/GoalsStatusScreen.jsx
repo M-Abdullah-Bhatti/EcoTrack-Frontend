@@ -1,6 +1,14 @@
-import React from "react";
-import { View, Text, StyleSheet, ScrollView, Dimensions } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
+import SetGoalModal from "../../components/SetGoalModal";
 
 const GoalsStatusScreen = () => {
   const goals = [
@@ -10,6 +18,7 @@ const GoalsStatusScreen = () => {
     { title: "Plant a tree", achieved: false },
     { title: "Recycle more", achieved: true },
   ];
+  const [goalModalVisible, setgoalModalVisible] = useState(false);
 
   const lastWeekValue = 15500;
   const thisWeekValue = 12000;
@@ -69,6 +78,27 @@ const GoalsStatusScreen = () => {
           </View>
         ))}
       </View>
+      <TouchableOpacity
+        onPress={() => setgoalModalVisible(true)}
+        style={{
+          backgroundColor: "green",
+          width: "90%",
+          borderRadius: 20,
+          marginHorizontal: "5%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: 20,
+        }}
+      >
+        <Text style={{ fontSize: 14, color: "white" }}> Open Modal</Text>
+      </TouchableOpacity>
+      <SetGoalModal
+        isVisible={goalModalVisible}
+        title="Goal 1"
+        description="Plant more trees "
+        hideModal={() => setgoalModalVisible(false)}
+      />
     </ScrollView>
   );
 };
