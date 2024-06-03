@@ -6,12 +6,42 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { redemptionProducts } from "../../data";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
 const RedemptionsScreen = () => {
+  const [vouchers, setVouchers] = useState([]);
+  
+  const { token } = useSelector((state)=> state.user);
+
   const totalUserWinPrice = 100;
+
+  useEffect(() => {
+    const getVouchers = async () => {
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+  
+        const response = await axios.get(
+          'https://ecotrack-dev.vercel.app/api/voucher/allVouchersForUsers',
+          config
+        );
+  
+        console.log("VOUCHERSSS: ", response.data);
+        setVouchers(response.data);
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      }
+    };
+
+    getVouchers(); 
+  }, []);
 
   return (
     <ScrollView
@@ -23,7 +53,7 @@ const RedemptionsScreen = () => {
         marginTop: 10,
       }}
     >
-      {redemptionProducts.map((rp, i) => (
+      {vouchers.map((voucher, i) => (
         <View key={i} style={styles.cardOfPrice}>
           <View
             style={{
@@ -40,13 +70,25 @@ const RedemptionsScreen = () => {
             }}
           >
             <Text style={{ color: "white", fontWeight: "700" }}>
-              {rp.category}
+              Voucher
             </Text>
           </View>
           <Image
-            src={rp.imageUrl}
-            style={{ width: "100%", height: 100, objectFit: "fill" }}
+            src={voucher.image}
+            style={{ width: "100%", height: 125, objectFit: "fill" }}
           />
+
+          <View
+            style={{
+              display: "flex",
+              marginTop: 8,
+              paddingHorizontal: 10,
+            }}
+          >
+            <Text style={{fontWeight: '800', fontSize: 16, marginBottom: 4}}>{voucher.name}</Text>
+            <Text style={{fontSize: 12}}>{voucher.description}</Text>
+          </View>
+
           <View
             style={{
               display: "flex",
@@ -64,20 +106,20 @@ const RedemptionsScreen = () => {
                 alignSelf: "flex-start",
               }}
             >
-              <View>
+              {/* <View>
                 <Text>Quantity</Text>
-                <Text style={{ fontWeight: "bold" }}>{rp.quantity}</Text>
-              </View>
+                <Text style={{ fontWeight: "bold" }}>{voucher.quantity}</Text>
+              </View> */}
               <View>
-                <Text>Prize/{rp.category}</Text>
-                <Text style={{ fontWeight: "bold" }}>{rp.quantity}</Text>
+                <Text>Price</Text>
+                <Text style={{ fontWeight: "bold" }}>{voucher.price}</Text>
               </View>
             </View>
             <TouchableOpacity
               style={[
                 {
                   backgroundColor:
-                    rp.stock == "In stock" && totalUserWinPrice > rp.points
+                    !voucher.disable
                       ? "#0c856e"
                       : "grey",
                   paddingVertical: 8,
@@ -85,13 +127,13 @@ const RedemptionsScreen = () => {
                   paddingHorizontal: 16,
                 },
               ]}
-              disabled={rp.stock != "In stock" || totalUserWinPrice < rp.points}
+              disabled={voucher.disable}
             >
               <Text style={{ color: "white" }}>Redeem</Text>
             </TouchableOpacity>
           </View>
           <View>
-            {totalUserWinPrice < rp.points && rp.stock == "In stock" && (
+            {voucher.disable && (
               <View
                 style={{
                   display: "flex",
@@ -110,7 +152,7 @@ const RedemptionsScreen = () => {
                 </Text>
               </View>
             )}
-            {totalUserWinPrice > rp.points && rp.stock == "In stock" && (
+            {(!voucher.disable) && (
               <View
                 style={{
                   display: "flex",
@@ -127,7 +169,7 @@ const RedemptionsScreen = () => {
                 <Text style={{ fontSize: 14, color: "#ffc53d" }}>In Stock</Text>
               </View>
             )}
-            {rp.stock !== "In stock" && (
+            {voucher.disable && (
               <View
                 style={{
                   display: "flex",
@@ -165,7 +207,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    height: 200,
     position: "relative",
+    paddingBottom: 10
   },
 });
