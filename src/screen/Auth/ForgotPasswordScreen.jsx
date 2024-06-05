@@ -143,10 +143,7 @@ const ForgotPassword = ({ navigation }) => {
       }}
     >
       <ScrollView
-        style={[
-          styles.container,
-          { marginTop: keyboardPadding > 0 ? -keyboardPadding + 20 : 0 },
-        ]}
+        style={[styles.container]}
         // contentContainerStyle={{ paddingBottom: keyboardPadding }}
       >
         <View style={styles.headerDiv}>
@@ -200,7 +197,7 @@ const ForgotPassword = ({ navigation }) => {
             Eco Track
           </Text>
           <Text style={{ fontSize: 14, color: "black", marginBottom: 30 }}>
-            Forgot your Account
+            Forgot your password
           </Text>
         </View>
         <View style={{ width: "100%", display: "flex", alignItems: "center" }}>

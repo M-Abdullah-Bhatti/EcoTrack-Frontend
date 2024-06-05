@@ -14,8 +14,8 @@ import axios from "axios";
 
 const RedemptionsScreen = () => {
   const [vouchers, setVouchers] = useState([]);
-  
-  const { token } = useSelector((state)=> state.user);
+
+  const { token } = useSelector((state) => state.user);
 
   const totalUserWinPrice = 100;
 
@@ -27,20 +27,20 @@ const RedemptionsScreen = () => {
             Authorization: `Bearer ${token}`,
           },
         };
-  
+
         const response = await axios.get(
-          'https://ecotrack-dev.vercel.app/api/voucher/allVouchersForUsers',
+          "https://ecotrack-dev.vercel.app/api/voucher/allVouchersForUsers",
           config
         );
-  
+
         console.log("VOUCHERSSS: ", response.data);
         setVouchers(response.data);
       } catch (error) {
-        console.error('Error fetching user profile:', error);
+        console.error("Error fetching user profile:", error);
       }
     };
 
-    getVouchers(); 
+    getVouchers();
   }, []);
 
   return (
@@ -52,6 +52,7 @@ const RedemptionsScreen = () => {
         width: "96%",
         marginTop: 10,
       }}
+      // contentContainerStyle={{ paddingBottom: 200 }}
     >
       {vouchers.map((voucher, i) => (
         <View key={i} style={styles.cardOfPrice}>
@@ -69,9 +70,7 @@ const RedemptionsScreen = () => {
               borderBottomRightRadius: 20,
             }}
           >
-            <Text style={{ color: "white", fontWeight: "700" }}>
-              Voucher
-            </Text>
+            <Text style={{ color: "white", fontWeight: "700" }}>Voucher</Text>
           </View>
           <Image
             src={voucher.image}
@@ -85,8 +84,10 @@ const RedemptionsScreen = () => {
               paddingHorizontal: 10,
             }}
           >
-            <Text style={{fontWeight: '800', fontSize: 16, marginBottom: 4}}>{voucher.name}</Text>
-            <Text style={{fontSize: 12}}>{voucher.description}</Text>
+            <Text style={{ fontWeight: "800", fontSize: 16, marginBottom: 4 }}>
+              {voucher.name}
+            </Text>
+            <Text style={{ fontSize: 12 }}>{voucher.description}</Text>
           </View>
 
           <View
@@ -118,10 +119,7 @@ const RedemptionsScreen = () => {
             <TouchableOpacity
               style={[
                 {
-                  backgroundColor:
-                    !voucher.disable
-                      ? "#0c856e"
-                      : "grey",
+                  backgroundColor: !voucher.disable ? "#0c856e" : "grey",
                   paddingVertical: 8,
                   borderRadius: 20,
                   paddingHorizontal: 16,
@@ -152,7 +150,7 @@ const RedemptionsScreen = () => {
                 </Text>
               </View>
             )}
-            {(!voucher.disable) && (
+            {!voucher.disable && (
               <View
                 style={{
                   display: "flex",
@@ -208,6 +206,6 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
     position: "relative",
-    paddingBottom: 10
+    paddingBottom: 10,
   },
 });

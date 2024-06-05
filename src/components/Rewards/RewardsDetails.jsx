@@ -1,4 +1,10 @@
-import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+} from "react-native";
 import React, { useState } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import axios from "axios";
@@ -8,7 +14,6 @@ import { useSelector } from "react-redux";
 import { useFocusEffect } from "@react-navigation/native";
 
 const RewardsDetails = () => {
-
   const [rewardsData, setRewardsData] = useState([]);
   const [groupedRewards, setGroupedRewards] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -24,7 +29,9 @@ const RewardsDetails = () => {
             `https://ecotrack-dev.vercel.app/api/rewards/${user._id}`
           );
           const data = response.data;
-          const sortedData = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+          const sortedData = data.sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          );
           setRewardsData(sortedData);
           setGroupedRewards(groupByDate(sortedData));
           setIsLoading(false);
@@ -35,21 +42,28 @@ const RewardsDetails = () => {
           setIsLoading(false);
         }
       };
-  
+
       getData();
     }, [])
   );
 
   if (isLoading) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", paddingTop: 250 }}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          paddingTop: 250,
+        }}
+      >
         <ActivityIndicator size="large" color="#0000ff" />
       </View>
     );
   }
-  
+
   return (
-    <ScrollView contentContainerStyle={{ paddingBottom: 50 }}>
+    <ScrollView contentContainerStyle={{ paddingBottom: 600 }}>
       {Object.keys(groupedRewards).length > 0 ? (
         Object.keys(groupedRewards).map((date, i) => (
           <View

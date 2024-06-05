@@ -67,7 +67,7 @@ const RedemptionDetail = () => {
         width: "96%",
         marginTop: 10,
       }}
-      contentContainerStyle={{ paddingBottom: 550 }}
+      contentContainerStyle={{ paddingBottom: 570 }}
     >
       {redemptionProducts.map((rp, i) => (
         <View key={i} style={styles.cardOfPrice}>
