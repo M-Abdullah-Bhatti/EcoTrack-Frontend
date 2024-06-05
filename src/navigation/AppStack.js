@@ -70,6 +70,8 @@ const AppStack = () => {
       getGoalsData();
     }
 
+    console.log("GOALSSS STATE: ", goals, "EMISSIONS STATE: ", emissions);
+
     // if(emissions[0].exceedsThreshold) {
     //   Alert.alert(`${emissions[0].category} Exceeds threshold value`)
     // }

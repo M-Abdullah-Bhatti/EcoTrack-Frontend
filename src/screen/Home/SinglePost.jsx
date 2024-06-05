@@ -451,8 +451,8 @@ const SinglePost = ({ post, id, onPressShare }) => {
                     borderRadius: 100,
                   }}
                   source={
-                    comment.user.profilePic
-                      ? { uri: comment.user.profilePic }
+                    comment?.user?.profilePic !== null
+                      ? { uri: comment?.user?.profilePic }
                       : { require: "../../../assets/placeholder.jpg" }
                   }
                 />
@@ -467,7 +467,7 @@ const SinglePost = ({ post, id, onPressShare }) => {
                 }}
               >
                 <Text style={{ fontSize: 14, fontWeight: "bold" }}>
-                  {comment?.user.name}
+                  {comment?.user?.name}
                 </Text>
                 {showFullComment[id] ? (
                   <Text
