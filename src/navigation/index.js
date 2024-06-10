@@ -151,7 +151,7 @@ const Routes = () => {
           component={RedemptionsScreen}
           options={{
             headerTransparent: false,
-            title: "",
+            title: "Discount Vouchers",
           }}
         />
         <MainStackNavigator.Screen

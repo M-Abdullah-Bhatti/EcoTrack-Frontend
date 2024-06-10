@@ -8,16 +8,13 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
-import { redemptionProducts } from "../../data";
 import { useSelector } from "react-redux";
 import axios from "axios";
 
 const RedemptionsScreen = () => {
   const [vouchers, setVouchers] = useState([]);
 
-  const { token } = useSelector((state) => state.user);
-
-  const totalUserWinPrice = 100;
+  const { user, token } = useSelector((state) => state.user);
 
   useEffect(() => {
     const getVouchers = async () => {
@@ -29,7 +26,7 @@ const RedemptionsScreen = () => {
         };
 
         const response = await axios.get(
-          "https://ecotrack-dev.vercel.app/api/voucher/allVouchersForUsers",
+          `https://ecotrack-dev.vercel.app/api/voucher/allVouchersForUsers?userId=${user._id}`,
           config
         );
 
@@ -52,7 +49,6 @@ const RedemptionsScreen = () => {
         width: "96%",
         marginTop: 10,
       }}
-      // contentContainerStyle={{ paddingBottom: 200 }}
     >
       {vouchers.map((voucher, i) => (
         <View key={i} style={styles.cardOfPrice}>
