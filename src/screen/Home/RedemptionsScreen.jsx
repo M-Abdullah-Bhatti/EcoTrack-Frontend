@@ -5,11 +5,14 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  Alert
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 import axios from "axios";
+
+import baseUrl from "../../utils/baseUrl";
 
 const RedemptionsScreen = () => {
   const [vouchers, setVouchers] = useState([]);
@@ -39,6 +42,39 @@ const RedemptionsScreen = () => {
 
     getVouchers();
   }, []);
+
+  const redeemVoucher = async (voucherId) => {
+    try {
+      const requestBody = {
+        userId: user?._id,
+        voucherId: voucherId,
+      };
+
+      console.log("requestBody: ", requestBody);
+
+      const response = await fetch(
+        `${baseUrl}/api/voucher/assignVoucherToUser`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user?.token}`,
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to redeem voucher. Please try again later.");
+      }
+
+      const responseData = await response.json();
+      console.log("Voucher redeemed successfully!", responseData);
+    } catch (error) {
+      console.error("Error redeeming voucher:", error);
+      Alert.alert(error.message);
+    }
+  };
 
   return (
     <ScrollView
@@ -122,6 +158,7 @@ const RedemptionsScreen = () => {
                 },
               ]}
               disabled={voucher.disable}
+              onPress={() => redeemVoucher(voucher._id)}
             >
               <Text style={{ color: "white" }}>Redeem</Text>
             </TouchableOpacity>
