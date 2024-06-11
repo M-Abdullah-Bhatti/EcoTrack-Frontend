@@ -19,7 +19,7 @@ const HabitsGuide = () => {
   }, []);
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollViewContent}>
+    <ScrollView contentContainerStyle={styles.scrollViewContent} showsVerticalScrollIndicator={false}>
       <StatusBar style="dark" />
       <Text style={styles.sectionTitle}>Transportation</Text>
       {transportationData.map((data, index) => (
@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     paddingBottom: 50,
+    backgroundColor: '#fff'
   },
   sectionTitle: {
     textAlign: "center",

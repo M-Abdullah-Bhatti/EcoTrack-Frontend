@@ -19,6 +19,7 @@ import MainScreen from "../screen/Home/MainScreen";
 import RedemptionsScreen from "../screen/Home/RedemptionsScreen";
 import SearchScreen from "../screen/SearchScreen";
 import GoalsStatusScreen from "../screen/Home/GoalsStatusScreen";
+import ActDetails from "../screen/ActDetails";
 
 const Routes = () => {
   const MainStackNavigator = createNativeStackNavigator();
@@ -152,6 +153,13 @@ const Routes = () => {
           options={{
             headerTransparent: false,
             title: "Discount Vouchers",
+          }}
+        />
+        <MainStackNavigator.Screen
+          name="ActDetails"
+          component={ActDetails}
+          options={{
+            title: "",
           }}
         />
         <MainStackNavigator.Screen

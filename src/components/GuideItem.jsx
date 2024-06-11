@@ -1,8 +1,11 @@
 import { Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { Entypo } from "@expo/vector-icons";
+import { useNavigation } from '@react-navigation/native';
 
 const GuideItem = ({ data }) => {
+  const navigation = useNavigation();
+  
   return (
     <>
       {data.map((content, index) => (
@@ -16,6 +19,7 @@ const GuideItem = ({ data }) => {
             paddingHorizontal: 12,
             paddingVertical: 10,
           }}
+          onPress={() => navigation.navigate("ActDetails", { content })}
         >
           <Text style={{ color: "#000", fontSize: 15, fontFamily: "PoppinsLight" }}>
             {content.tip}

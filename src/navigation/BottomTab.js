@@ -20,7 +20,7 @@ function TopTabs() {
     <SafeAreaView style={{ flex: 1, paddingTop: 30 }}>
       <TopTab.Navigator>
         <TopTab.Screen name="Food" component={FoodGuide} />
-        <TopTab.Screen name="Habits" component={HabitsGuide} />
+        <TopTab.Screen name="Energy" component={HabitsGuide} />
       </TopTab.Navigator>
     </SafeAreaView>
   );
