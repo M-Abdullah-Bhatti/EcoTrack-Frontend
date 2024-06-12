@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import {
   View,
   Text,
@@ -10,21 +10,24 @@ import {
   StatusBar,
   Platform,
   ScrollView,
-} from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import * as ImagePicker from 'expo-image-picker';
-import { FontAwesome5 } from 'react-native-vector-icons';
+} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import * as ImagePicker from "expo-image-picker";
+import { FontAwesome5 } from "react-native-vector-icons";
+import { uploadImage } from "../../utils/helpers";
+import { useFocusEffect } from "@react-navigation/native";
 
 const EditProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  
+
   const { user, token } = useSelector((state) => state.user);
 
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [image, setImage] = useState(null);
+  const [imageFromFirebase, setImageFromFirebase] = useState(null);
 
   // Function to fetch user profile data
   const getProfile = async () => {
@@ -36,23 +39,28 @@ const EditProfileScreen = ({ navigation }) => {
       };
 
       const response = await axios.get(
-        'https://ecotrack-dev.vercel.app/api/users/profile',
-        config
+        `https://ecotrack-dev.vercel.app/api/users/${user._id}`
       );
-
-      const userData = response.data.user;
-      console.log("User DATA ", userData)
+      console.log("id", user._id);
+      console.log("response of backend is", response.data);
+      const userData = response.data.userWithoutPassword;
+      console.log("User DATA ", userData);
       setName(userData.name);
       setEmail(userData.email);
+      userData.profilePic && setImage(userData.profilePic);
     } catch (error) {
-      console.error('Error fetching user profile:', error);
+      console.error("Error fetching user profile:", error);
     }
   };
 
-  useEffect(() => {
-    getProfile(); 
-  }, []);
-
+  // useFocusEffect(() => {
+  //   getProfile();
+  // }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      getProfile();
+    }, [])
+  );
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -61,14 +69,17 @@ const EditProfileScreen = ({ navigation }) => {
       aspect: [4, 3],
       quality: 1,
     });
-
+    console.log("ress", result.uri);
+    console.log("ress", await uploadImage(result.uri));
     if (!result.canceled) {
       setImage(result.uri);
+      setImageFromFirebase(await uploadImage(result.uri));
     }
   };
 
   // Function to handle profile update
   const handleUpdateProfile = async () => {
+    console.log("object", imageFromFirebase);
     try {
       const config = {
         headers: {
@@ -79,27 +90,33 @@ const EditProfileScreen = ({ navigation }) => {
       const userData = {
         name,
         email,
-        password,
-        image,
+        // password,
+        profilePic: imageFromFirebase ? imageFromFirebase : image,
       };
 
-      console.log("Usr Data ", userData)
-
+      console.log("Usr Data ", userData);
+      // "https://ecotrack-dev.vercel.app/api/users/edit",
       const response = await axios.put(
-        'https://ecotrack-dev.vercel.app/api/users/edit',
+        "http://192.168.100.29:5000/api/users/edit",
         userData,
         config
       );
 
-      console.log('User data updated:', response.data);
-   
+      console.log("User data updated:", response.data);
+      getProfile();
     } catch (error) {
-        if (error.response) {
-          console.error('Error updating user data:', error.response.data)
-        } else {
-          console.error('Error updating user data:', error.message);
-        }
+      if (error.response.data.message) {
+        alert(error.response.data.message);
       }
+      if (error.response) {
+        console.error(
+          "Error updating user data res:",
+          error.response.data.message
+        );
+      } else {
+        console.error("Error updating user data:", error.message);
+      }
+    }
   };
 
   return (
@@ -107,12 +124,12 @@ const EditProfileScreen = ({ navigation }) => {
       <TouchableOpacity onPress={pickImage}>
         <Image
           style={styles.profImage}
-          source={image ? { uri: image } :  require("../../../assets/prof.png") }
+          source={image ? { uri: image } : require("../../../assets/prof.png")}
         />
         <Text style={styles.editImageText}>Edit Image</Text>
       </TouchableOpacity>
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Name</Text>
+        <Text style={styles.label}>Namee</Text>
         <TextInput
           style={styles.input}
           value={name}
@@ -127,7 +144,7 @@ const EditProfileScreen = ({ navigation }) => {
           onChangeText={(text) => setEmail(text)}
         />
       </View>
-      <View style={styles.inputContainer}>
+      {/* <View style={styles.inputContainer}>
         <Text style={styles.label}>Password</Text>
         <TextInput
           style={styles.input}
@@ -142,10 +159,10 @@ const EditProfileScreen = ({ navigation }) => {
           secureTextEntry
           onChangeText={(text) => setConfirmPassword(text)}
         />
-      </View>
+      </View> */}
       <TouchableOpacity style={styles.btn} onPress={handleUpdateProfile}>
         <FontAwesome5 name="save" color="#FFF" size={24} />
-        <Text style={{ fontSize: 18, fontWeight: 'bold', color: '#FFF' }}>
+        <Text style={{ fontSize: 18, fontWeight: "bold", color: "#FFF" }}>
           Save Changes
         </Text>
       </TouchableOpacity>
@@ -156,9 +173,9 @@ const EditProfileScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    paddingTop: Platform.OS == 'android' ? StatusBar.currentHeight : '0px',
-    backgroundColor: 'white',
-    alignItems: 'center',
+    paddingTop: Platform.OS == "android" ? StatusBar.currentHeight + 20 : "0px",
+    backgroundColor: "white",
+    alignItems: "center",
     paddingHorizontal: 20,
   },
   profImage: {
@@ -168,41 +185,41 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   editImageText: {
-    color: '#2DBAA0',
+    color: "#2DBAA0",
     fontSize: 16,
-    textDecorationLine: 'underline',
-    textAlign: 'center',
+    textDecorationLine: "underline",
+    textAlign: "center",
     marginBottom: 20,
   },
   inputContainer: {
-    width: '100%',
+    width: "100%",
     marginBottom: 20,
   },
   label: {
     fontSize: 16,
     marginBottom: 6,
-    fontWeight: 'bold',
-    textTransform: 'capitalize',
+    fontWeight: "bold",
+    textTransform: "capitalize",
   },
   input: {
-    width: '100%',
+    width: "100%",
     height: 40,
     borderWidth: 1,
-    borderColor: '#2DBAA0',
+    borderColor: "#2DBAA0",
     borderRadius: 8,
     paddingHorizontal: 10,
   },
   btn: {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'row',
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
     gap: 6,
-    backgroundColor: '#46A667',
+    backgroundColor: "#46A667",
     paddingVertical: 14,
-    alignItems: 'center',
+    alignItems: "center",
     marginVertical: 20,
     borderRadius: 12,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
 });
 
