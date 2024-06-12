@@ -89,7 +89,7 @@ const EditProfileScreen = ({ navigation }) => {
 
       const userData = {
         name,
-        email,
+
         // password,
         profilePic: imageFromFirebase ? imageFromFirebase : image,
       };
@@ -129,7 +129,7 @@ const EditProfileScreen = ({ navigation }) => {
         <Text style={styles.editImageText}>Edit Image</Text>
       </TouchableOpacity>
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Namee</Text>
+        <Text style={styles.label}>Name</Text>
         <TextInput
           style={styles.input}
           value={name}
@@ -138,11 +138,22 @@ const EditProfileScreen = ({ navigation }) => {
       </View>
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Email</Text>
-        <TextInput
+        <Text
+          style={{
+            fontSize: 15,
+            marginBottom: 6,
+            marginTop: 3,
+            fontWeight: "600",
+            // textTransform: "capitalize",
+          }}
+        >
+          {email}
+        </Text>
+        {/* <TextInput
           style={styles.input}
           value={email}
-          onChangeText={(text) => setEmail(text)}
-        />
+          // onChangeText={(text) => setEmail(text)}
+        /> */}
       </View>
       {/* <View style={styles.inputContainer}>
         <Text style={styles.label}>Password</Text>
