@@ -97,7 +97,7 @@ const EditProfileScreen = ({ navigation }) => {
       console.log("Usr Data ", userData);
       // "https://ecotrack-dev.vercel.app/api/users/edit",
       const response = await axios.put(
-        "http://192.168.100.29:5000/api/users/edit",
+        "https://ecotrack-dev.vercel.app/api/users/edit",
         userData,
         config
       );
