@@ -352,7 +352,7 @@ const AddEmission = ({ navigation, route }) => {
           </View>
 
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Distance</Text>
+            <Text style={styles.sectionTitle}>Quantity</Text>
             <Text>{mealQuantity} meal(s)</Text>
           </View>
 

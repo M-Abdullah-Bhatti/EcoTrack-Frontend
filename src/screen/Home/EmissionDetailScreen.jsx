@@ -71,7 +71,7 @@ const EmissionDetailScreen = () => {
       {/* <Text>EmissionDetailScreen</Text> */}
       <View>
         {detailsHeadingToBeShown.map((d) => (
-          <View style={{ paddingVertical: 15 }}>
+          <View style={{ paddingVertical: 15 }} key={d._id}>
             <Text style={{ fontWeight: "bold", fontSize: 18 }}>
               {d.heading}
             </Text>

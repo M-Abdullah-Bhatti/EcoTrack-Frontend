@@ -122,7 +122,10 @@ const MainScreen = ({ navigation }) => {
               <Entypo size={30} color="black" name="trophy" />
               <Text style={styles.itemText}>Check Rewards</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.item}>
+            <TouchableOpacity
+              style={styles.item}
+              onPress={() => navigation.navigate("UserDashboard")}
+            >
               <MaterialCommunityIcons
                 size={30}
                 color="black"

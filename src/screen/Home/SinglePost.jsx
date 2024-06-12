@@ -42,7 +42,8 @@ const SinglePost = ({ post, id, onPressShare }) => {
   };
 
   if (post.user.profilePic) {
-    source = { uri: post.user.profilePic };
+    // source = { uri: post.user.profilePic };
+    source = require("../../../assets/placeholder.jpg");
   } else {
     source = require("../../../assets/placeholder.jpg");
   }
