@@ -1,7 +1,6 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { AuthStacks } from "./AuthStack";
-import BottomTab from "./BottomTab";
 import AddEmissionCategory from "../screen/Home/AddEmissionCategory";
 import AddEmission from "../screen/Home/AddEmission";
 import SplashScreen from "../screen/SplashScreen";
@@ -14,7 +13,6 @@ import AppStack from "./AppStack";
 import Story from "../screen/Story";
 import RewardScreen from "../screen/RewardScreen";
 import Upload from "../screen/Upload";
-import ChatbotButton from "../components/Shared/ChatbotButton";
 import MainScreen from "../screen/Home/MainScreen";
 import RedemptionsScreen from "../screen/Home/RedemptionsScreen";
 import SearchScreen from "../screen/SearchScreen";

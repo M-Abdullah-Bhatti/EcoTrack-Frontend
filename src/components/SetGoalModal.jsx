@@ -25,7 +25,7 @@ const SetGoalModal = ({
   return (
     <Modal
       hasBackdrop={true}
-      onBackdropPress={hideModal}
+      // onBackdropPress={hideModal}
       isVisible={isVisible}
       animationIn={"fadeInLeft"}
       animationOut={"fadeOutRight"}

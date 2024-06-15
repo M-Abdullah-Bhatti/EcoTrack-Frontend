@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -14,8 +14,79 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { useDispatch, useSelector } from "react-redux";
+import { setEmissions, setGoals } from '../../redux/userSlice';
+import axios from "axios";
+import SetGoalModal from "../../components/SetGoalModal";
 
 const MainScreen = ({ navigation }) => {
+  const [modalOpen, setModalOpen] = useState(false);
+  
+  const { user, token, goals, emissions } = useSelector((state)=> state.user);
+  const dispatch = useDispatch();
+  
+  useEffect(()=> {
+    const getEmissionsData = async () => {
+      // setIsLoading(true);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      
+      try {
+        const emissionData = await axios.get(
+          `https://ecotrack-dev.vercel.app/api/emission/weekly/${user._id}`, config
+        );
+        dispatch(setEmissions(emissionData.data.result))
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        // setIsLoading(false);
+      }
+    };
+
+    const getGoalsData = async () => {
+      // setIsLoading(true);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      
+      try {
+        const goalsData = await axios.get(
+          `https://ecotrack-dev.vercel.app/api/goal/weekly/${user._id}`, config
+        );
+        dispatch(setGoals(goalsData.data))
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        // setIsLoading(false);
+      }
+    };
+
+    getEmissionsData();
+
+    getGoalsData();
+
+    if(emissions) {
+      setModalOpen(true);
+    }
+
+    console.log("GOALSSS STATE: ", goals, "EMISSIONS STATE: ", emissions);
+
+    // if(emissions[0].exceedsThreshold) {
+    //   Alert.alert(`${emissions[0].category} Exceeds threshold value`)
+    // }
+
+    // if(goals[0].startDate, ">>>", goals[0].endDate) {
+    //   console.log(goals[0].startDate, ">>>", goals[0].endDate)
+    //   Alert.alert(`Your weekly ${goals[0].category} goals not met`)
+    // }
+
+  }, []);
+  
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.curvedContainer}>
@@ -123,6 +194,13 @@ const MainScreen = ({ navigation }) => {
           </View>
         </View>
       </View>
+
+      <SetGoalModal
+        isVisible={modalOpen}
+        title="Goal 1"
+        description="Plant more trees "
+        hideModal={() => setModalOpen(false)}
+      />
     </ScrollView>
   );
 };
@@ -246,7 +324,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginHorizontal: "2%",
-    paddingVertical: "5%",
+    paddingVertical: "4%",
     borderRadius: 10,
     width: "28%",
   },

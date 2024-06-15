@@ -14,7 +14,7 @@ import React, { useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { Ionicons, Feather } from "@expo/vector-icons";
-import SinglePost from "./SinglePost";
+import SinglePost from "../../components/SinglePost";
 import ChatbotButton from "../../components/Shared/ChatbotButton";
 import axios from "axios";
 import StoryComponent from "../../components/StoryComponent";

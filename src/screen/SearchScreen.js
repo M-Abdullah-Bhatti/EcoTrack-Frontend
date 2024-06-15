@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import SinglePost from '../screen/Home/SinglePost';
+import SinglePost from '../components/SinglePost';
 
 const SearchScreen = ({ route, navigation }) => {
   const [searchText, setSearchText] = useState('');
