@@ -6,11 +6,18 @@ import {
   ScrollView,
   StyleSheet,
   Image,
+  TouchableOpacity,
 } from "react-native";
 import { useSelector } from "react-redux";
+import {
+  Ionicons,
+  FontAwesome,
+  Fontisto,
+  AntDesign,
+  Entypo,
+} from "@expo/vector-icons";
 
-const RedemptionDetail = () => {
-
+const RedemptionDetail = ({ navigation }) => {
   const [vouchers, setVouchers] = useState([]);
 
   const { user, token } = useSelector((state) => state.user);
@@ -38,7 +45,7 @@ const RedemptionDetail = () => {
 
     getVouchers();
   }, []);
-  
+
   const redemptionProducts = [
     {
       id: 1,
@@ -81,141 +88,196 @@ const RedemptionDetail = () => {
       }}
       contentContainerStyle={{ paddingBottom: 570 }}
     >
-      {vouchers.map((voucher, i) => (
-        <View key={i} style={styles.cardOfPrice}>
-          <View
-            style={{
-              position: "absolute",
-              left: 0,
-              top: 20,
-              backgroundColor: "#0c856e",
-              width: "auto",
-              paddingHorizontal: 10,
-              paddingVertical: 4,
-              zIndex: 3,
-              borderTopRightRadius: 20,
-              borderBottomRightRadius: 20,
-            }}
-          >
-            <Text style={{ color: "white", fontWeight: "700" }}>Voucher</Text>
-          </View>
-          <Image
-            src={voucher.image}
-            style={{ width: "100%", height: 125, objectFit: "fill" }}
-          />
-
-          <View
+      {vouchers.length == 0 ? (
+        <View
+          style={{
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            gap: 20,
+            backgroundColor: "white",
+            height: "100%",
+            paddingTop: 80,
+            flex: 1,
+          }}
+        >
+          <Text>You have no rewards right now</Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Community")}
             style={{
               display: "flex",
-              marginTop: 8,
-              paddingHorizontal: 10,
-            }}
-          >
-            <Text style={{ fontWeight: "800", fontSize: 16, marginBottom: 4 }}>
-              {voucher.name}
-            </Text>
-            <Text style={{ fontSize: 12 }}>{voucher.description}</Text>
-          </View>
-
-          <View
-            style={{
-              display: "flex",
+              alignItems: "center",
+              height: 50,
+              justifyContent: "center",
               flexDirection: "row",
-              justifyContent: "space-between",
-              marginVertical: 15,
-              paddingHorizontal: 10,
             }}
           >
+            <Text
+              style={{
+                color: "#a8a5a5",
+                fontSize: 14,
+                marginRight: 10,
+              }}
+            >
+              Contribute to community to earn rewards
+            </Text>
+            <AntDesign name="arrowright" size={16} color="#a8a5a5" />
+          </TouchableOpacity>
+        </View>
+      ) : (
+        vouchers.map((voucher, i) => (
+          <View key={i} style={styles.cardOfPrice}>
+            <View
+              style={{
+                position: "absolute",
+                left: 0,
+                top: 20,
+                backgroundColor: "#0c856e",
+                width: "auto",
+                paddingHorizontal: 10,
+                paddingVertical: 4,
+                zIndex: 3,
+                borderTopRightRadius: 20,
+                borderBottomRightRadius: 20,
+              }}
+            >
+              <Text style={{ color: "white", fontWeight: "700" }}>Voucher</Text>
+            </View>
+            <Image
+              src={voucher.image}
+              style={{ width: "100%", height: 125, objectFit: "fill" }}
+            />
+
+            <View
+              style={{
+                display: "flex",
+                marginTop: 8,
+                paddingHorizontal: 10,
+              }}
+            >
+              <Text
+                style={{ fontWeight: "800", fontSize: 16, marginBottom: 4 }}
+              >
+                {voucher.name}
+              </Text>
+              <Text style={{ fontSize: 12 }}>{voucher.description}</Text>
+            </View>
+
             <View
               style={{
                 display: "flex",
                 flexDirection: "row",
-                gap: 30,
-                alignSelf: "flex-start",
+                justifyContent: "space-between",
+                marginVertical: 15,
+                paddingHorizontal: 10,
               }}
             >
-              {/* <View>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: 30,
+                  alignSelf: "flex-start",
+                }}
+              >
+                {/* <View>
                 <Text>Quantity</Text>
                 <Text style={{ fontWeight: "bold" }}>{voucher.quantity}</Text>
               </View> */}
-              <View>
-                <Text>Price</Text>
-                <Text style={{ fontWeight: "bold" }}>{voucher.price}</Text>
+                <View>
+                  <Text>Price</Text>
+                  <Text style={{ fontWeight: "bold" }}>{voucher.price}</Text>
+                </View>
               </View>
+              <TouchableOpacity
+                style={[
+                  {
+                    backgroundColor: !voucher.disable ? "#0c856e" : "grey",
+                    paddingVertical: 8,
+                    borderRadius: 20,
+                    paddingHorizontal: 16,
+                  },
+                ]}
+                disabled={voucher.disable}
+              >
+                <Text style={{ color: "white" }}>Redeem</Text>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              style={[
-                {
-                  backgroundColor: !voucher.disable ? "#0c856e" : "grey",
-                  paddingVertical: 8,
-                  borderRadius: 20,
-                  paddingHorizontal: 16,
-                },
-              ]}
-              disabled={voucher.disable}
-            >
-              <Text style={{ color: "white" }}>Redeem</Text>
-            </TouchableOpacity>
+            <View>
+              {voucher.disable && (
+                <View
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "flex-start",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 10,
+                    paddingHorizontal: 10,
+                  }}
+                >
+                  <MaterialIcons
+                    name="error-outline"
+                    size={20}
+                    color="#ffc53d"
+                  />
+
+                  <Text style={{ fontSize: 14, color: "#ffc53d" }}>
+                    Not enough points
+                  </Text>
+                </View>
+              )}
+              {!voucher.disable && (
+                <View
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "flex-start",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 10,
+                    paddingHorizontal: 10,
+                  }}
+                >
+                  <MaterialIcons
+                    name="error-outline"
+                    size={20}
+                    color="#ffc53d"
+                  />
+
+                  <Text style={{ fontSize: 14, color: "#ffc53d" }}>
+                    In Stock
+                  </Text>
+                </View>
+              )}
+              {voucher.disable && (
+                <View
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    justifyContent: "flex-start",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 10,
+                    paddingHorizontal: 10,
+                  }}
+                >
+                  <MaterialIcons
+                    name="error-outline"
+                    size={20}
+                    color="#ffc53d"
+                  />
+
+                  <Text style={{ fontSize: 14, color: "#ffc53d" }}>
+                    Out of stock
+                  </Text>
+                </View>
+              )}
+            </View>
           </View>
-          <View>
-            {voucher.disable && (
-              <View
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  justifyContent: "flex-start",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: 10,
-                  paddingHorizontal: 10,
-                }}
-              >
-                <MaterialIcons name="error-outline" size={20} color="#ffc53d" />
-
-                <Text style={{ fontSize: 14, color: "#ffc53d" }}>
-                  Not enough points
-                </Text>
-              </View>
-            )}
-            {!voucher.disable && (
-              <View
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  justifyContent: "flex-start",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: 10,
-                  paddingHorizontal: 10,
-                }}
-              >
-                <MaterialIcons name="error-outline" size={20} color="#ffc53d" />
-
-                <Text style={{ fontSize: 14, color: "#ffc53d" }}>In Stock</Text>
-              </View>
-            )}
-            {voucher.disable && (
-              <View
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  justifyContent: "flex-start",
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: 10,
-                  paddingHorizontal: 10,
-                }}
-              >
-                <MaterialIcons name="error-outline" size={20} color="#ffc53d" />
-
-                <Text style={{ fontSize: 14, color: "#ffc53d" }}>
-                  Out of stock
-                </Text>
-              </View>
-            )}
-          </View>
-        </View>
-      ))}
+        ))
+      )}
+      {}
     </ScrollView>
   );
 };

@@ -10,7 +10,7 @@ const RewardScreen = ({ navigation }) => {
   const [activeTab, setActiveTab] = useState("Rewards");
 
   const { user } = useSelector((state) => state.user);
-  
+
   return (
     <View>
       <View style={styles.rewardHeader}>
@@ -98,7 +98,11 @@ const RewardScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={styles.contentForRewardScreenContainer}>
-        {rewardDetailsVisible ? <RewardsDetails /> : <RedemptionDetail />}
+        {rewardDetailsVisible ? (
+          <RewardsDetails navigation={navigation} />
+        ) : (
+          <RedemptionDetail navigation={navigation} />
+        )}
       </View>
     </View>
   );

@@ -13,7 +13,7 @@ import RewardItem from "./RewardItem";
 import { useSelector } from "react-redux";
 import { useFocusEffect } from "@react-navigation/native";
 
-const RewardsDetails = () => {
+const RewardsDetails = ({ navigation }) => {
   const [rewardsData, setRewardsData] = useState([]);
   const [groupedRewards, setGroupedRewards] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -107,6 +107,7 @@ const RewardsDetails = () => {
         >
           <Text>You have no rewards right now</Text>
           <TouchableOpacity
+            onPress={() => navigation.navigate("Community")}
             style={{
               display: "flex",
               alignItems: "center",

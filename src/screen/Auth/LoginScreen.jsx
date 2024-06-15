@@ -342,7 +342,7 @@ const Login = ({ navigation }) => {
             )}
           </TouchableOpacity>
         </View>
-        <View style={styles.breakPoint}>
+        {/* <View style={styles.breakPoint}>
           <View style={styles.item}></View>
           <Text style={styles.bpText}>OR</Text>
           <View style={styles.item}></View>
@@ -355,7 +355,7 @@ const Login = ({ navigation }) => {
             />
             <Text style={styles.googleloginTExt}>CONTINUE WITH GOOGLE</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
 
         <View
           style={{

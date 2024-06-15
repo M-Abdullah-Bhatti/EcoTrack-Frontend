@@ -151,7 +151,8 @@ const UserDashboard = ({ navigation }) => {
     try {
       setLoading(true);
       const emissionData = await axios.get(
-        "https://ecotrack-dev.vercel.app/api/emission/allMyEmission",
+        `https://ecotrack-dev.vercel.app/api/emission/${user._id}`,
+        // "http://192.168.100.29:5000/api/emission/allMyEmission",
         {
           headers: {
             authorization: `Bearer ${user.token}`,
@@ -167,6 +168,7 @@ const UserDashboard = ({ navigation }) => {
       }
       setLoading(false);
     } catch (error) {
+      console.log("error while getting emissins", error);
       alert("An error occurred. Please try again.");
     }
   };
