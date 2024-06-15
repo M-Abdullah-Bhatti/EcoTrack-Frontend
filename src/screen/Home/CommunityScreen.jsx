@@ -96,89 +96,12 @@ const CommunityScreen = ({ navigation }) => {
           style={{
             width: 25,
             height: 25,
-            // borderRadius: 20,
             objectFit: "fill",
           }}
         />
         <Text style={{ fontSize: 16, fontWeight: "800" }}>
           Eco Track Community
         </Text>
-      </View>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={{
-            width: "64%",
-            display: "flex",
-            flexDirection: "row",
-            height: 60,
-            justifyContent: "space-around",
-            alignItems: "center",
-          }}
-          onPress={() => Alert.alert("Aziz")}
-        >
-          <View style={{ width: 40, height: 40, borderRadius: 20 }}>
-            <Image
-              source={require("../../../assets/prof.png")}
-              style={{ width: 40, height: 40, borderRadius: 20 }}
-            />
-          </View>
-          <View
-            style={{ display: "flex", alignItems: "flex-start", width: "70%" }}
-          >
-            <Text
-              style={{
-                fontSize: 13,
-                marginTop: 2,
-                fontWeight: "bold",
-                color: "black",
-                textTransform: "capitalize",
-              }}
-            >
-              {user?.name}
-            </Text>
-            <Text style={{ fontSize: 11, marginTop: 2, color: "black" }}>
-              @{user?.name}
-            </Text>
-          </View>
-        </TouchableOpacity>
-        <View
-          style={{
-            width: "40%",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "flex-end",
-            gap: 14,
-          }}
-        >
-          <TouchableOpacity
-            style={{
-              height: 28,
-              width: 28,
-              // backgroundColor: "white",
-              borderRadius: 14,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Ionicons name="settings-sharp" size={24} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              height: 28,
-              width: 28,
-              // backgroundColor: "white",
-              borderRadius: 14,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            onPress={() => navigation.navigate("Search", {posts: posts})}
-          >
-            <Feather name="search" size={24} color="black" />
-          </TouchableOpacity>
-        </View>
       </View>
 
       <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>

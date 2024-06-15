@@ -2,21 +2,14 @@ import {
   View,
   Text,
   StyleSheet,
-  StatusBar,
   Switch,
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
-import { useRoute } from "@react-navigation/native";
-// import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 
-const EmissionDetailScreen = () => {
-  const route = useRoute();
+const EmissionDetailScreen = ({route}) => {
   const dataOfEmission = route.params?.data;
-  const [textOfMitigation, settextOfMitigation] = useState(
-    "This emission hasn't been mitigated"
-  );
   console.log("data", dataOfEmission);
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
@@ -38,13 +31,11 @@ const EmissionDetailScreen = () => {
       id: 1,
       heading: "Category",
       text: dataOfEmission.category,
-      // text2: dataOfEmission.type,
     },
     {
       id: 2,
       heading: "Sub category",
       text: dataOfEmission.subCategory,
-      // text2: dataOfEmission.type,
     },
     {
       id: 3,
@@ -52,13 +43,6 @@ const EmissionDetailScreen = () => {
       heading: "Quantity",
       text: dataOfEmission.carbonEmitted + " " + "kgCO2eq",
     },
-    // {
-    //   id: 4,
-
-    //   heading: "Mitigation",
-    //   textOfMitigation,
-    //   switchBtn: true,
-    // },
     {
       id: 4,
 
@@ -66,6 +50,7 @@ const EmissionDetailScreen = () => {
       text: formattedDate,
     },
   ];
+  
   return (
     <View style={styles.container}>
       {/* <Text>EmissionDetailScreen</Text> */}
@@ -121,14 +106,11 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderTopColor: "#2DBAA0",
     borderTopWidth: 1,
-    // justifyContent: "flex-start",
-    // alignItems: "center",
     paddingHorizontal: 20,
     gap: 10,
   },
   monthDiv: {
     height: 60,
-    // backgroundColor: "#2DBAA0",
     alignItems: "center",
     display: "flex",
     flexDirection: "row",
@@ -139,7 +121,6 @@ const styles = StyleSheet.create({
   },
   monthDiv2: {
     height: 60,
-    // backgroundColor: "#2DBAA0",
     alignItems: "center",
     display: "flex",
     flexDirection: "row",
@@ -149,7 +130,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1.4,
   },
   singleEmissionDiv: {
-    // flex: 1,
     display: "flex",
     borderBottomColor: "#2DBAA0",
     borderBottomWidth: 0.3,
@@ -162,4 +142,5 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
 export default EmissionDetailScreen;

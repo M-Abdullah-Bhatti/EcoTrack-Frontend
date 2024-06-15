@@ -38,32 +38,17 @@ export default function StoryComponent() {
             <View style={{padding: 7}}>
                 <Image source={{uri: currentUserProfilePic}} style={{width: 70, backgroundColor: 'pink', height: 70, borderRadius: 100, borderWidth: 1, borderColor: '#000'}} />
                 <View style={{position: 'absolute'}}>
-                    <TouchableOpacity style={{marginTop: 55, backgroundColor: 'black', marginLeft: 55, width: 23, height: 23, borderRadius: 50, borderWidth: 1.5, justifyContent: 'center', alignItems: 'center'}} onPress={()=> navigation.navigate("Upload", {type: "story"})}>
+                    <TouchableOpacity style={{marginTop: 55, backgroundColor: 'black', marginLeft: 55, width: 22, height: 22, borderRadius: 50, borderWidth: 1.5, justifyContent: 'center', alignItems: 'center'}} onPress={()=> navigation.navigate("Upload", {type: "story"})}>
                         <Ionicons name="add" size={24} color="white" style={{textAlign: 'center', textAlignVertical: 'center', fontSize: 16}} />
                     </TouchableOpacity>
                     <Text style={[styles.username, {textTransform: 'capitalize'}]}>Your Story</Text>
                 </View>
             </View>
-            {/* <FlatList 
-                data={users}
-                keyExtractor={(_, index)=> index}
-                renderItem={({item})=> {
-                    return (
-                        <TouchableOpacity style={{width: 85, padding: 5}} onPress={()=> navigation.navigate("Story", {userId: item._id})}>
-                            <Image source={{uri: item?.profilePic}} style={{width: 70, borderWidth: 2.5, borderColor: '#2DBAA0', backgroundColor: 'pink', height: 70, borderRadius: 100}} />
-                            <Text style={styles.username}>{item.name}</Text>
-                        </TouchableOpacity>
-                    )
-                }}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-            /> */}
-
             {
                 users.map((item, index)=> (
                     <TouchableOpacity style={{width: 85, padding: 5}} onPress={()=> navigation.navigate("Story", {userId: item._id})} key={index}>
-                            <Image source={{uri: currentStoryOwnerProfilePic(item)}} style={{width: 70, borderWidth: 2.5, borderColor: '#2DBAA0', height: 70, borderRadius: 100}} />
-                            <Text style={styles.username}>{item.name}</Text>
+                        <Image source={{uri: currentStoryOwnerProfilePic(item)}} style={{width: 70, borderWidth: 2.5, borderColor: '#2DBAA0', height: 70, borderRadius: 100}} />
+                        <Text style={styles.username}>{item.name}</Text>
                     </TouchableOpacity>
                 ))
             }

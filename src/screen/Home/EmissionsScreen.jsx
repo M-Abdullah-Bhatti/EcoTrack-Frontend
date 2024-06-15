@@ -13,18 +13,15 @@ import ChatbotButton from "../../components/Shared/ChatbotButton";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { AntDesign } from "@expo/vector-icons";
-import { renderEmissionIcon } from "../../utils/renderIcon";
 import { allEmissionItems, food } from "../../data";
 import { useFocusEffect } from "@react-navigation/native";
 
 const EmissionsScreen = ({ navigation }) => {
-  const [count, setCount] = useState(0);
   const [loadingForFilteringEmissions, setloadingForFilteringEmissions] =
     useState(false);
   const [emissionsData, setemissionsData] = useState([]);
   const [filteredemissionsData, setfilteredemissionsData] = useState([]);
-  const { user } = useSelector((state) => state.user);
-  const onPress = () => setCount((prevCount) => prevCount + 1);
+  const { user, token } = useSelector((state) => state.user);
 
   const [currentYear, setCurrentYear] = useState(0);
   const [currentMonthIndex, setCurrentMonthIndex] = useState(10); // November is index 10
@@ -70,8 +67,6 @@ const EmissionsScreen = ({ navigation }) => {
     if (newMonthIndex < 0) {
       newMonthIndex = 11; // December
       newYear -= 1;
-      // console.log("new year", newYear);
-      // console.log("new motn", newMonthIndex);
     } else if (newMonthIndex > 11) {
       newMonthIndex = 0; // January
       newYear += 1;
@@ -103,10 +98,10 @@ const EmissionsScreen = ({ navigation }) => {
       setloadingForFilteringEmissions(true);
 
       const response = await axios.get(
-        "https://ecotrack-dev.vercel.app//api/emission/allMyEmission",
+        `https://ecotrack-dev.vercel.app/api/emission/${user._id}`,
         {
           headers: {
-            authorization: `Bearer ${user.token}`,
+            authorization: `Bearer ${token}`,
           },
         }
       );
@@ -139,173 +134,6 @@ const EmissionsScreen = ({ navigation }) => {
     }, [])
   );
 
-  // console.log("objectss: ", newDate);
-  // const dummyData = [];
-  // const dummyData = [
-  //   {
-  //     id: 1,
-  //     category: "Train",
-  //     type: "Transport",
-  //     carbon: "19.74kgCO2eq",
-  //     icon: (
-  //       <MaterialCommunityIcons name="train-variant" size={24} color="black" />
-  //     ),
-  //   },
-  //   {
-  //     id: 2,
-
-  //     category: "Train",
-  //     type: "Transport",
-
-  //     carbon: "19.74kgCO2eq",
-  //     icon: (
-  //       <MaterialCommunityIcons name="train-variant" size={24} color="black" />
-  //     ),
-  //   },
-  //   {
-  //     id: 2,
-
-  //     category: "Train",
-  //     type: "Transport",
-
-  //     carbon: "19.74kgCO2eq",
-  //     icon: (
-  //       <MaterialCommunityIcons name="train-variant" size={24} color="black" />
-  //     ),
-  //   },
-  //   {
-  //     id: 2,
-
-  //     category: "Train",
-  //     type: "Transport",
-
-  //     carbon: "19.74kgCO2eq",
-  //     icon: (
-  //       <MaterialCommunityIcons name="train-variant" size={24} color="black" />
-  //     ),
-  //   },
-  //   {
-  //     id: 2,
-
-  //     category: "Train",
-  //     type: "Transport",
-
-  //     carbon: "19.74kgCO2eq",
-  //     icon: (
-  //       <MaterialCommunityIcons name="train-variant" size={24} color="black" />
-  //     ),
-  //   },
-  //   {
-  //     id: 2,
-
-  //     category: "Train",
-  //     type: "Transport",
-
-  //     carbon: "19.74kgCO2eq",
-  //     icon: (
-  //       <MaterialCommunityIcons name="train-variant" size={24} color="black" />
-  //     ),
-  //   },
-  //   {
-  //     id: 2,
-
-  //     category: "Train",
-  //     type: "Transport",
-
-  //     carbon: "19.74kgCO2eq",
-  //     icon: (
-  //       <MaterialCommunityIcons name="train-variant" size={24} color="black" />
-  //     ),
-  //   },
-  //   {
-  //     id: 2,
-
-  //     category: "Train",
-  //     type: "Transport",
-
-  //     carbon: "19.74kgCO2eq",
-  //     icon: (
-  //       <MaterialCommunityIcons name="train-variant" size={24} color="black" />
-  //     ),
-  //   },
-  //   {
-  //     id: 2,
-
-  //     category: "Train",
-  //     type: "Transport",
-
-  //     carbon: "19.74kgCO2eq",
-  //     icon: (
-  //       <MaterialCommunityIcons name="train-variant" size={24} color="black" />
-  //     ),
-  //   },
-  //   {
-  //     id: 2,
-
-  //     category: "Train",
-  //     type: "Transport",
-
-  //     carbon: "19.74kgCO2eq",
-  //     icon: (
-  //       <MaterialCommunityIcons name="train-variant" size={24} color="black" />
-  //     ),
-  //   },
-  //   {
-  //     id: 2,
-
-  //     category: "Train",
-  //     type: "Transport",
-
-  //     carbon: "19.74kgCO2eq",
-  //     icon: (
-  //       <MaterialCommunityIcons name="train-variant" size={24} color="black" />
-  //     ),
-  //   },
-  //   {
-  //     id: 2,
-
-  //     category: "Train",
-  //     type: "Transport",
-
-  //     carbon: "19.74kgCO2eq",
-  //     icon: (
-  //       <MaterialCommunityIcons name="train-variant" size={24} color="black" />
-  //     ),
-  //   },
-  //   {
-  //     id: 2,
-
-  //     category: "Train",
-  //     type: "Transport",
-
-  //     carbon: "19.74kgCO2eq",
-  //     icon: (
-  //       <MaterialCommunityIcons name="train-variant" size={24} color="black" />
-  //     ),
-  //   },
-  //   {
-  //     id: 2,
-
-  //     category: "Train",
-  //     type: "Transport",
-
-  //     carbon: "19.74kgCO2eq",
-  //     icon: (
-  //       <MaterialCommunityIcons name="train-variant" size={24} color="black" />
-  //     ),
-  //   },
-  //   {
-  //     id: 2,
-
-  //     category: "Train",
-  //     type: "Transport",
-
-  //     carbon: "19.74kgCO2eq",
-  //     icon: (
-  //       <MaterialCommunityIcons name="train-variant" size={24} color="black" />
-  //     ),
-  //   },
-  // ];
   useEffect(() => {
     const filterEmissions = () => {
       const filteredEmissions = emissionsData.filter((emission) => {
@@ -363,14 +191,10 @@ const EmissionsScreen = ({ navigation }) => {
           {loadingForFilteringEmissions ? (
             <View
               style={{
-                // height: "100%",
-                // display: "flex",
-                // justifyContent: "center",
-                // alignItems: "center",
                 marginVertical: "60%",
               }}
             >
-              <ActivityIndicator size="small" color="#0000ff" />
+              <ActivityIndicator size="medium" color="#2DBAA0" />
             </View>
           ) : emissionsData.length == 0 ? (
             <View
@@ -387,7 +211,6 @@ const EmissionsScreen = ({ navigation }) => {
                   alignItems: "center",
                   height: 50,
                   justifyContent: "center",
-
                   flexDirection: "row",
                 }}
                 onPress={() => navigation.navigate("Add")}
@@ -502,18 +325,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     justifyContent: "space-between",
     borderBottomColor: "#2DBAA0",
-    borderBottomWidth: 2,
+    borderBottomWidth: 1,
   },
   monthDiv2: {
     height: 60,
-    // backgroundColor: "#2DBAA0",
     alignItems: "center",
     display: "flex",
     flexDirection: "row",
     paddingHorizontal: 14,
     justifyContent: "space-between",
     borderBottomColor: "#2DBAA0",
-    borderBottomWidth: 1.4,
+    borderBottomWidth: 1,
   },
   singleEmissionDiv: {
     // flex: 1,

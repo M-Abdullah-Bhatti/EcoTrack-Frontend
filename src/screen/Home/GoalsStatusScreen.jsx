@@ -106,7 +106,6 @@ const GoalsStatusScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: "#e0f2f1",
   },
   header: {
     padding: 20,

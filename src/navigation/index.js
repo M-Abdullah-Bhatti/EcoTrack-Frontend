@@ -99,20 +99,11 @@ const Routes = () => {
           options={{ headerShown: false }}
         />
 
-        {/* <MainStackNavigator.Screen
-          name="EditProfile"
-          component={EditProfileScreen}
-          options={{
-            headerShown: true,
-            title: "Edit Profile",
-          }}
-        /> */}
-
         <MainStackNavigator.Screen
           name="AddEmissionCategory"
           component={AddEmissionCategory}
           options={{
-            title: "Add Emission category",
+            title: "Select Emission Category",
           }}
         />
 

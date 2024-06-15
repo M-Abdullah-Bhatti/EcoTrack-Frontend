@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
 import {
   View,
   Text,
-  TextInput,
   StyleSheet,
   TouchableOpacity,
   Image,
@@ -16,26 +14,8 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import BlogAccordion from "../../utils/blogAccordion";
 
 const MainScreen = ({ navigation }) => {
-  blogs = [
-    {
-      heading: "Top 10 Ways to Reduce Your Carbon Footprint",
-      content:
-        "Austin was one of 195 cities worldwide that signed the Paris Agreement at the United Nations Conference on Climate Change, agreeing to lower greenhouse gas emissions to alleviate the worst impacts of climate change. But this is only the most recent development in a long history of climate action taken by our city. In 2007, City Council approved a resolution to make Austin a leader in the fight against climate change. Building on that effort, in 2014 Council set a target of community-wide net-zero greenhouse gas emissions by 2050. But what does it all mean? Currently, the City is working to implement over 130 actions that will reduce greenhouse gas emissions from energy, transportation, and materials and waste sources. But it’s going to take more than City action to meet the net-zero goal – everyone has to do their part to cut carbon.That’s where we need your help! Taking personal action isn’t hard and also comes with great benefits. In addition to reducing your carbon footprint, you’ll also save money and time, avoid traffic, reduce pollution, improve air quality, and enjoy a healthier, more active lifestyle.",
-    },
-    {
-      heading: "Top 10 Ways to Reduce Your Carbon Footprint",
-      content:
-        "Austin was one of 195 cities worldwide that signed the Paris Agreement at the United Nations Conference on Climate Change, agreeing to lower greenhouse gas emissions to alleviate the worst impacts of climate change. But this is only the most recent development in a long history of climate action taken by our city. In 2007, City Council approved a resolution to make Austin a leader in the fight against climate change. Building on that effort, in 2014 Council set a target of community-wide net-zero greenhouse gas emissions by 2050. But what does it all mean? Currently, the City is working to implement over 130 actions that will reduce greenhouse gas emissions from energy, transportation, and materials and waste sources. But it’s going to take more than City action to meet the net-zero goal – everyone has to do their part to cut carbon.That’s where we need your help! Taking personal action isn’t hard and also comes with great benefits. In addition to reducing your carbon footprint, you’ll also save money and time, avoid traffic, reduce pollution, improve air quality, and enjoy a healthier, more active lifestyle.",
-    },
-    {
-      heading: "Top 10 Ways to Reduce Your Carbon Footprint",
-      content:
-        "Austin was one of 195 cities worldwide that signed the Paris Agreement at the United Nations Conference on Climate Change, agreeing to lower greenhouse gas emissions to alleviate the worst impacts of climate change. But this is only the most recent development in a long history of climate action taken by our city. In 2007, City Council approved a resolution to make Austin a leader in the fight against climate change. Building on that effort, in 2014 Council set a target of community-wide net-zero greenhouse gas emissions by 2050. But what does it all mean? Currently, the City is working to implement over 130 actions that will reduce greenhouse gas emissions from energy, transportation, and materials and waste sources. But it’s going to take more than City action to meet the net-zero goal – everyone has to do their part to cut carbon.That’s where we need your help! Taking personal action isn’t hard and also comes with great benefits. In addition to reducing your carbon footprint, you’ll also save money and time, avoid traffic, reduce pollution, improve air quality, and enjoy a healthier, more active lifestyle.",
-    },
-  ];
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.curvedContainer}>
@@ -81,7 +61,7 @@ const MainScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.itemContainer}>
-        <Text style={{ fontFamily: "PoppinsMedium", fontSize: 15 }}>
+        <Text style={{ fontFamily: "PoppinsMedium", fontSize: 15, marginLeft: 14 }}>
           More with EcoTrack
         </Text>
         <View style={styles.secondCard}>
@@ -142,13 +122,6 @@ const MainScreen = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
-
-      <View>
-        <Text style={{ fontFamily: "PoppinsMedium", fontSize: 15 }}>
-          Do you know?
-        </Text>
-        <BlogAccordion blogs={blogs} />
       </View>
     </ScrollView>
   );

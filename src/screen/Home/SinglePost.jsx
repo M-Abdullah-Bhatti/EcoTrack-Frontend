@@ -41,9 +41,8 @@ const SinglePost = ({ post, id, onPressShare }) => {
     setShowFullComment(updatedShowFullComment);
   };
 
-  if (post.user.profilePic) {
-    // source = { uri: post.user.profilePic };
-    source = require("../../../assets/placeholder.jpg");
+  if (post?.user?.profilePic) {
+    source = { uri: post?.user?.profilePic };
   } else {
     source = require("../../../assets/placeholder.jpg");
   }

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
-import Checkbox from "expo-checkbox";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -36,13 +35,13 @@ const SetGoalModal = ({
         style={{
           width: wp("89%"),
           minHeight: hp("40%"),
-          borderRadius: wp("7%"),
+          borderRadius: wp("3%"),
           backgroundColor: "white",
           justifyContent: "center",
           alignItems: "center",
           alignSelf: "center",
           paddingHorizontal: wp("5%"),
-          paddingVertical: hp("3%"),
+          paddingVertical: hp("1%"),
         }}
       >
         {error && <MaterialIcons name="error" size={24} color="#d1180a" />}

@@ -14,8 +14,10 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import * as ImagePicker from "expo-image-picker";
 import { FontAwesome5 } from "react-native-vector-icons";
-import { uploadImage } from "../../utils/helpers";
 import { useFocusEffect } from "@react-navigation/native";
+
+import { toastShow, uploadImage } from "../../utils/helpers";
+import { refreshUser } from "../../redux/userSlice";
 
 const EditProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -104,6 +106,9 @@ const EditProfileScreen = ({ navigation }) => {
 
       console.log("User data updated:", response.data);
       getProfile();
+      navigation.goBack();
+      dispatch(refreshUser(user._id));
+      toastShow("Data updated successfully!");
     } catch (error) {
       if (error.response.data.message) {
         alert(error.response.data.message);
@@ -113,6 +118,8 @@ const EditProfileScreen = ({ navigation }) => {
           "Error updating user data res:",
           error.response.data.message
         );
+        navigation.goBack();
+        toastShow("Couldn't update user data. Try again later.");
       } else {
         console.error("Error updating user data:", error.message);
       }
@@ -184,7 +191,7 @@ const EditProfileScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    paddingTop: Platform.OS == "android" ? StatusBar.currentHeight + 20 : "0px",
+    paddingTop: Platform.OS == "android" ? StatusBar.currentHeight + 10 : "0px",
     backgroundColor: "white",
     alignItems: "center",
     paddingHorizontal: 20,

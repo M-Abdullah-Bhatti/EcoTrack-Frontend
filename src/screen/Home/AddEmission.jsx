@@ -37,7 +37,7 @@ const AddEmission = ({ navigation, route }) => {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [loader, setLoader] = useState(false);
 
-  const { user } = useSelector((state) => state.user);
+  const { user, token } = useSelector((state) => state.user);
 
   const handleSelection = (selectedItem, index) => {
     setSelectedCountry(selectedItem);
@@ -129,7 +129,7 @@ const AddEmission = ({ navigation, route }) => {
     axios
       .post(`${baseUrl}/api/emission/addEmission`, requestBody, {
         headers: {
-          Authorization: `Bearer ${user?.token}`,
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {

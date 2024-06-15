@@ -16,17 +16,14 @@ import ChatbotButton from "../../components/Shared/ChatbotButton";
 const AddScreen = ({ navigation }) => {
   const categories = [
     {
-      image: "",
       text: "Meal",
       icon: <Ionicons name="md-fast-food-outline" size={30} color="white" />,
     },
     {
-      image: "",
       text: "Transportation",
       icon: <SimpleLineIcons name="plane" size={30} color="white" />,
     },
     {
-      image: "",
       text: "Food",
       icon: (
         <MaterialCommunityIcons
@@ -36,9 +33,7 @@ const AddScreen = ({ navigation }) => {
         />
       ),
     },
-
     {
-      image: "",
       text: "Electricity",
       icon: (
         <MaterialCommunityIcons
@@ -70,8 +65,6 @@ const AddScreen = ({ navigation }) => {
         backgroundColor: "white",
         height: "100%",
         position: "relative",
-
-        // paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : "0px",
       }}
     >
       <View style={styles.monthDiv}>
@@ -84,7 +77,6 @@ const AddScreen = ({ navigation }) => {
           style={{
             fontSize: 20,
             fontWeight: "bold",
-            // textAlign: "center",
             marginVertical: 20,
           }}
         >
@@ -108,7 +100,6 @@ const AddScreen = ({ navigation }) => {
                 width: "47%",
                 display: "flex",
                 height: 160,
-                // flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "space-around",
                 paddingHorizontal: 10,
@@ -143,7 +134,6 @@ const AddScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   monthDiv: {
     height: 60,
-    // backgroundColor: "#2DBAA0",
     alignItems: "center",
     display: "flex",
     flexDirection: "row",
@@ -153,4 +143,5 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
   },
 });
+
 export default AddScreen;
