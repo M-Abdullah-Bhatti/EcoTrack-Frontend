@@ -29,7 +29,7 @@ const MainScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const getEmissionsData = async () => {
+    const fetchData = async () => {
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -44,15 +44,7 @@ const MainScreen = ({ navigation }) => {
       } catch (error) {
         console.error("Error fetching emissions data:", error);
       }
-    };
 
-    const getGoalsData = async () => {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      
       try {
         const goalsData = await axios.get(
           `https://ecotrack-dev.vercel.app/api/goal/weekly/${user._id}`, config
@@ -63,8 +55,7 @@ const MainScreen = ({ navigation }) => {
       }
     };
 
-    getEmissionsData();
-    getGoalsData();
+    fetchData();
   }, []);
 
   useEffect(() => {
