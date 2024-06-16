@@ -15,19 +15,21 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { useDispatch, useSelector } from "react-redux";
-import { setEmissions, setGoals } from '../../redux/userSlice';
 import axios from "axios";
+import { setEmissions, setGoals } from '../../redux/userSlice';
 import SetGoalModal from "../../components/SetGoalModal";
 
 const MainScreen = ({ navigation }) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [currentCategory, setCurrentCategory] = useState(null);
+  const [categoriesNeedingGoals, setCategoriesNeedingGoals] = useState([]);
+  const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
   
-  const { user, token, goals, emissions } = useSelector((state)=> state.user);
+  const { user, token, goals, emissions } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  
-  useEffect(()=> {
+
+  useEffect(() => {
     const getEmissionsData = async () => {
-      // setIsLoading(true);
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -38,16 +40,13 @@ const MainScreen = ({ navigation }) => {
         const emissionData = await axios.get(
           `https://ecotrack-dev.vercel.app/api/emission/weekly/${user._id}`, config
         );
-        dispatch(setEmissions(emissionData.data.result))
+        dispatch(setEmissions(emissionData.data.result));
       } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        // setIsLoading(false);
+        console.error("Error fetching emissions data:", error);
       }
     };
 
     const getGoalsData = async () => {
-      // setIsLoading(true);
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -58,35 +57,76 @@ const MainScreen = ({ navigation }) => {
         const goalsData = await axios.get(
           `https://ecotrack-dev.vercel.app/api/goal/weekly/${user._id}`, config
         );
-        dispatch(setGoals(goalsData.data))
+        dispatch(setGoals(goalsData.data));
       } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        // setIsLoading(false);
+        console.error("Error fetching goals data:", error);
       }
     };
 
     getEmissionsData();
-
     getGoalsData();
+  }, []);
 
-    if(emissions) {
+  useEffect(() => {
+    if (emissions && goals) {
+      checkEmissions();
+    }
+  }, [emissions, goals]);
+
+  const checkEmissions = () => {
+    const goalCategories = goals.map(goal => goal.category);
+    const newCategoriesNeedingGoals = emissions
+      .map(emission => emission.category)
+      .filter(category => !goalCategories.includes(category));
+    
+    setCategoriesNeedingGoals(newCategoriesNeedingGoals);
+
+    if (newCategoriesNeedingGoals.length > 0) {
+      setCurrentCategory(newCategoriesNeedingGoals[0]);
       setModalOpen(true);
     }
+  };
 
-    console.log("GOALSSS STATE: ", goals, "EMISSIONS STATE: ", emissions);
+  const handleSetGoal = async (percentage) => {
+    const category = categoriesNeedingGoals[currentCategoryIndex];
+    const startDate = new Date();
+    const endDate = new Date();
+    endDate.setDate(startDate.getDate() + 7);
 
-    // if(emissions[0].exceedsThreshold) {
-    //   Alert.alert(`${emissions[0].category} Exceeds threshold value`)
-    // }
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
 
-    // if(goals[0].startDate, ">>>", goals[0].endDate) {
-    //   console.log(goals[0].startDate, ">>>", goals[0].endDate)
-    //   Alert.alert(`Your weekly ${goals[0].category} goals not met`)
-    // }
+      const body = {
+        category,
+        percentage,
+        startDate,
+        endDate,
+        goalAchieved: false,
+      };
 
-  }, []);
-  
+      await axios.post('https://ecotrack-dev.vercel.app/api/goals/add/', body, config);
+
+      if (currentCategoryIndex < categoriesNeedingGoals.length - 1) {
+        setCurrentCategoryIndex(currentCategoryIndex + 1);
+        setCurrentCategory(categoriesNeedingGoals[currentCategoryIndex + 1]);
+      } else {
+        setModalOpen(false);
+      }
+
+      // Fetch updated goals
+      const updatedGoals = await axios.get(
+        `https://ecotrack-dev.vercel.app/api/goal/weekly/${user._id}`, config
+      );
+      dispatch(setGoals(updatedGoals.data));
+    } catch (error) {
+      console.error("Error setting goal:", error);
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.curvedContainer}>
@@ -99,7 +139,7 @@ const MainScreen = ({ navigation }) => {
         </View>
         <View style={styles.rightContent}>
           <Text style={styles.heading}>EcoTrack</Text>
-          <Text style={styles.subHeading}>Guide to Sustainable Future</Text>
+          <Text style={styles.subHeading}>Guide to a Sustainable Future</Text>
         </View>
       </View>
       <View style={styles.CardContainer}>
@@ -130,19 +170,17 @@ const MainScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-
       <View style={styles.itemContainer}>
-        <Text style={{ fontFamily: "PoppinsMedium", fontSize: 15, marginLeft: 14 }}>
-          More with EcoTrack
-        </Text>
+        <Text style={styles.heading2}>More with EcoTrack</Text>
         <View style={styles.secondCard}>
-          {/* First Row */}
           <View style={styles.row}>
-            <TouchableOpacity style={styles.item}>
+            <TouchableOpacity
+              style={styles.item}
+              onPress={() => setModalOpen(true)}
+            >
               <AntDesign size={30} color="black" name="areachart" />
               <Text style={styles.itemText}>Set Goal</Text>
             </TouchableOpacity>
-
             <TouchableOpacity
               style={styles.item}
               onPress={() => navigation.navigate("Community")}
@@ -150,21 +188,14 @@ const MainScreen = ({ navigation }) => {
               <Ionicons size={30} color="black" name="people-sharp" />
               <Text style={styles.itemText}>Social Community</Text>
             </TouchableOpacity>
-
             <TouchableOpacity
               style={styles.item}
               onPress={() => navigation.navigate("Emissions")}
             >
-              <MaterialCommunityIcons
-                size={30}
-                color="black"
-                name="foot-print"
-              />
+              <MaterialCommunityIcons size={30} color="black" name="foot-print" />
               <Text style={styles.itemText}>Emissions</Text>
             </TouchableOpacity>
           </View>
-
-          {/* Second Row */}
           <View style={styles.row}>
             <TouchableOpacity
               style={styles.item}
@@ -177,11 +208,7 @@ const MainScreen = ({ navigation }) => {
               style={styles.item}
               onPress={() => navigation.navigate("UserDashboard")}
             >
-              <MaterialCommunityIcons
-                size={30}
-                color="black"
-                name="database-sync"
-              />
+              <MaterialCommunityIcons size={30} color="black" name="database-sync" />
               <Text style={styles.itemText}>Visualize Data</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -194,12 +221,11 @@ const MainScreen = ({ navigation }) => {
           </View>
         </View>
       </View>
-
       <SetGoalModal
         isVisible={modalOpen}
-        title="Goal 1"
-        description="Plant more trees "
         hideModal={() => setModalOpen(false)}
+        category={currentCategory}
+        onSetGoal={handleSetGoal}
       />
     </ScrollView>
   );
@@ -207,131 +233,131 @@ const MainScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-    paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : "0px",
-    backgroundColor: "white",
-    alignItems: "center",
-    // paddingHorizontal: 20,
+  flexGrow: 1,
+  paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : "0px",
+  backgroundColor: "white",
+  alignItems: "center",
   },
   btn: {
-    width: "100%",
-    display: "flex",
-    flexDirection: "row",
-    gap: 6,
-    backgroundColor: "#46A667",
-    paddingVertical: 14,
-    alignItems: "center",
-    marginVertical: 20,
-    borderRadius: 12,
-    justifyContent: "center",
+  width: "100%",
+  display: "flex",
+  flexDirection: "row",
+  gap: 6,
+  backgroundColor: "#46A667",
+  paddingVertical: 14,
+  alignItems: "center",
+  marginVertical: 20,
+  borderRadius: 12,
+  justifyContent: "center",
   },
   curvedContainer: {
-    width: "100%",
-    height: 200,
-    backgroundColor: "#46A667",
-    borderBottomLeftRadius: 150, // Adjust the value for more curve
-    borderBottomRightRadius: 30, // No curve on the right
-    overflow: "hidden",
-    flexDirection: "row", // Ensures children don't overflow
+  width: "100%",
+  height: 200,
+  backgroundColor: "#46A667",
+  borderBottomLeftRadius: 150,
+  borderBottomRightRadius: 30,
+  overflow: "hidden",
+  flexDirection: "row",
   },
   leftContent: {
-    flex: 3,
-    justifyContent: "center",
-    alignItems: "flex-start",
-    paddingLeft: 20, // Add some left padding
+  flex: 3,
+  justifyContent: "center",
+  alignItems: "flex-start",
+  paddingLeft: 20,
   },
   rightContent: {
-    marginLeft: "5%",
-    flex: 4, // Takes 70% of the curved container
-    justifyContent: "center", // Center the image vertically
-    alignItems: "flex-start", // Align the image to the right
-    paddingRight: 20, // Add some right padding
+  marginLeft: "5%",
+  flex: 4,
+  justifyContent: "center",
+  alignItems: "flex-start",
+  paddingRight: 20,
   },
   heading: {
-    fontSize: 25,
-    color: "white",
-    fontWeight: "bold",
-    fontFamily: "PoppinsSemiBold",
+  fontSize: 25,
+  color: "white",
+  fontWeight: "bold",
+  fontFamily: "PoppinsSemiBold",
   },
   subHeading: {
-    fontSize: 18,
-    color: "white",
-    fontFamily: "PoppinsRegular",
+  fontSize: 18,
+  color: "white",
+  fontFamily: "PoppinsRegular",
   },
   image: {
-    width: 150,
-    height: 150,
-    borderRadius: 50, // Make it circular
+  width: 150,
+  height: 150,
+  borderRadius: 50,
   },
   heading2: {
-    marginTop: "3%",
-    fontSize: 18,
-    color: "black",
-    fontFamily: "PoppinsMedium",
+  marginTop: "2%",
+  fontSize: 18,
+  color: "black",
+  fontFamily: "PoppinsMedium",
+  marginLeft: 12
   },
   CardContainer: {
-    marginTop: "3%",
-    marginHorizontal: 5,
-    display: "flex",
-    flexDirection: "row",
+  marginTop: "3%",
+  marginHorizontal: 5,
+  display: "flex",
+  flexDirection: "row",
   },
   Card: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    borderColor: "black",
-    borderWidth: 1,
-    height: 220,
-    width: "45%",
-    marginHorizontal: 3,
-    borderRadius: 10,
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  borderColor: "black",
+  borderWidth: 1,
+  height: 220,
+  width: "45%",
+  marginHorizontal: 3,
+  borderRadius: 10,
   },
   cardImg: {
-    height: 100,
-    width: "40%",
+  height: 100,
+  width: "40%",
   },
   cardText: {
-    textAlign: "center",
-    fontFamily: "PoppinsMedium",
-    marginVertical: 5,
+  textAlign: "center",
+  fontFamily: "PoppinsMedium",
+  marginVertical: 5,
   },
   cardBtn: {
-    height: 40,
-    width: "90%",
-    backgroundColor: "#46A667",
-    borderRadius: 5,
-    marginVertical: "10%",
-    display: "flex",
-    justifyContent: "center",
+  height: 40,
+  width: "90%",
+  backgroundColor: "#46A667",
+  borderRadius: 5,
+  marginVertical: "10%",
+  display: "flex",
+  justifyContent: "center",
   },
   cardBtnText: {
-    textAlign: "center",
-    fontFamily: "PoppinsRegular",
-    color: "white",
+  textAlign: "center",
+  fontFamily: "PoppinsRegular",
+  color: "white",
   },
   row: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginBottom: 10,
+  flexDirection: "row",
+  justifyContent: "center",
+  marginBottom: 10,
   },
   itemContainer: {
-    marginTop: "5%",
+  marginTop: "5%",
   },
   item: {
-    display: "flex",
-    backgroundColor: "lightblue",
-    alignItems: "center",
-    justifyContent: "center",
-    marginHorizontal: "2%",
-    paddingVertical: "4%",
-    borderRadius: 10,
-    width: "28%",
+  display: "flex",
+  backgroundColor: "lightblue",
+  alignItems: "center",
+  justifyContent: "center",
+  marginHorizontal: "2%",
+  paddingVertical: "4%",
+  borderRadius: 10,
+  width: "28%",
   },
   itemText: {
-    marginTop: 5,
-    textAlign: "center",
-    fontFamily: "PoppinsRegular",
+  marginTop: 5,
+  textAlign: "center",
+  fontFamily: "PoppinsRegular",
   },
 });
 

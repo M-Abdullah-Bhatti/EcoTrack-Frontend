@@ -39,7 +39,7 @@ const AppStack = () => {
         component={GoalsStatusScreen}
         options={{
           drawerIcon: ({color}) => (
-            <AntDesign name="Trophy" size={24} color="black" />
+            <AntDesign name="Trophy" size={24} color={color} />
           ),
           headerShown: true,
           title: 'My Goals'

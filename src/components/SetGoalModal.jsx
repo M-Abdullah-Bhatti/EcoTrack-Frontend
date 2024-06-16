@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -11,8 +11,8 @@ import ButtonComponent from "./Shared/ButtonComponent";
 const SetGoalModal = ({
   isVisible,
   hideModal,
-  title,
-  description,
+  category,
+  onSetGoal,
   success,
   error,
 }) => {
@@ -22,10 +22,19 @@ const SetGoalModal = ({
     setSelectedPercentage(percentage);
   };
 
+  const handleSetGoal = () => {
+    if (selectedPercentage !== null) {
+      onSetGoal(selectedPercentage);
+      setSelectedPercentage(null);  // Reset the selected percentage after setting the goal
+    } else {
+      alert('Please select a reduction percentage.');
+    }
+  };
+
   return (
     <Modal
       hasBackdrop={true}
-      // onBackdropPress={hideModal}
+      onBackdropPress={hideModal}
       isVisible={isVisible}
       animationIn={"fadeInLeft"}
       animationOut={"fadeOutRight"}
@@ -62,7 +71,7 @@ const SetGoalModal = ({
             textAlign: "center",
           }}
         >
-          {title}
+          Set Goal for {category} Emissions
         </Text>
         <Text
           style={{
@@ -70,15 +79,11 @@ const SetGoalModal = ({
             fontSize: 14,
             letterSpacing: 0.24,
             marginBottom: 20,
-            textAlign: "center",
           }}
         >
-          {description}
+          Select a reduction percentage goal for your {category} emissions.
         </Text>
         <View style={{ width: "100%", marginBottom: 20 }}>
-          <Text style={{ color: "#253551", fontSize: 14, marginBottom: 10 }}>
-            Select reduction percentage:
-          </Text>
           <View
             style={{ flexDirection: "row", justifyContent: "space-around" }}
           >
@@ -116,7 +121,7 @@ const SetGoalModal = ({
             borderRadius: 20,
           }}
           buttonText="Done"
-          onPress={hideModal}
+          onPress={handleSetGoal}
           backgroundColor={"black"}
         />
       </View>
