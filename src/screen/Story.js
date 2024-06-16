@@ -94,7 +94,7 @@ const Story = ({route})=> {
           style={{height: height, width: width}}
         />
         :
-        <Image source={{uri: content[current]?.imageUrl}} style={{width: width, height: height*0.9, resizeMode: 'cover'}} onLoadEnd={()=> {
+        <Image source={{uri: content[current]?.imageUrl}} style={{width: width, height: height*0.9, resizeMode: 'contain'}} onLoadEnd={()=> {
           progress.setValue(0);
           start();
         }} />

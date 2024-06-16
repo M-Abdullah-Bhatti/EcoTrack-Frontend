@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, BackHandler, Alert } from 'react-native'
-import React, {useEffect, useState} from 'react'
+import React, { useEffect } from 'react'
 import BottomSheet from '@gorhom/bottom-sheet';
 import { MaterialIcons, AntDesign, FontAwesome } from '@expo/vector-icons';
 

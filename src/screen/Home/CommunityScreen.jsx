@@ -7,18 +7,15 @@ import {
   StatusBar,
   Image,
   ScrollView,
-  Alert,
   ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { useSelector } from "react-redux";
-import { Ionicons, Feather } from "@expo/vector-icons";
 import SinglePost from "../../components/SinglePost";
 import ChatbotButton from "../../components/Shared/ChatbotButton";
 import axios from "axios";
 import StoryComponent from "../../components/StoryComponent";
-import PostOptions from "../../components/PostOptions";
 import { DeleteSingleData } from "../../axios/NetworkCalls";
 
 // https://www.pinterest.com/pin/254664553914369768/
@@ -26,31 +23,12 @@ import { DeleteSingleData } from "../../axios/NetworkCalls";
 const CommunityScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
-  const { user } = useSelector((state) => state.user);
-
   const [postOptionsVisible, setPostOptionsVisible] = useState(false);
   const [postIdToDelete, setPostIdToDelete] = useState(null); // Add state for post ID to delete
 
   const togglePostOptions = (postId) => {
     setPostOptionsVisible(!postOptionsVisible);
     setPostIdToDelete(postId); // Set the post ID to delete
-  };
-
-  // Function to delete the post
-  const handleDeletePost = async () => {
-    try {
-      console.log("Deleting post with ID:", postIdToDelete);
-      const deletedPost = await DeleteSingleData(`/api/post/${postIdToDelete}`);
-      // await axios.delete(`https://ecotrack-dev.vercel.app/api/post/${postIdToDelete}`);
-      // console.log("Post deleted successfully");
-      console.log("Deleted post:", deletedPost);
-    } catch (error) {
-      console.error("Error deleting post:", error);
-    } finally {
-      setPostIdToDelete(null);
-      setPostOptionsVisible(false);
-    }
   };
 
   useFocusEffect(
@@ -162,17 +140,13 @@ const CommunityScreen = ({ navigation }) => {
         ) : (
           <View style={styles.postsContainer}>
             {posts.map((post, id) => (
-              <SinglePost post={post} id={id} key={id} onPressShare={(postId) => togglePostOptions(postId)} />
+              <SinglePost post={post} id={id} key={id} setPosts={setPosts} />
             ))}
           </View>
         )}
       </ScrollView>
 
       <ChatbotButton />
-
-      {postOptionsVisible && <PostOptions handleDelete={handleDeletePost} setPostOptionsVisible={setPostOptionsVisible} />}
-
-      {/* <PostOptions /> */}
     </View>
   );
 };

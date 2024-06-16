@@ -23,12 +23,11 @@ const ProfileScreen = ({ navigation }) => {
   const [userData, setUserData] = useState({});
 
   
-const { user } = useSelector((state) => state.user);
+const { user, token } = useSelector((state) => state.user);
 
 // Function to fetch user profile data
 const getProfile = async () => {
   try {
-    const token = user.token;
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,

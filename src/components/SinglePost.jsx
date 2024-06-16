@@ -19,15 +19,19 @@ import {
 import { formatDateLikeFacebook } from "../utils/helpers";
 import { useDispatch, useSelector } from "react-redux";
 import { refreshUser } from "../redux/userSlice";
+import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
+import { toastShow } from "./../utils/helpers";
 import baseUrl from "../utils/baseUrl";
+import axios from "axios";
 
-const SinglePost = ({ post, id, onPressShare }) => {
+const SinglePost = ({ post, id, setPosts }) => {
   const [viewFullDesc, setViewFullDesc] = useState(false);
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState(post.comments);
   const [postLikes, setPostLikes] = useState(post.likes);
   const inputCommentRef = useRef(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
   const [showFullComment, setShowFullComment] = useState(
     new Array(post.comments.length).fill(false)
   );
@@ -47,10 +51,13 @@ const SinglePost = ({ post, id, onPressShare }) => {
     source = require("../../assets/placeholder.jpg");
   }
 
-  const { user } = useSelector((state) => state.user);
+  const { user, token } = useSelector((state) => state.user);
 
   // Check if the current user has liked the post
   const liked = postLikes.includes(user?._id);
+
+  const showMenu = () => setMenuVisible(true);
+  const hideMenu = () => setMenuVisible(false);
 
   const addComment = async () => {
     if (!comment) return;
@@ -69,7 +76,7 @@ const SinglePost = ({ post, id, onPressShare }) => {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${user?.token}`,
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(requestBody),
         }
@@ -103,7 +110,7 @@ const SinglePost = ({ post, id, onPressShare }) => {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(requestBody),
         }
@@ -121,11 +128,30 @@ const SinglePost = ({ post, id, onPressShare }) => {
     }
   };
 
+  // Function to delete the post
+  const handleDeletePost = async (postId) => {
+    hideMenu();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    try {
+      const deletedPost = await axios.delete(`https://ecotrack-dev.vercel.app/api/posts/${postId}`, config);
+      toastShow("Post Deleted Successfully");
+      setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    } finally {
+      hideMenu();
+    }
+  };
+
   return (
     <View
       key={id}
       style={{
-        // height: "auto",
         marginVertical: 12,
         width: "100%",
         shadowColor: "#000",
@@ -149,7 +175,6 @@ const SinglePost = ({ post, id, onPressShare }) => {
             justifyContent: "space-around",
             alignItems: "center",
           }}
-          onPress={() => alert("Aziz")}
         >
           <View style={{ width: 40, height: 40, borderRadius: 20 }}>
             <Image
@@ -173,20 +198,22 @@ const SinglePost = ({ post, id, onPressShare }) => {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={{
-            height: 28,
-            width: 28,
-            backgroundColor: "#f0efed",
-            borderRadius: 14,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-          onPress={() => onPressShare(post?._id)}
-        >
-          <Feather name="more-horizontal" size={20} color="black" />
-        </TouchableOpacity>
+        <Menu
+            visible={menuVisible}
+            anchor={
+              <TouchableOpacity
+                style={styles.moreButton}
+                onPress={showMenu}
+              >
+                <Feather name="more-horizontal" size={20} color="black" />
+              </TouchableOpacity>
+            }
+            onRequestClose={hideMenu}
+          >
+            {post.user._id === user._id && <MenuItem onPress={()=> handleDeletePost(post._id)}>Delete Post</MenuItem>}
+            <MenuItem>Report Post</MenuItem>
+            <MenuDivider />
+        </Menu>
       </View>
 
       <View style={{ width: "100%" }}>
@@ -262,13 +289,6 @@ const SinglePost = ({ post, id, onPressShare }) => {
             <Text style={{ marginLeft: 4 }}>
               {postLikes.length > 0 && postLikes.length + " Likes"}
             </Text>
-
-            {/* <Text style={{ marginLeft: 4 }}>
-              {post.likesByUsers.length > 0 &&
-                post.likesByUsers[0].username.split(" ")[0]}{" "}
-              and {post.likesByUsers.length > 0 && post.likesByUsers.length - 1}{" "}
-              others
-            </Text> */}
           </View>
         )}
         {comments > 0 && (
@@ -347,7 +367,6 @@ const SinglePost = ({ post, id, onPressShare }) => {
       </View>
       <Modal
         animationType="slide"
-        // transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
           setModalVisible(!modalVisible);

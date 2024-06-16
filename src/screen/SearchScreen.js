@@ -24,7 +24,7 @@ const SearchScreen = ({ route, navigation }) => {
   };
 
   const renderItem = ({ item }) => (
-    <SinglePost post={item} />
+    <SinglePost post={item} search={true} />
   );
 
   const renderEmptyComponent = () => {

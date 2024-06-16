@@ -58,21 +58,24 @@ const RedemptionsScreen = () => {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${user?.token}`,
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(requestBody),
         }
       );
 
-      if (!response.ok) {
-        throw new Error("Failed to redeem voucher. Please try again later.");
-      }
-
       const responseData = await response.json();
-      console.log("Voucher redeemed successfully!", responseData);
+
+      if (response.ok) {
+        console.log("Voucher redeemed successfully!", responseData);
+        Alert.alert("Success", "Voucher redeemed successfully!");
+      } else {
+        // throw new Error(responseData.message || "Failed to redeem voucher");
+        Alert.alert(responseData.message || "Failed to redeem voucher")
+      }
     } catch (error) {
-      console.error("Error redeeming voucher:", error);
-      Alert.alert(error.message);
+      // console.error("Error redeeming voucher:", error);
+      Alert.alert("Error", error.message || "There was an error redeeming the voucher. Please try again later.");
     }
   };
 

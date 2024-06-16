@@ -6,31 +6,25 @@ import {
   Platform,
   Image,
   TextInput,
-  Button,
-  Pressable,
   TouchableOpacity,
   ScrollView,
   Animated,
   Easing,
   Dimensions,
   Keyboard,
-  KeyboardAvoidingView,
   ActivityIndicator,
 } from "react-native";
-import React, { useEffect, useState } from "react";
-import { SafeAreaView } from "react-native";
+import React, { useState } from "react";
 import {
   FontAwesome,
   AntDesign,
   Feather,
-  Ionicons,
   MaterialIcons,
 } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import Svg, { Path, Rect } from "react-native-svg";
-import { loginStart, loginSuccess } from "../../redux/userSlice";
+import { loginSuccess } from "../../redux/userSlice";
 import ErrorModal from "../../components/Shared/ErrorModal";
-import SuccessModal from "../../components/Shared/SuccessModal";
 import { toastShow } from "../../utils/helpers";
 import baseUrl from "../../utils/baseUrl";
 
