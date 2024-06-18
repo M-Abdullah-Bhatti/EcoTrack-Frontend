@@ -45,7 +45,6 @@ const AddEmission = ({ navigation, route }) => {
 
   // electricity
   const calculateCarbon = async () => {
-    console.log("eletricity cons: ");
     const params = {
       country_name: selectedCountry,
       electricity_value: electricity,
@@ -63,7 +62,6 @@ const AddEmission = ({ navigation, route }) => {
   };
 
   const calculateFuelCarbon = async () => {
-    console.log("Fuel cons: ");
     const params = {
       vehicle_type: vehicleType,
       distance_value: distance,

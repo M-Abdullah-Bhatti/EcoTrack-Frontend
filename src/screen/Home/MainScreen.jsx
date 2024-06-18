@@ -9,11 +9,7 @@ import {
   Platform,
   ScrollView,
 } from "react-native";
-import Entypo from "react-native-vector-icons/Entypo";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import AntDesign from "react-native-vector-icons/AntDesign";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { MaterialCommunityIcons, MaterialIcons, Entypo, Ionicons, AntDesign } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { setEmissions, setGoals } from '../../redux/userSlice';
@@ -92,6 +88,7 @@ const MainScreen = ({ navigation }) => {
       };
 
       const body = {
+        userId: user._id,
         category,
         percentage,
         startDate,
@@ -99,11 +96,13 @@ const MainScreen = ({ navigation }) => {
         goalAchieved: false,
       };
 
-      await axios.post('https://ecotrack-dev.vercel.app/api/goals/add/', body, config);
+      console.log("ADD GOAL BODY: ", body)
+
+      await axios.post('https://ecotrack-dev.vercel.app/api/goal/add/', body, config);
 
       if (currentCategoryIndex < categoriesNeedingGoals.length - 1) {
-        setCurrentCategoryIndex(currentCategoryIndex + 1);
-        setCurrentCategory(categoriesNeedingGoals[currentCategoryIndex + 1]);
+        setCurrentCategoryIndex(currentCategoryIndex);
+        setCurrentCategory(categoriesNeedingGoals[currentCategoryIndex]);
       } else {
         setModalOpen(false);
       }

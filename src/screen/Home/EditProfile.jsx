@@ -43,7 +43,6 @@ const EditProfileScreen = ({ navigation }) => {
       const response = await axios.get(
         `https://ecotrack-dev.vercel.app/api/users/${user._id}`
       );
-      console.log("id", user._id);
       console.log("response of backend is", response.data);
       const userData = response.data.userWithoutPassword;
       console.log("User DATA ", userData);

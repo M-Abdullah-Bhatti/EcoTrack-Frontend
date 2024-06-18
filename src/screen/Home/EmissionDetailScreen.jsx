@@ -53,16 +53,14 @@ const EmissionDetailScreen = ({route}) => {
   
   return (
     <View style={styles.container}>
-      {/* <Text>EmissionDetailScreen</Text> */}
       <View>
-        {detailsHeadingToBeShown.map((d) => (
-          <View style={{ paddingVertical: 15 }} key={d._id}>
+        {detailsHeadingToBeShown.map((d, i) => (
+          <View style={{ paddingVertical: 15 }} key={i}>
             <Text style={{ fontWeight: "bold", fontSize: 18 }}>
               {d.heading}
             </Text>
             <Text style={{ fontSize: 14, opacity: 0.5, marginTop: 10 }}>
               {d.text && d.text}
-              {/* {d.text2 && ` - ${d.text2}`} */}
               {d.textOfMitigation && d.textOfMitigation}
             </Text>
             {d.switchBtn && (
@@ -102,7 +100,6 @@ const EmissionDetailScreen = ({route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : "0px",
     backgroundColor: "white",
     borderTopColor: "#2DBAA0",
     borderTopWidth: 1,

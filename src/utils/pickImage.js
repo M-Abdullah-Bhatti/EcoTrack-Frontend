@@ -9,8 +9,6 @@ export const pickImage = async () => {
     quality: 1,
   });
 
-  // console.log("result", result);
-
   if (!result.canceled) {
     setImageUri(result?.assets[0]?.uri);
     setImgPreview(result?.assets[0]?.uri);
@@ -24,8 +22,6 @@ export const pickVideos = async () => {
     aspect: [4, 3],
     quality: 1,
   });
-
-  // console.log("result", result);
 
   if (!result.canceled) {
     setImageUri(result?.assets[0]?.uri);
@@ -41,8 +37,6 @@ export const pickFiles = async () => {
     aspect: [4, 3],
     quality: 1,
   });
-
-  // console.log("result", result);
 
   if (!result.canceled) {
     setImageUri(result?.assets[0]?.uri);

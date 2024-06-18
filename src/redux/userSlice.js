@@ -48,7 +48,6 @@ const userSlice = createSlice({
     signupSuccess: (state, action) => {
       state.loading = false;
       state.user = action.payload;
-      console.log(action.payload);
     },
     signupFailure: (state) => {
       state.loading = false;
@@ -56,13 +55,9 @@ const userSlice = createSlice({
     },
     setGoals: (state, action) => {
       state.goals = action.payload;
-
-      console.log("GOALS STATEEE: ", state.goals);
     },
     setEmissions: (state, action) => {
       state.emissions = action.payload;
-
-      console.log("EMISSIONS STATEEE: ", state.emissions);
     },
   },
   extraReducers: (builder) => {

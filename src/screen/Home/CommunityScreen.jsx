@@ -11,25 +11,16 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-import { useSelector } from "react-redux";
 import SinglePost from "../../components/SinglePost";
 import ChatbotButton from "../../components/Shared/ChatbotButton";
 import axios from "axios";
 import StoryComponent from "../../components/StoryComponent";
-import { DeleteSingleData } from "../../axios/NetworkCalls";
 
 // https://www.pinterest.com/pin/254664553914369768/
 
 const CommunityScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [postOptionsVisible, setPostOptionsVisible] = useState(false);
-  const [postIdToDelete, setPostIdToDelete] = useState(null); // Add state for post ID to delete
-
-  const togglePostOptions = (postId) => {
-    setPostOptionsVisible(!postOptionsVisible);
-    setPostIdToDelete(postId); // Set the post ID to delete
-  };
 
   useFocusEffect(
     React.useCallback(() => {

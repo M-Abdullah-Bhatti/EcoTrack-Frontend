@@ -158,7 +158,6 @@ const VerificationCode = ({ navigation, route }) => {
       });
 
       handleOtpSubmit(body);
-      //   console.log("otp: ", otp.join(""));
     }
   }, [otp]);
 

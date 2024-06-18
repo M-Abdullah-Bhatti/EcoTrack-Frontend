@@ -1,7 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import userReducer from "./userSlice";
-// import goalReducer from "./goalSlice";
-// import emissionReducer from "./emissionSlice";
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
 
@@ -12,8 +10,6 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   user: userReducer,
-  // goal: goalReducer,
-  // emission: emissionReducer
 });
 
 export const persistedReducer = persistReducer(persistConfig, rootReducer);

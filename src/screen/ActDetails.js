@@ -15,7 +15,7 @@ const ActDetails = ({ route, navigation }) => {
 
   return (
     <View style={{paddingHorizontal: 12, paddingVertical: 18, backgroundColor: '#fff', flex: 1}}>
-      <Text style={{fontSize: 16}}>{content?.description}</Text>
+      <Text style={{fontSize: 18}}>{content?.description}</Text>
     </View>
   );
 };

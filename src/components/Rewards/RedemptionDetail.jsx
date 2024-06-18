@@ -9,13 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useSelector } from "react-redux";
-import {
-  Ionicons,
-  FontAwesome,
-  Fontisto,
-  AntDesign,
-  Entypo,
-} from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 
 const RedemptionDetail = ({ navigation }) => {
   const [vouchers, setVouchers] = useState([]);
@@ -46,37 +40,6 @@ const RedemptionDetail = ({ navigation }) => {
     getVouchers();
   }, []);
 
-  const redemptionProducts = [
-    {
-      id: 1,
-      name: "Reusable Bamboo Utensil Set",
-      description:
-        "A set of reusable utensils made from sustainable bamboo, including a fork, knife, spoon, and carrying case.",
-      points: 51, // Points required for redemption
-      imageUrl:
-        "https://www.bambooswitch.com/cdn/shop/products/6pc-bamboo-kitchen-utensil-holder-set-249467.jpg?v=1688603513",
-      category: "Product",
-      stock: "In stock",
-      quantity: 38,
-      redeemed: true,
-      redeemedDate: "2024-04-25",
-    },
-    {
-      id: 2,
-      name: "Organic Cotton Tote Bag",
-      description:
-        "A durable tote bag made from organic cotton, perfect for shopping or carrying essentials.",
-      points: 350,
-      imageUrl:
-        "https://www.oneworld-zerowaste.com/cdn/shop/products/IMG_4830.jpg?v=1544563046",
-      category: "Product",
-      stock: "Out of stock",
-      quantity: 30,
-      redeemed: true,
-      redeemedDate: "2023-12-25",
-    },
-  ];
-
   return (
     <ScrollView
       style={{
@@ -101,7 +64,7 @@ const RedemptionDetail = ({ navigation }) => {
             flex: 1,
           }}
         >
-          <Text>You have no rewards right now</Text>
+          <Text>You have not redeemed any reward yet</Text>
           <TouchableOpacity
             onPress={() => navigation.navigate("Community")}
             style={{

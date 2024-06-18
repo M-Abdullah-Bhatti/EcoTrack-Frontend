@@ -71,8 +71,8 @@ const GoalsStatusScreen = () => {
                 />
               </View>
               <View style={styles.goal}>
-                <Text style={styles.goalText}>Previous: {goal.emissionsBeforeStartDate.toFixed(2)} kg</Text>
-                <Text style={styles.goalText}>Progress: {goal.emissionsDuringGoalPeriod.toFixed(2)} kg</Text>
+                <Text style={styles.goalText}>Last Week: {goal.emissionsBeforeStartDate.toFixed(2)} kg</Text>
+                <Text style={styles.goalText}>This Week: {goal.emissionsDuringGoalPeriod.toFixed(2)} kg</Text>
               </View>
             </View>
           ))}

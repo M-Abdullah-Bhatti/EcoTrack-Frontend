@@ -49,15 +49,12 @@ const EmissionsScreen = ({ navigation }) => {
     if (newYear === 2023 && newMonthIndex < 10) {
       newMonthIndex = 10;
     }
-    // console.log("object");
 
     // // // Ensure it doesn't go beyond the current month
     const currentDateCheck = new Date();
     const currentYearCheck = currentDateCheck.getFullYear();
     const currentMonthIndexCheck = currentDateCheck.getMonth();
-    // console.log("cc", newMonthIndex);
-    // console.log("cc", currentYearCheck);
-    // // console.log("cc", newYear);
+
     if (
       newYear === currentYearCheck &&
       newMonthIndex > currentMonthIndexCheck

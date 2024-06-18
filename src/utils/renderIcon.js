@@ -1,14 +1,7 @@
-import {
-  MaterialCommunityIcons,
-  MaterialIcons,
-  Fontisto,
-  FontAwesome5,
-  Entypo,
-  Ionicons,
-} from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { food, meal, transport } from "../data";
+
 export const renderEmissionIcon = (category, subCategory) => {
-  //   console.log("object", );
   switch (category) {
     case "Transportation":
       const transportIcon = transport.find((item) => item.text === subCategory);
