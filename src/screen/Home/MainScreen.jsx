@@ -9,10 +9,16 @@ import {
   Platform,
   ScrollView,
 } from "react-native";
-import { MaterialCommunityIcons, MaterialIcons, Entypo, Ionicons, AntDesign } from "@expo/vector-icons";
+import {
+  MaterialCommunityIcons,
+  MaterialIcons,
+  Entypo,
+  Ionicons,
+  AntDesign,
+} from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { setEmissions, setGoals } from '../../redux/userSlice';
+import { setEmissions, setGoals } from "../../redux/userSlice";
 import SetGoalModal from "../../components/SetGoalModal";
 
 const MainScreen = ({ navigation }) => {
@@ -20,7 +26,7 @@ const MainScreen = ({ navigation }) => {
   const [currentCategory, setCurrentCategory] = useState(null);
   const [categoriesNeedingGoals, setCategoriesNeedingGoals] = useState([]);
   const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
-  
+
   const { user, token, goals, emissions } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
@@ -31,10 +37,11 @@ const MainScreen = ({ navigation }) => {
           Authorization: `Bearer ${token}`,
         },
       };
-      
+
       try {
         const emissionData = await axios.get(
-          `https://ecotrack-dev.vercel.app/api/emission/weekly/${user._id}`, config
+          `https://ecotrack-dev.vercel.app/api/emission/weekly/${user._id}`,
+          config
         );
         dispatch(setEmissions(emissionData.data.result));
       } catch (error) {
@@ -43,7 +50,8 @@ const MainScreen = ({ navigation }) => {
 
       try {
         const goalsData = await axios.get(
-          `https://ecotrack-dev.vercel.app/api/goal/weekly/${user._id}`, config
+          `https://ecotrack-dev.vercel.app/api/goal/weekly/${user._id}`,
+          config
         );
         dispatch(setGoals(goalsData.data));
       } catch (error) {
@@ -61,11 +69,11 @@ const MainScreen = ({ navigation }) => {
   }, [emissions, goals]);
 
   const checkEmissions = () => {
-    const goalCategories = goals.map(goal => goal.category);
+    const goalCategories = goals.map((goal) => goal.category);
     const newCategoriesNeedingGoals = emissions
-      .map(emission => emission.category)
-      .filter(category => !goalCategories.includes(category));
-    
+      .map((emission) => emission.category)
+      .filter((category) => !goalCategories.includes(category));
+
     setCategoriesNeedingGoals(newCategoriesNeedingGoals);
 
     if (newCategoriesNeedingGoals.length > 0) {
@@ -96,9 +104,13 @@ const MainScreen = ({ navigation }) => {
         goalAchieved: false,
       };
 
-      console.log("ADD GOAL BODY: ", body)
+      console.log("ADD GOAL BODY: ", body);
 
-      await axios.post('https://ecotrack-dev.vercel.app/api/goal/add/', body, config);
+      await axios.post(
+        "https://ecotrack-dev.vercel.app/api/goal/add/",
+        body,
+        config
+      );
 
       if (currentCategoryIndex < categoriesNeedingGoals.length - 1) {
         setCurrentCategoryIndex(currentCategoryIndex);
@@ -109,7 +121,8 @@ const MainScreen = ({ navigation }) => {
 
       // Fetch updated goals
       const updatedGoals = await axios.get(
-        `https://ecotrack-dev.vercel.app/api/goal/weekly/${user._id}`, config
+        `https://ecotrack-dev.vercel.app/api/goal/weekly/${user._id}`,
+        config
       );
       dispatch(setGoals(updatedGoals.data));
     } catch (error) {
@@ -182,7 +195,11 @@ const MainScreen = ({ navigation }) => {
               style={styles.item}
               onPress={() => navigation.navigate("Emissions")}
             >
-              <MaterialCommunityIcons size={30} color="black" name="foot-print" />
+              <MaterialCommunityIcons
+                size={30}
+                color="black"
+                name="foot-print"
+              />
               <Text style={styles.itemText}>Emissions</Text>
             </TouchableOpacity>
           </View>
@@ -198,7 +215,11 @@ const MainScreen = ({ navigation }) => {
               style={styles.item}
               onPress={() => navigation.navigate("UserDashboard")}
             >
-              <MaterialCommunityIcons size={30} color="black" name="database-sync" />
+              <MaterialCommunityIcons
+                size={30}
+                color="black"
+                name="database-sync"
+              />
               <Text style={styles.itemText}>Visualize Data</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -223,131 +244,131 @@ const MainScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-  flexGrow: 1,
-  paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : "0px",
-  backgroundColor: "white",
-  alignItems: "center",
+    flexGrow: 1,
+    paddingTop: Platform.OS == "android" ? StatusBar.currentHeight : "0px",
+    backgroundColor: "white",
+    alignItems: "center",
   },
   btn: {
-  width: "100%",
-  display: "flex",
-  flexDirection: "row",
-  gap: 6,
-  backgroundColor: "#46A667",
-  paddingVertical: 14,
-  alignItems: "center",
-  marginVertical: 20,
-  borderRadius: 12,
-  justifyContent: "center",
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    gap: 6,
+    backgroundColor: "#46A667",
+    paddingVertical: 14,
+    alignItems: "center",
+    marginVertical: 20,
+    borderRadius: 12,
+    justifyContent: "center",
   },
   curvedContainer: {
-  width: "100%",
-  height: 200,
-  backgroundColor: "#46A667",
-  borderBottomLeftRadius: 150,
-  borderBottomRightRadius: 30,
-  overflow: "hidden",
-  flexDirection: "row",
+    width: "100%",
+    height: 200,
+    backgroundColor: "#46A667",
+    borderBottomLeftRadius: 150,
+    borderBottomRightRadius: 30,
+    overflow: "hidden",
+    flexDirection: "row",
   },
   leftContent: {
-  flex: 3,
-  justifyContent: "center",
-  alignItems: "flex-start",
-  paddingLeft: 20,
+    flex: 3,
+    justifyContent: "center",
+    alignItems: "flex-start",
+    paddingLeft: 20,
   },
   rightContent: {
-  marginLeft: "5%",
-  flex: 4,
-  justifyContent: "center",
-  alignItems: "flex-start",
-  paddingRight: 20,
+    marginLeft: "5%",
+    flex: 4,
+    justifyContent: "center",
+    alignItems: "flex-start",
+    paddingRight: 20,
   },
   heading: {
-  fontSize: 25,
-  color: "white",
-  fontWeight: "bold",
-  fontFamily: "PoppinsSemiBold",
+    fontSize: 25,
+    color: "white",
+    fontWeight: "bold",
+    fontFamily: "PoppinsSemiBold",
   },
   subHeading: {
-  fontSize: 18,
-  color: "white",
-  fontFamily: "PoppinsRegular",
+    fontSize: 18,
+    color: "white",
+    fontFamily: "PoppinsRegular",
   },
   image: {
-  width: 150,
-  height: 150,
-  borderRadius: 50,
+    width: 150,
+    height: 150,
+    borderRadius: 50,
   },
   heading2: {
-  marginTop: "2%",
-  fontSize: 18,
-  color: "black",
-  fontFamily: "PoppinsMedium",
-  marginLeft: 12
+    marginTop: "2%",
+    fontSize: 18,
+    color: "black",
+    fontFamily: "PoppinsMedium",
+    marginLeft: 12,
   },
   CardContainer: {
-  marginTop: "3%",
-  marginHorizontal: 5,
-  display: "flex",
-  flexDirection: "row",
+    marginTop: "3%",
+    marginHorizontal: 5,
+    display: "flex",
+    flexDirection: "row",
   },
   Card: {
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "center",
-  borderColor: "black",
-  borderWidth: 1,
-  height: 220,
-  width: "45%",
-  marginHorizontal: 3,
-  borderRadius: 10,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    borderColor: "black",
+    borderWidth: 1,
+    height: 220,
+    width: "45%",
+    marginHorizontal: 3,
+    borderRadius: 10,
   },
   cardImg: {
-  height: 100,
-  width: "40%",
+    height: 100,
+    width: "40%",
   },
   cardText: {
-  textAlign: "center",
-  fontFamily: "PoppinsMedium",
-  marginVertical: 5,
+    textAlign: "center",
+    fontFamily: "PoppinsMedium",
+    marginVertical: 5,
   },
   cardBtn: {
-  height: 40,
-  width: "90%",
-  backgroundColor: "#46A667",
-  borderRadius: 5,
-  marginVertical: "10%",
-  display: "flex",
-  justifyContent: "center",
+    height: 40,
+    width: "90%",
+    backgroundColor: "#46A667",
+    borderRadius: 5,
+    marginVertical: "10%",
+    display: "flex",
+    justifyContent: "center",
   },
   cardBtnText: {
-  textAlign: "center",
-  fontFamily: "PoppinsRegular",
-  color: "white",
+    textAlign: "center",
+    fontFamily: "PoppinsRegular",
+    color: "white",
   },
   row: {
-  flexDirection: "row",
-  justifyContent: "center",
-  marginBottom: 10,
+    flexDirection: "row",
+    justifyContent: "center",
+    marginBottom: 10,
   },
   itemContainer: {
-  marginTop: "5%",
+    marginTop: "5%",
   },
   item: {
-  display: "flex",
-  backgroundColor: "lightblue",
-  alignItems: "center",
-  justifyContent: "center",
-  marginHorizontal: "2%",
-  paddingVertical: "4%",
-  borderRadius: 10,
-  width: "28%",
+    display: "flex",
+    backgroundColor: "lightblue",
+    alignItems: "center",
+    justifyContent: "center",
+    marginHorizontal: "2%",
+    paddingVertical: "4%",
+    borderRadius: 10,
+    width: "28%",
   },
   itemText: {
-  marginTop: 5,
-  textAlign: "center",
-  fontFamily: "PoppinsRegular",
+    marginTop: 5,
+    textAlign: "center",
+    fontFamily: "PoppinsRegular",
   },
 });
 

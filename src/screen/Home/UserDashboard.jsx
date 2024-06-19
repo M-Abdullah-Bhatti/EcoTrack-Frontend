@@ -11,17 +11,14 @@ import {
 import React, { useEffect, useState } from "react";
 import { Dimensions } from "react-native";
 import { BarChart } from "react-native-gifted-charts";
-import {
-  Ionicons,
-  AntDesign,
-} from "@expo/vector-icons";
+import { Ionicons, AntDesign } from "@expo/vector-icons";
 
 import axios from "axios";
 import { useSelector } from "react-redux";
 
 const UserDashboard = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
-  
+
   const { user, token } = useSelector((state) => state.user);
 
   const renderTitle = () => {
@@ -105,7 +102,7 @@ const UserDashboard = ({ navigation }) => {
 
   const [CarbonData, setCarbonData] = useState([]);
   const [CarbonDataToBeSHown, setCarbonDataToBeSHown] = useState([]);
-  const [year, setyear] = useState(2023);
+  const [year, setyear] = useState(2024);
   const { width } = Dimensions.get("screen");
 
   const fetchEmissionData = async () => {
@@ -130,7 +127,7 @@ const UserDashboard = ({ navigation }) => {
       alert("An error occurred. Please try again.");
     }
   };
-  
+
   useEffect(() => {
     fetchEmissionData();
   }, []);
@@ -321,81 +318,79 @@ const UserDashboard = ({ navigation }) => {
           height: "auto",
         }}
       >
-        {
-          loading ? (
-            <ActivityIndicator size="large" color="#00ff00" />
-          ) : CarbonDataToBeSHown.length == 0 ? (
-            <>
-              <View
-                style={{
-                  width: "100%",
-                  height: 40,
-                  marginVertical: 10,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexDirection: "row",
-                  gap: 20,
-                }}
-              >
-                <TouchableOpacity onPress={handleDecreaseYear}>
-                  <AntDesign name="leftcircleo" size={24} color="black" />
-                </TouchableOpacity>
-                <Text style={{ fontSize: 16, fontWeight: "700" }}>{year}</Text>
-                <TouchableOpacity onPress={handleIncreaseYear}>
-                  <AntDesign name="rightcircleo" size={24} color="black" />
-                </TouchableOpacity>
-              </View>
-              <Text
-                style={{
-                  textAlign: "center",
-                  fontSize: 14,
-                  marginVertical: 10,
-                }}
-              >
-                No data available for {selectedOpt} and year:{year}
-              </Text>
-            </>
-          ) : (
-            <View>
-              <View
-                style={{
-                  width: "100%",
-                  height: 40,
-                  marginVertical: 10,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexDirection: "row",
-                  gap: 20,
-                }}
-              >
-                <TouchableOpacity onPress={handleDecreaseYear}>
-                  <AntDesign name="leftcircleo" size={24} color="black" />
-                </TouchableOpacity>
-                <Text style={{ fontSize: 16, fontWeight: "700" }}>{year}</Text>
-                <TouchableOpacity onPress={handleIncreaseYear}>
-                  <AntDesign name="rightcircleo" size={24} color="black" />
-                </TouchableOpacity>
-              </View>
-              {renderTitle()}
-              <BarChart
-                barWidth={8}
-                noOfSections={12}
-                barBorderRadius={4}
-                frontColor="lightgray"
-                data={CarbonDataToBeSHown}
-                yAxisThickness={0}
-                xAxisThickness={0}
-                labelWidth={190}
-                initialSpacing={20}
-                height={250}
-                width={width}
-                spacing={6}
-              />
+        {loading ? (
+          <ActivityIndicator size="large" color="#00ff00" />
+        ) : CarbonDataToBeSHown.length == 0 ? (
+          <>
+            <View
+              style={{
+                width: "100%",
+                height: 40,
+                marginVertical: 10,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: "row",
+                gap: 20,
+              }}
+            >
+              <TouchableOpacity onPress={handleDecreaseYear}>
+                <AntDesign name="leftcircleo" size={24} color="black" />
+              </TouchableOpacity>
+              <Text style={{ fontSize: 16, fontWeight: "700" }}>{year}</Text>
+              <TouchableOpacity onPress={handleIncreaseYear}>
+                <AntDesign name="rightcircleo" size={24} color="black" />
+              </TouchableOpacity>
             </View>
-          )
-        }
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: 14,
+                marginVertical: 10,
+              }}
+            >
+              No data available for {selectedOpt} and year:{year}
+            </Text>
+          </>
+        ) : (
+          <View>
+            <View
+              style={{
+                width: "100%",
+                height: 40,
+                marginVertical: 10,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: "row",
+                gap: 20,
+              }}
+            >
+              <TouchableOpacity onPress={handleDecreaseYear}>
+                <AntDesign name="leftcircleo" size={24} color="black" />
+              </TouchableOpacity>
+              <Text style={{ fontSize: 16, fontWeight: "700" }}>{year}</Text>
+              <TouchableOpacity onPress={handleIncreaseYear}>
+                <AntDesign name="rightcircleo" size={24} color="black" />
+              </TouchableOpacity>
+            </View>
+            {renderTitle()}
+            <BarChart
+              barWidth={8}
+              noOfSections={12}
+              barBorderRadius={4}
+              frontColor="lightgray"
+              data={CarbonDataToBeSHown}
+              yAxisThickness={0}
+              xAxisThickness={0}
+              labelWidth={190}
+              initialSpacing={20}
+              height={250}
+              width={width}
+              spacing={6}
+            />
+          </View>
+        )}
       </View>
     </ScrollView>
   );

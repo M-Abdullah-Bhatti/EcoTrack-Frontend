@@ -19,7 +19,7 @@ import {
 import { formatDateLikeFacebook } from "../utils/helpers";
 import { useDispatch, useSelector } from "react-redux";
 import { refreshUser } from "../redux/userSlice";
-import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
+import { Menu, MenuItem, MenuDivider } from "react-native-material-menu";
 import { toastShow } from "./../utils/helpers";
 import baseUrl from "../utils/baseUrl";
 import axios from "axios";
@@ -138,7 +138,10 @@ const SinglePost = ({ post, id, setPosts }) => {
       },
     };
     try {
-      const deletedPost = await axios.delete(`https://ecotrack-dev.vercel.app/api/posts/${postId}`, config);
+      const deletedPost = await axios.delete(
+        `https://ecotrack-dev.vercel.app/api/posts/${postId}`,
+        config
+      );
       toastShow("Post Deleted Successfully");
       setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
     } catch (error) {
@@ -193,26 +196,29 @@ const SinglePost = ({ post, id, setPosts }) => {
               {post.isTypeAd ? post.user.companyName : post.user.name}
             </Text>
             <Text style={{ fontSize: 11, marginTop: 2 }}>
-              {post.isTypeAd ? 'Sponsored' : formatDateLikeFacebook(post.createdAt)}
+              {post.isTypeAd
+                ? "Sponsored"
+                : formatDateLikeFacebook(post.createdAt)}
             </Text>
           </View>
         </TouchableOpacity>
 
         <Menu
-            visible={menuVisible}
-            anchor={
-              <TouchableOpacity
-                style={styles.moreButton}
-                onPress={showMenu}
-              >
-                <Feather name="more-horizontal" size={20} color="black" />
-              </TouchableOpacity>
-            }
-            onRequestClose={hideMenu}
-          >
-            {post.user._id === user._id && <MenuItem onPress={()=> handleDeletePost(post._id)}>Delete Post</MenuItem>}
-            <MenuItem>Report Post</MenuItem>
-            <MenuDivider />
+          visible={menuVisible}
+          anchor={
+            <TouchableOpacity style={styles.moreButton} onPress={showMenu}>
+              <Feather name="more-horizontal" size={20} color="black" />
+            </TouchableOpacity>
+          }
+          onRequestClose={hideMenu}
+        >
+          {post.user._id === user._id && (
+            <MenuItem onPress={() => handleDeletePost(post._id)}>
+              Delete Post
+            </MenuItem>
+          )}
+          <MenuItem>Report Post</MenuItem>
+          <MenuDivider />
         </Menu>
       </View>
 
@@ -349,7 +355,7 @@ const SinglePost = ({ post, id, setPosts }) => {
           <AntDesign name="message1" size={18} color="white" />
           <Text style={{ color: "white" }}>Comment</Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{
             display: "flex",
             flexDirection: "row",
@@ -363,7 +369,7 @@ const SinglePost = ({ post, id, setPosts }) => {
         >
           <Feather name="send" size={18} color="white" />
           <Text style={{ color: "white" }}>Share</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       <Modal
         animationType="slide"
@@ -438,11 +444,12 @@ const SinglePost = ({ post, id, setPosts }) => {
         </View>
         <ScrollView
           contentContainerStyle={{
-            paddingBottom: 20,
+            paddingBottom: 80,
             gap: 10,
             display: "flex",
             alignItems: "center",
             marginTop: 20,
+            // backgroundColor: "red",
           }}
         >
           {comments.map((comment, id) => (
