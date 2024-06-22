@@ -439,16 +439,17 @@ const UserDashboard = ({ navigation }) => {
               spacing={46}
             /> */}
             <View style={{ paddingHorizontal: 2 }}>
+              <Text style={{ marginLeft: 7, marginBottom: 20 }}>KgCO2</Text>
               <LineChart
                 data={LineChartData.Food}
                 data2={LineChartData.Electricity}
                 data3={LineChartData.Transportation}
                 height={250}
                 // showVerticalLines
-                yAxisLabelWidth={90}
+                yAxisLabelWidth={40}
                 spacing={44}
                 noOfSections={10}
-                yAxisLabelSuffix=" kg CO2"
+                // yAxisLabelSuffix=" kg"
                 initialSpacing={20}
                 maxValue={800}
                 color1="#177AD5"
