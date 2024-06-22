@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Dimensions } from "react-native";
-import { BarChart } from "react-native-gifted-charts";
+import { BarChart, LineChart } from "react-native-gifted-charts";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 
 import axios from "axios";
@@ -18,6 +18,7 @@ import { useSelector } from "react-redux";
 
 const UserDashboard = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
+  console.log("year", new Date().getFullYear());
 
   const { user, token } = useSelector((state) => state.user);
 
@@ -52,7 +53,7 @@ const UserDashboard = ({ navigation }) => {
                 color: "black",
               }}
             >
-              Food
+              Diet
             </Text>
           </View>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -101,8 +102,9 @@ const UserDashboard = ({ navigation }) => {
   };
 
   const [CarbonData, setCarbonData] = useState([]);
-  const [CarbonDataToBeSHown, setCarbonDataToBeSHown] = useState([]);
-  const [year, setyear] = useState(2024);
+  const [CarbonDataToBeShown, setCarbonDataToBeShown] = useState([]);
+  const [LineChartData, setLineChartData] = useState([]);
+  const [year, setYear] = useState(new Date().getFullYear());
   const { width } = Dimensions.get("screen");
 
   const fetchEmissionData = async () => {
@@ -119,11 +121,12 @@ const UserDashboard = ({ navigation }) => {
 
       if (emissionData.data) {
         setCarbonData(emissionData.data);
-        setCarbonDataToBeSHown(transformData(emissionData.data));
+        setCarbonDataToBeShown(transformData(emissionData.data));
+        setLineChartData(transformDataForLineChart(emissionData.data));
       }
       setLoading(false);
     } catch (error) {
-      console.log("error while getting emissins", error);
+      console.log("error while getting emissions", error);
       alert("An error occurred. Please try again.");
     }
   };
@@ -155,8 +158,7 @@ const UserDashboard = ({ navigation }) => {
         const date = new Date(item.createdAt);
         return date.getFullYear() === year && date.getMonth() === i;
       });
-      console.log("asdhff", monthData);
-      // Calculate total carbon emitted for each category in this month
+
       const categoryValues = {
         Electricity: 0,
         Food: 0,
@@ -164,87 +166,135 @@ const UserDashboard = ({ navigation }) => {
       };
 
       monthData.forEach((item) => {
-        if (item.category == "Food" || item.category == "Meal") {
-          console.log("uess", item.carbonEmitted);
+        if (item.category === "Food" || item.category === "Meal") {
           categoryValues.Food += item.carbonEmitted;
         } else {
           categoryValues[item.category] += item.carbonEmitted;
         }
       });
 
-      // Check if any category has non-zero emissions
       const hasNonZeroEmissions = Object.values(categoryValues).some(
         (value) => value > 0
       );
 
-      // Only add month data if any category has non-zero emissions
-      if (hasNonZeroEmissions) {
-        console.log("jsdsf", categoryValues.Food);
-        if (categoryValues.Food > 0) {
-          transformedData.push({
-            value: categoryValues.Food,
-            label: month,
-            labelWidth: 30,
-            labelTextStyle: { color: "gray" },
-            frontColor: "#177AD5", // Customize as needed
-          });
-        }
-        if (categoryValues.Food > 0) {
+      if (categoryValues.Food > 0) {
+        transformedData.push({
+          value: categoryValues.Food,
+          label: month,
+          spacing: 5,
+          labelTextStyle: { color: "gray" },
+          frontColor: "#177AD5",
+        });
+      }
+      if (categoryValues.Food > 0) {
+        transformedData.push({
+          value: categoryValues.Electricity,
+          frontColor: "#ED6665",
+        });
+      } else {
+        if (categoryValues.Electricity > 0) {
           transformedData.push({
             value: categoryValues.Electricity,
-            frontColor: "#ED6665", // Customize as needed
-          });
-        } else {
-          if (categoryValues.Electricity > 0) {
-            transformedData.push({
-              value: categoryValues.Electricity,
-              frontColor: "#ED6665", // Customize as needed
-              label: month,
-              // spacing: 2,
-              labelWidth: 30,
-              labelTextStyle: { color: "gray" },
-            });
-          } else {
-            transformedData.push({
-              value: categoryValues.Electricity,
-              frontColor: "#ED6665", // Customize as needed
-            });
-          }
-        }
-
-        if (categoryValues.Food > 0 || categoryValues.Electricity > 0) {
-          transformedData.push({
-            value: categoryValues.Transportation,
-            frontColor: "#46A667", // Customize as needed
-          });
-        } else {
-          transformedData.push({
-            value: categoryValues.Transportation,
-            frontColor: "#46A667", // Customize as needed
+            frontColor: "#ED6665",
             label: month,
-            // spacing: 2,
-            labelWidth: 30,
+            spacing: 2,
             labelTextStyle: { color: "gray" },
           });
         }
       }
+
+      if (categoryValues.Food > 0 || categoryValues.Electricity > 0) {
+        transformedData.push({
+          value: categoryValues.Transportation,
+          frontColor: "#46A667",
+        });
+      } else {
+        transformedData.push({
+          value: categoryValues.Transportation,
+          frontColor: "#46A667",
+          label: month,
+          labelWidth: 30,
+          labelTextStyle: { color: "gray" },
+        });
+      }
     }
-    console.log("trrr", transformedData);
+
     return transformedData;
+  };
+
+  const transformDataForLineChart = (fetchedData) => {
+    const monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+
+    const data = {
+      Electricity: [],
+      Food: [],
+      Transportation: [],
+    };
+
+    for (let i = 0; i < 12; i++) {
+      const month = monthNames[i];
+      const monthData = fetchedData.filter((item) => {
+        const date = new Date(item.createdAt);
+        return date.getFullYear() === year && date.getMonth() === i;
+      });
+
+      const categoryValues = {
+        Electricity: 0,
+        Food: 0,
+        Transportation: 0,
+      };
+
+      monthData.forEach((item) => {
+        if (item.category === "Food" || item.category === "Meal") {
+          categoryValues.Food += item.carbonEmitted;
+        } else {
+          categoryValues[item.category] += item.carbonEmitted;
+        }
+      });
+
+      data.Electricity.push({
+        value: categoryValues.Electricity,
+        label: month,
+      });
+      data.Food.push({
+        value: categoryValues.Food,
+        label: month,
+      });
+      data.Transportation.push({
+        value: categoryValues.Transportation,
+        label: month,
+      });
+    }
+
+    return data;
   };
 
   const handleDecreaseYear = () => {
     if (year > 2023) {
-      setyear(year - 1);
+      setYear(year - 1);
     }
   };
 
   useEffect(() => {
-    setCarbonDataToBeSHown(transformData(CarbonData));
-    console.log("uearr");
+    setCarbonDataToBeShown(transformData(CarbonData));
+    setLineChartData(transformDataForLineChart(CarbonData));
   }, [year]);
+
   const handleIncreaseYear = () => {
-    setyear(year + 1);
+    setYear(year + 1);
   };
 
   const [selectedOpt, setSelectedOpt] = useState("Electricity");
@@ -320,7 +370,7 @@ const UserDashboard = ({ navigation }) => {
       >
         {loading ? (
           <ActivityIndicator size="large" color="#00ff00" />
-        ) : CarbonDataToBeSHown.length == 0 ? (
+        ) : CarbonDataToBeShown.length === 0 ? (
           <>
             <View
               style={{
@@ -349,7 +399,7 @@ const UserDashboard = ({ navigation }) => {
                 marginVertical: 10,
               }}
             >
-              No data available for {selectedOpt} and year:{year}
+              No data available for {selectedOpt} and year: {year}
             </Text>
           </>
         ) : (
@@ -375,26 +425,55 @@ const UserDashboard = ({ navigation }) => {
               </TouchableOpacity>
             </View>
             {renderTitle()}
-            <BarChart
+            {/* <BarChart
               barWidth={8}
               noOfSections={12}
               barBorderRadius={4}
               frontColor="lightgray"
-              data={CarbonDataToBeSHown}
+              data={CarbonDataToBeShown}
               yAxisThickness={0}
               xAxisThickness={0}
-              labelWidth={190}
+              labelWidth={150}
               initialSpacing={20}
               height={250}
-              width={width}
-              spacing={6}
-            />
+              spacing={46}
+            /> */}
+            <View style={{ paddingHorizontal: 2 }}>
+              <LineChart
+                data={LineChartData.Food}
+                data2={LineChartData.Electricity}
+                data3={LineChartData.Transportation}
+                height={250}
+                // showVerticalLines
+                yAxisLabelWidth={90}
+                spacing={44}
+                noOfSections={10}
+                yAxisLabelSuffix=" kg CO2"
+                initialSpacing={20}
+                maxValue={800}
+                color1="#177AD5"
+                color2="#ED6665"
+                color3="#46A667"
+                textColor1="blue"
+                textColor2="red"
+                textColor3="purple"
+                dataPointsHeight={6}
+                dataPointsWidth={6}
+                dataPointsColor1="blue"
+                dataPointsColor2="red"
+                dataPointsColor3="green"
+                textShiftY={-2}
+                textShiftX={-5}
+                textFontSize={13}
+              />
+            </View>
           </View>
         )}
       </View>
     </ScrollView>
   );
 };
+
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
