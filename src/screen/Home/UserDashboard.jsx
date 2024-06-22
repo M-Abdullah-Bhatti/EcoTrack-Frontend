@@ -176,48 +176,56 @@ const UserDashboard = ({ navigation }) => {
       const hasNonZeroEmissions = Object.values(categoryValues).some(
         (value) => value > 0
       );
+      transformedData.push({
+        value: categoryValues.Food == 0 ? 1 : categoryValues.Food,
+        label: month,
+        spacing: 4,
+        labelWidth: 30,
+        labelTextStyle: { color: "gray" },
+        frontColor: "#177AD5",
+      });
+      transformedData.push({
+        value: categoryValues.Electricity == 0 ? 1 : categoryValues.Electricity,
+        frontColor: "#ED6665",
+        spacing: 4,
+      });
+      transformedData.push({
+        value:
+          categoryValues.Transportation == 0
+            ? 1
+            : categoryValues.Transportation,
+        frontColor: "#46A667",
+      });
+      // if (categoryValues.Food > 0) {
 
-      if (categoryValues.Food > 0) {
-        transformedData.push({
-          value: categoryValues.Food,
-          label: month,
-          spacing: 5,
-          labelTextStyle: { color: "gray" },
-          frontColor: "#177AD5",
-        });
-      }
-      if (categoryValues.Food > 0) {
-        transformedData.push({
-          value: categoryValues.Electricity,
-          frontColor: "#ED6665",
-        });
-      } else {
-        if (categoryValues.Electricity > 0) {
-          transformedData.push({
-            value: categoryValues.Electricity,
-            frontColor: "#ED6665",
-            label: month,
-            spacing: 2,
-            labelTextStyle: { color: "gray" },
-          });
-        }
-      }
+      // }
+      // if (categoryValues.Food > 0) {
 
-      if (categoryValues.Food > 0 || categoryValues.Electricity > 0) {
-        transformedData.push({
-          value: categoryValues.Transportation,
-          frontColor: "#46A667",
-        });
-      } else {
-        transformedData.push({
-          value: categoryValues.Transportation,
-          frontColor: "#46A667",
-          label: month,
-          labelWidth: 30,
-          labelTextStyle: { color: "gray" },
-        });
-      }
+      // } else {
+      //   if (categoryValues.Electricity > 0) {
+      //     transformedData.push({
+      //       value: categoryValues.Electricity,
+      //       frontColor: "#ED6665",
+      //       label: month,
+      //       spacing: 2,
+      //       labelTextStyle: { color: "gray" },
+      //     });
+      //   }
+      // }
+
+      // if (categoryValues.Food > 0 || categoryValues.Electricity > 0) {
+
+      // } else {
+      //   transformedData.push({
+      //     value: categoryValues.Transportation,
+      //     frontColor: "#46A667",
+      //     label: month,
+      //     labelWidth: 30,
+      //     labelTextStyle: { color: "gray" },
+      //   });
+      // }
     }
+    console.log("barrr data", transformedData);
 
     return transformedData;
   };
@@ -425,31 +433,55 @@ const UserDashboard = ({ navigation }) => {
               </TouchableOpacity>
             </View>
             {renderTitle()}
-            {/* <BarChart
-              barWidth={8}
-              noOfSections={12}
-              barBorderRadius={4}
-              frontColor="lightgray"
-              data={CarbonDataToBeShown}
-              yAxisThickness={0}
-              xAxisThickness={0}
-              labelWidth={150}
-              initialSpacing={20}
-              height={250}
-              spacing={46}
-            /> */}
-            <View style={{ paddingHorizontal: 2 }}>
-              <Text style={{ marginLeft: 7, marginBottom: 20 }}>KgCO2</Text>
+            <View
+              style={{
+                paddingHorizontal: 2,
+                borderTopColor: "black",
+                borderTopWidth: 1,
+                marginTop: 20,
+              }}
+            >
+              <Text style={{ marginLeft: 8, marginBottom: 7 }}>kg CO2</Text>
+
+              <BarChart
+                barWidth={8}
+                noOfSections={12}
+                barBorderRadius={4}
+                frontColor="lightgray"
+                // showLine
+
+                // data={barData}
+                data={CarbonDataToBeShown}
+                // yAxisThickness={0}
+                // xAxisThickness={0}
+                // labelWidth={150}
+                initialSpacing={10}
+                yAxisLabelWidth={50}
+                height={250}
+                spacing={30}
+                maxValue={800}
+                xAxisLabelTextStyle
+              />
+            </View>
+
+            <View
+              style={{
+                paddingHorizontal: 2,
+                borderTopColor: "black",
+                borderTopWidth: 1,
+                marginTop: 20,
+              }}
+            >
+              <Text style={{ marginLeft: 8, marginBottom: 7 }}>kg CO2</Text>
               <LineChart
                 data={LineChartData.Food}
                 data2={LineChartData.Electricity}
                 data3={LineChartData.Transportation}
                 height={250}
                 // showVerticalLines
-                yAxisLabelWidth={40}
+                yAxisLabelWidth={50}
                 spacing={44}
                 noOfSections={10}
-                // yAxisLabelSuffix=" kg"
                 initialSpacing={20}
                 maxValue={800}
                 color1="#177AD5"
