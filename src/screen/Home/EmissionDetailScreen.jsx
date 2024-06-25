@@ -1,14 +1,8 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Switch,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, Switch, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { FontAwesome } from "@expo/vector-icons";
 
-const EmissionDetailScreen = ({route}) => {
+const EmissionDetailScreen = ({ route }) => {
   const dataOfEmission = route.params?.data;
   console.log("data", dataOfEmission);
   const [isEnabled, setIsEnabled] = useState(false);
@@ -50,7 +44,7 @@ const EmissionDetailScreen = ({route}) => {
       text: formattedDate,
     },
   ];
-  
+
   return (
     <View style={styles.container}>
       <View>
@@ -76,7 +70,7 @@ const EmissionDetailScreen = ({route}) => {
           </View>
         ))}
       </View>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={{
           backgroundColor: "#c43b0e",
           width: "100%",
@@ -93,7 +87,7 @@ const EmissionDetailScreen = ({route}) => {
           Mitigate
         </Text>
         <FontAwesome name="heartbeat" size={24} color="white" />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };

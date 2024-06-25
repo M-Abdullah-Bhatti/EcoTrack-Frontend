@@ -9,12 +9,13 @@ import {
 import { useSelector } from "react-redux";
 import { useFocusEffect } from "@react-navigation/native";
 import axios from "axios";
+import UserDashboard from "./UserDashboard";
 
 const GoalsStatusScreen = () => {
   const [goalsData, setGoalsData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  
-  const { user } = useSelector((state)=> state.user);
+
+  const { user } = useSelector((state) => state.user);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -39,19 +40,20 @@ const GoalsStatusScreen = () => {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.balanceCard}>
+      {/* <View style={styles.balanceCard}>
         <Text style={styles.balanceTitle}>Total Emissions</Text>
         <Text style={styles.balanceAmount}>3500.00 kg</Text>
-      </View>
+      </View> */}
       <View style={styles.summary}>
-        <View style={styles.incomeExpenseContainer}>
-        </View>
+        {/* <View style={styles.incomeExpenseContainer}>
+          <Text>Gello</Text>
+        </View> */}
+        <UserDashboard isGoalScreen={true} />
       </View>
 
-      {
-        isLoading ?
+      {isLoading ? (
         <ActivityIndicator />
-        :
+      ) : (
         <View style={styles.cardContainer}>
           {goalsData.map((goal, index) => (
             <View key={index} style={styles.card}>
@@ -61,9 +63,14 @@ const GoalsStatusScreen = () => {
                   style={[
                     styles.progressLine,
                     {
-                      width: `${(goal.emissionsDuringGoalPeriod / goal.emissionsBeforeStartDate) * 100}%`,
+                      width: `${
+                        (goal.emissionsDuringGoalPeriod /
+                          goal.emissionsBeforeStartDate) *
+                        100
+                      }%`,
                       backgroundColor:
-                        goal.emissionsDuringGoalPeriod < goal.emissionsBeforeStartDate
+                        goal.emissionsDuringGoalPeriod <
+                        goal.emissionsBeforeStartDate
                           ? "green"
                           : "red",
                     },
@@ -71,13 +78,17 @@ const GoalsStatusScreen = () => {
                 />
               </View>
               <View style={styles.goal}>
-                <Text style={styles.goalText}>Last Week: {goal.emissionsBeforeStartDate.toFixed(2)} kg</Text>
-                <Text style={styles.goalText}>This Week: {goal.emissionsDuringGoalPeriod.toFixed(2)} kg</Text>
+                <Text style={styles.goalText}>
+                  Last Week: {goal.emissionsBeforeStartDate.toFixed(2)} kg
+                </Text>
+                <Text style={styles.goalText}>
+                  This Week: {goal.emissionsDuringGoalPeriod.toFixed(2)} kg
+                </Text>
               </View>
             </View>
           ))}
         </View>
-      }
+      )}
     </ScrollView>
   );
 };
@@ -103,7 +114,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   summary: {
-    margin: 10,
+    // margin: 10,
+    width: "100%",
   },
   incomeExpenseContainer: {
     flexDirection: "row",

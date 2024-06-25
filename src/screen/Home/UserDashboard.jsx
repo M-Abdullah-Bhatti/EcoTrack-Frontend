@@ -16,7 +16,7 @@ import { Ionicons, AntDesign } from "@expo/vector-icons";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-const UserDashboard = ({ navigation }) => {
+const UserDashboard = ({ navigation, isGoalScreen }) => {
   const [loading, setLoading] = useState(false);
   console.log("year", new Date().getFullYear());
 
@@ -312,61 +312,67 @@ const UserDashboard = ({ navigation }) => {
       style={styles.mainContainer}
       contentContainerStyle={{ paddingBottom: 20 }}
     >
-      <View style={styles.header}>
-        <View
-          style={{
-            width: "50%",
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "flex-start",
-            gap: 13,
-          }}
-        >
-          <TouchableOpacity
+      {!isGoalScreen && (
+        <View style={styles.header}>
+          <View
             style={{
-              height: 32,
-              width: 32,
-              backgroundColor: "white",
-              borderRadius: 14,
+              width: "100%",
               display: "flex",
+              flexDirection: "row",
               alignItems: "center",
-              justifyContent: "center",
+              justifyContent: "flex-start",
+              gap: 13,
+              paddingVertical: 15,
+              paddingHorizontal: 5,
             }}
-            onPress={() => navigation.goBack()}
           >
-            <Ionicons name="arrow-back-circle" size={30} color="black" />
-          </TouchableOpacity>
-          <Text
+            <TouchableOpacity
+              style={{
+                height: 32,
+                width: 32,
+                backgroundColor: "white",
+                borderRadius: 14,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              onPress={() => navigation.goBack()}
+            >
+              <Ionicons name="arrow-back-circle" size={30} color="black" />
+            </TouchableOpacity>
+            <Text
+              style={{
+                fontSize: 20,
+                marginTop: 2,
+                fontWeight: "bold",
+                color: "black",
+              }}
+            >
+              Data Analysis
+            </Text>
+          </View>
+          {/* <View
             style={{
-              fontSize: 20,
-              marginTop: 2,
-              fontWeight: "bold",
-              color: "black",
+              width: "50%",
+              display: "flex",
+              flexDirection: "row",
+              height: 60,
+              justifyContent: "flex-end",
+              alignItems: "center",
             }}
+            onPress={() => alert("Aziz")}
           >
-            Data Analysis
-          </Text>
-        </View>
-        <View
-          style={{
-            width: "50%",
-            display: "flex",
-            flexDirection: "row",
-            height: 60,
-            justifyContent: "flex-end",
-            alignItems: "center",
-          }}
-          onPress={() => alert("Aziz")}
-        >
-          <TouchableOpacity style={{ width: 40, height: 40, borderRadius: 20 }}>
-            <Image
-              source={require("../../../assets/prof.png")}
+            <TouchableOpacity
               style={{ width: 40, height: 40, borderRadius: 20 }}
-            />
-          </TouchableOpacity>
+            >
+              <Image
+                source={require("../../../assets/prof.png")}
+                style={{ width: 40, height: 40, borderRadius: 20 }}
+              />
+            </TouchableOpacity>
+          </View> */}
         </View>
-      </View>
+      )}
 
       <View
         style={{
@@ -407,11 +413,24 @@ const UserDashboard = ({ navigation }) => {
                 marginVertical: 10,
               }}
             >
-              No data available for {selectedOpt} and year: {year}
+              No data available for year: {year}
             </Text>
           </>
         ) : (
           <View>
+            {isGoalScreen && (
+              <Text
+                style={{
+                  color: "black",
+                  textAlign: "center",
+                  fontSize: 16,
+                  fontWeight: "700",
+                  marginVertical: 10,
+                }}
+              >
+                My Data
+              </Text>
+            )}
             <View
               style={{
                 width: "100%",
@@ -436,9 +455,22 @@ const UserDashboard = ({ navigation }) => {
             <View
               style={{
                 paddingHorizontal: 2,
-                borderTopColor: "black",
-                borderTopWidth: 1,
+                paddingVertical: 10,
+                // borderTopColor: "black",
+                // borderTopWidth: 1,
                 marginTop: 20,
+                marginBottom: 12,
+                backgroundColor: "white",
+                shadowColor: "#000",
+                shadowOffset: {
+                  width: 0,
+                  height: 2,
+                },
+                shadowOpacity: 0.23,
+                shadowRadius: 2.62,
+
+                elevation: 4,
+                // paddingVertical: 10,
               }}
             >
               <Text style={{ marginLeft: 8, marginBottom: 7 }}>kg CO2</Text>
@@ -463,43 +495,55 @@ const UserDashboard = ({ navigation }) => {
                 xAxisLabelTextStyle
               />
             </View>
+            {!isGoalScreen && (
+              <View
+                style={{
+                  paddingHorizontal: 2,
+                  // borderTopColor: "black",
+                  // borderTopWidth: 1,
+                  marginTop: 20,
+                  backgroundColor: "white",
+                  shadowColor: "#000",
+                  shadowOffset: {
+                    width: 0,
+                    height: 2,
+                  },
+                  shadowOpacity: 0.23,
+                  shadowRadius: 2.62,
 
-            <View
-              style={{
-                paddingHorizontal: 2,
-                borderTopColor: "black",
-                borderTopWidth: 1,
-                marginTop: 20,
-              }}
-            >
-              <Text style={{ marginLeft: 8, marginBottom: 7 }}>kg CO2</Text>
-              <LineChart
-                data={LineChartData.Food}
-                data2={LineChartData.Electricity}
-                data3={LineChartData.Transportation}
-                height={250}
-                // showVerticalLines
-                yAxisLabelWidth={50}
-                spacing={44}
-                noOfSections={10}
-                initialSpacing={20}
-                maxValue={800}
-                color1="#177AD5"
-                color2="#ED6665"
-                color3="#46A667"
-                textColor1="blue"
-                textColor2="red"
-                textColor3="purple"
-                dataPointsHeight={6}
-                dataPointsWidth={6}
-                dataPointsColor1="blue"
-                dataPointsColor2="red"
-                dataPointsColor3="green"
-                textShiftY={-2}
-                textShiftX={-5}
-                textFontSize={13}
-              />
-            </View>
+                  elevation: 4,
+                  paddingVertical: 10,
+                }}
+              >
+                <Text style={{ marginLeft: 8, marginBottom: 7 }}>kg CO2</Text>
+                <LineChart
+                  data={LineChartData.Food}
+                  data2={LineChartData.Electricity}
+                  data3={LineChartData.Transportation}
+                  height={250}
+                  // showVerticalLines
+                  yAxisLabelWidth={50}
+                  spacing={44}
+                  noOfSections={10}
+                  initialSpacing={20}
+                  maxValue={800}
+                  color1="#177AD5"
+                  color2="#ED6665"
+                  color3="#46A667"
+                  textColor1="blue"
+                  textColor2="red"
+                  textColor3="purple"
+                  dataPointsHeight={6}
+                  dataPointsWidth={6}
+                  dataPointsColor1="blue"
+                  dataPointsColor2="red"
+                  dataPointsColor3="green"
+                  textShiftY={-2}
+                  textShiftX={-5}
+                  textFontSize={13}
+                />
+              </View>
+            )}
           </View>
         )}
       </View>
