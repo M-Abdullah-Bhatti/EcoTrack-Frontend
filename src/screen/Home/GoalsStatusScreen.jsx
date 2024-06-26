@@ -35,19 +35,12 @@ const GoalsStatusScreen = () => {
       };
 
       fetchData();
-    }, [])
+    }, [user._id])
   );
 
   return (
     <ScrollView style={styles.container}>
-      {/* <View style={styles.balanceCard}>
-        <Text style={styles.balanceTitle}>Total Emissions</Text>
-        <Text style={styles.balanceAmount}>3500.00 kg</Text>
-      </View> */}
       <View style={styles.summary}>
-        {/* <View style={styles.incomeExpenseContainer}>
-          <Text>Gello</Text>
-        </View> */}
         <UserDashboard isGoalScreen={true} />
       </View>
 
@@ -55,6 +48,7 @@ const GoalsStatusScreen = () => {
         <ActivityIndicator />
       ) : (
         <View style={styles.cardContainer}>
+          <Text style={{fontWeight: '600', fontSize: 18}}>GOALS</Text>
           {goalsData.map((goal, index) => (
             <View key={index} style={styles.card}>
               <Text style={styles.cardTitle}>{goal.category}</Text>
@@ -97,29 +91,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  balanceCard: {
-    margin: 10,
-    padding: 20,
-    borderRadius: 10,
-    backgroundColor: "#34a853",
-    alignItems: "center",
-  },
-  balanceTitle: {
-    fontSize: 18,
-    color: "white",
-  },
-  balanceAmount: {
-    fontSize: 32,
-    color: "white",
-    fontWeight: "bold",
-  },
   summary: {
-    // margin: 10,
+    margin: 10,
     width: "100%",
-  },
-  incomeExpenseContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
   },
   cardContainer: {
     margin: 10,

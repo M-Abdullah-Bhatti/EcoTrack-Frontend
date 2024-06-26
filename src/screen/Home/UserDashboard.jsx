@@ -418,19 +418,6 @@ const UserDashboard = ({ navigation, isGoalScreen }) => {
           </>
         ) : (
           <View>
-            {isGoalScreen && (
-              <Text
-                style={{
-                  color: "black",
-                  textAlign: "center",
-                  fontSize: 16,
-                  fontWeight: "700",
-                  marginVertical: 10,
-                }}
-              >
-                My Data
-              </Text>
-            )}
             <View
               style={{
                 width: "100%",
