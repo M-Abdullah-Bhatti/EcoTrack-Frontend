@@ -39,16 +39,18 @@ const GoalsStatusScreen = () => {
   );
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.summary}>
-        <UserDashboard isGoalScreen={true} />
-      </View>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={{ paddingBottom: 100 }}
+    >
+      <View style={styles.summary}></View>
 
       {isLoading ? (
         <ActivityIndicator />
       ) : (
         <View style={styles.cardContainer}>
-          <Text style={{fontWeight: '600', fontSize: 18}}>GOALS</Text>
+          <UserDashboard isGoalScreen={true} />
+          <Text style={{ fontWeight: "600", fontSize: 18 }}>GOALS</Text>
           {goalsData.map((goal, index) => (
             <View key={index} style={styles.card}>
               <Text style={styles.cardTitle}>{goal.category}</Text>
@@ -76,7 +78,11 @@ const GoalsStatusScreen = () => {
                   Last Week: {goal.emissionsBeforeStartDate.toFixed(2)} kg
                 </Text>
                 <Text style={styles.goalText}>
-                  Goal: {goal.emissionsBeforeStartDate - goal.emissionsBeforeStartDate * (goal.percentage / 100)} kg
+                  Goal:{" "}
+                  {goal.emissionsBeforeStartDate -
+                    goal.emissionsBeforeStartDate *
+                      (goal.percentage / 100)}{" "}
+                  kg
                 </Text>
               </View>
             </View>
