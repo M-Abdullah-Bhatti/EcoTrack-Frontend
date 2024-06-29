@@ -422,7 +422,7 @@ const UserDashboard = ({ navigation, isGoalScreen }) => {
               style={{
                 width: "100%",
                 height: 40,
-                marginVertical: 10,
+                marginBottom: 10,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -443,8 +443,6 @@ const UserDashboard = ({ navigation, isGoalScreen }) => {
               style={{
                 paddingHorizontal: 2,
                 paddingVertical: 10,
-                // borderTopColor: "black",
-                // borderTopWidth: 1,
                 marginTop: 20,
                 marginBottom: 12,
                 backgroundColor: "white",
@@ -455,9 +453,6 @@ const UserDashboard = ({ navigation, isGoalScreen }) => {
                 },
                 shadowOpacity: 0.23,
                 shadowRadius: 2.62,
-
-                elevation: 4,
-                // paddingVertical: 10,
               }}
             >
               <Text style={{ marginLeft: 8, marginBottom: 7 }}>kg CO2</Text>

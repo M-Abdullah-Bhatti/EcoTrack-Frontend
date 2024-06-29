@@ -41,16 +41,14 @@ const GoalsStatusScreen = () => {
   return (
     <ScrollView
       style={styles.container}
-      contentContainerStyle={{ paddingBottom: 100 }}
+      contentContainerStyle={{ paddingBottom: 50 }}
     >
-      <View style={styles.summary}></View>
-
       {isLoading ? (
         <ActivityIndicator />
       ) : (
         <View style={styles.cardContainer}>
           <UserDashboard isGoalScreen={true} />
-          <Text style={{ fontWeight: "600", fontSize: 18 }}>GOALS</Text>
+          {goalsData && <Text style={{ fontWeight: "600", fontSize: 18 }}>GOALS</Text>}
           {goalsData.map((goal, index) => (
             <View key={index} style={styles.card}>
               <Text style={styles.cardTitle}>{goal.category}</Text>
@@ -103,6 +101,7 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     margin: 10,
+    marginTop: 0
   },
   card: {
     marginVertical: 10,
