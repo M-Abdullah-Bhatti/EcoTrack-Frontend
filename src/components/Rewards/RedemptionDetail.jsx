@@ -126,116 +126,8 @@ const RedemptionDetail = ({ navigation }) => {
               <Text style={{ fontSize: 12 }}>{voucher.description}</Text>
             </View>
 
-            <View
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                marginVertical: 15,
-                paddingHorizontal: 10,
-              }}
-            >
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: 30,
-                  alignSelf: "flex-start",
-                }}
-              >
-                {/* <View>
-                <Text>Quantity</Text>
-                <Text style={{ fontWeight: "bold" }}>{voucher.quantity}</Text>
-              </View> */}
-                <View>
-                  <Text>Price</Text>
-                  <Text style={{ fontWeight: "bold" }}>{voucher.price}</Text>
-                </View>
-              </View>
-              <TouchableOpacity
-                style={[
-                  {
-                    backgroundColor: !voucher.disable ? "#0c856e" : "grey",
-                    paddingVertical: 8,
-                    borderRadius: 20,
-                    paddingHorizontal: 16,
-                  },
-                ]}
-                disabled={voucher.disable}
-              >
-                <Text style={{ color: "white" }}>Redeem</Text>
-              </TouchableOpacity>
-            </View>
-            <View>
-              {voucher.disable && (
-                <View
-                  style={{
-                    display: "flex",
-                    width: "100%",
-                    justifyContent: "flex-start",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 10,
-                    paddingHorizontal: 10,
-                  }}
-                >
-                  <MaterialIcons
-                    name="error-outline"
-                    size={20}
-                    color="#ffc53d"
-                  />
-
-                  <Text style={{ fontSize: 14, color: "#ffc53d" }}>
-                    Not enough points
-                  </Text>
-                </View>
-              )}
-              {!voucher.disable && (
-                <View
-                  style={{
-                    display: "flex",
-                    width: "100%",
-                    justifyContent: "flex-start",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 10,
-                    paddingHorizontal: 10,
-                  }}
-                >
-                  <MaterialIcons
-                    name="error-outline"
-                    size={20}
-                    color="#ffc53d"
-                  />
-
-                  <Text style={{ fontSize: 14, color: "#ffc53d" }}>
-                    In Stock
-                  </Text>
-                </View>
-              )}
-              {voucher.disable && (
-                <View
-                  style={{
-                    display: "flex",
-                    width: "100%",
-                    justifyContent: "flex-start",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 10,
-                    paddingHorizontal: 10,
-                  }}
-                >
-                  <MaterialIcons
-                    name="error-outline"
-                    size={20}
-                    color="#ffc53d"
-                  />
-
-                  <Text style={{ fontSize: 14, color: "#ffc53d" }}>
-                    Out of stock
-                  </Text>
-                </View>
-              )}
+            <View style={{padding: 8}}>
+              <Text style={{fontSize: 16, fontWeight: '600'}}>Code: {voucher.code}</Text>
             </View>
           </View>
         ))
@@ -256,8 +148,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    height: 200,
     position: "relative",
+    borderRadius: 8,
+    overflow: 'hidden'
   },
   redeemButtonText: {
     color: "white",

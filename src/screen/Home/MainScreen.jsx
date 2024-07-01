@@ -28,6 +28,8 @@ const MainScreen = ({ navigation }) => {
   const { user, token, goals, emissions } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
+  console.log("HOME USER: ", user);
+
   useEffect(() => {
     const fetchData = async () => {
       const config = {
