@@ -13,8 +13,6 @@ import {
   MaterialCommunityIcons,
   MaterialIcons,
   Entypo,
-  Ionicons,
-  AntDesign,
 } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -176,7 +174,7 @@ const MainScreen = ({ navigation }) => {
       <View style={styles.itemContainer}>
         <Text style={styles.heading2}>More with EcoTrack</Text>
         <View style={styles.secondCard}>
-          <View style={styles.row}>
+          {/* <View style={styles.row}>
             <TouchableOpacity
               style={styles.item}
               onPress={() => setModalOpen(true)}
@@ -202,14 +200,21 @@ const MainScreen = ({ navigation }) => {
               />
               <Text style={styles.itemText}>Emissions</Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
           <View style={styles.row}>
+            <TouchableOpacity
+              style={styles.item}
+              onPress={() => navigation.navigate("GoalsScreen")}
+            >
+              <MaterialCommunityIcons name="bullseye-arrow" size={30} color="black" />
+              <Text style={styles.itemText}>My Goals</Text>
+            </TouchableOpacity>
             <TouchableOpacity
               style={styles.item}
               onPress={() => navigation.navigate("RewardScreen")}
             >
               <Entypo size={30} color="black" name="trophy" />
-              <Text style={styles.itemText}>Check Rewards</Text>
+              <Text style={styles.itemText}>Rewards</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.item}
@@ -221,13 +226,6 @@ const MainScreen = ({ navigation }) => {
                 name="database-sync"
               />
               <Text style={styles.itemText}>Visualize Data</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.item}
-              onPress={() => navigation.navigate("GoalsScreen")}
-            >
-              <MaterialIcons size={30} color="black" name="article" />
-              <Text style={styles.itemText}>Read Blogs</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -361,7 +359,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginHorizontal: "2%",
-    paddingVertical: "4%",
+    paddingVertical: "8%",
     borderRadius: 10,
     width: "28%",
   },

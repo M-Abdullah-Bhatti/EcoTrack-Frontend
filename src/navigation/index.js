@@ -156,7 +156,7 @@ const Routes = () => {
           component={GoalsStatusScreen}
           options={{
             headerTransparent: false,
-            title: "",
+            title: "My Goals",
           }}
         />
       </MainStackNavigator.Navigator>

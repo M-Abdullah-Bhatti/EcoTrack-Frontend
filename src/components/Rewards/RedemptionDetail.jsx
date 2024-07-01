@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useSelector } from "react-redux";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 
 const RedemptionDetail = ({ navigation }) => {
   const [vouchers, setVouchers] = useState([]);

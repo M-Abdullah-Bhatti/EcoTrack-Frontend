@@ -8,6 +8,7 @@ import {
   TextInput,
   Modal,
   ScrollView,
+  Alert,
 } from "react-native";
 import {
   Feather,
@@ -217,7 +218,7 @@ const SinglePost = ({ post, id, setPosts }) => {
               Delete Post
             </MenuItem>
           )}
-          <MenuItem>Report Post</MenuItem>
+          <MenuItem onPress={()=> Alert.alert("Post reported successfully")}>Report Post</MenuItem>
           <MenuDivider />
         </Menu>
       </View>
@@ -293,7 +294,7 @@ const SinglePost = ({ post, id, setPosts }) => {
             />
 
             <Text style={{ marginLeft: 4 }}>
-              {postLikes.length > 0 && postLikes.length + " Likes"}
+              {postLikes.length > 0 && postLikes.length + " Likes"} • {post.comments.length > 0 && post.comments.length + " Comments"}
             </Text>
           </View>
         )}
@@ -324,7 +325,7 @@ const SinglePost = ({ post, id, setPosts }) => {
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "center",
-            width: "30%",
+            width: "45%",
             gap: 8,
             backgroundColor: "#2DBAA0",
             padding: 10,
@@ -342,34 +343,18 @@ const SinglePost = ({ post, id, setPosts }) => {
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "center",
-            width: "30%",
+            width: "45%",
             gap: 8,
             backgroundColor: "#2DBAA0",
             borderRadius: 12,
           }}
           onPress={() => {
             setModalVisible(true);
-            // inputCommentRef.current.focus();
           }}
         >
           <AntDesign name="message1" size={18} color="white" />
           <Text style={{ color: "white" }}>Comment</Text>
         </TouchableOpacity>
-        {/* <TouchableOpacity
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "30%",
-            gap: 8,
-            backgroundColor: "#2DBAA0",
-            borderRadius: 12,
-          }}
-        >
-          <Feather name="send" size={18} color="white" />
-          <Text style={{ color: "white" }}>Share</Text>
-        </TouchableOpacity> */}
       </View>
       <Modal
         animationType="slide"
@@ -390,12 +375,10 @@ const SinglePost = ({ post, id, setPosts }) => {
                 display: "flex",
                 flexDirection: "row",
                 height: 60,
-                justifyContent: "flex-start",
+                justifyContent: "space-between",
                 alignItems: "center",
-
                 gap: 10,
               }}
-              onPress={() => alert("Aziz")}
             >
               <AntDesign
                 name={postLikes.length > 0 ? "like1" : "like2"}
@@ -409,20 +392,7 @@ const SinglePost = ({ post, id, setPosts }) => {
                   width: "70%",
                 }}
               >
-                {/* <Text
-                  style={{
-                    fontSize: 13,
-                    marginTop: 2,
-                    fontWeight: "bold",
-                    color: "black",
-                  }}
-                >
-                  {post.likesByUsers.length > 0 &&
-                    post.likesByUsers[0].username.split(" ")[0]}{" "}
-                  and{" "}
-                  {post.likesByUsers.length > 0 && post.likesByUsers.length - 1}{" "}
-                  others
-                </Text> */}
+                <Text style={{fontSize: 16, fontWeight: '700'}}>{post.user.name}'s Post</Text>
               </View>
             </TouchableOpacity>
           )}
