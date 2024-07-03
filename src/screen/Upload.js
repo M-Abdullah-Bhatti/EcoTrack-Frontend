@@ -192,13 +192,13 @@ const Upload = ({navigation, route}) => {
                   <Entypo name="images" size={24} color="red" />
                   <Text>Add Images</Text>
                 </TouchableOpacity>
-                <TouchableOpacity
+                {/* <TouchableOpacity
                   style={styles.addButtons}
                   onPress={pickVideos}
                 >
                   <Entypo name="folder-video" size={24} color="blue" />
                   <Text>Add Videos</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </>
             )}
         </View>

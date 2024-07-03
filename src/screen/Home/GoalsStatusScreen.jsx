@@ -77,9 +77,8 @@ const GoalsStatusScreen = () => {
                 </Text>
                 <Text style={styles.goalText}>
                   Goal:{" "}
-                  {goal.emissionsBeforeStartDate -
-                    goal.emissionsBeforeStartDate *
-                      (goal.percentage / 100)}{" "}
+                  {(goal.emissionsBeforeStartDate - 
+                    goal.emissionsBeforeStartDate * (goal.percentage / 100)).toFixed(2)}{" "}
                   kg
                 </Text>
               </View>

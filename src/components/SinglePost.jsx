@@ -129,27 +129,43 @@ const SinglePost = ({ post, id, setPosts }) => {
     }
   };
 
-  // Function to delete the post
   const handleDeletePost = async (postId) => {
     hideMenu();
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    try {
-      const deletedPost = await axios.delete(
-        `https://ecotrack-dev.vercel.app/api/posts/${postId}`,
-        config
-      );
-      toastShow("Post Deleted Successfully");
-      setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
-    } catch (error) {
-      console.error("Error deleting post:", error);
-    } finally {
-      hideMenu();
-    }
+    Alert.alert(
+      "Delete Post",
+      "Are you sure you want to delete this post?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Deletion cancelled"),
+          style: "cancel",
+        },
+        {
+          text: "OK",
+          onPress: async () => {
+            const config = {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            };
+            try {
+              const deletedPost = await axios.delete(
+                `https://ecotrack-dev.vercel.app/api/posts/${postId}`,
+                config
+              );
+              toastShow("Post Deleted Successfully");
+              setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
+            } catch (error) {
+              console.error("Error deleting post:", error);
+            } finally {
+              hideMenu();
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   return (
