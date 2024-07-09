@@ -8,16 +8,18 @@ import {
   StatusBar,
   Platform,
   ScrollView,
+  Dimensions
 } from "react-native";
 import {
   MaterialCommunityIcons,
-  MaterialIcons,
   Entypo,
 } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { setEmissions, setGoals } from "../../redux/userSlice";
 import SetGoalModal from "../../components/SetGoalModal";
+
+const {width} = Dimensions.get('screen');
 
 const MainScreen = ({ navigation }) => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -130,6 +132,8 @@ const MainScreen = ({ navigation }) => {
     }
   };
 
+  const totalEmissions = Object.values(user?.emissions).reduce((acc, curr) => acc + curr, 0);
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.curvedContainer}>
@@ -145,6 +149,15 @@ const MainScreen = ({ navigation }) => {
           <Text style={styles.subHeading}>Guide to a Sustainable Future</Text>
         </View>
       </View>
+
+      { user.emissions && 
+        <View style={styles.balanceCard}>
+          <Text style={styles.balanceTitle}>Monthly Carbon Emission</Text>
+          <Text style={styles.balanceAmount}>{totalEmissions} kg</Text>
+          <Text style={styles.balanceDescription}>This amount of CO2 would require <Text style={{fontWeight: 'bold'}}>{(totalEmissions / 1.83).toFixed(0)} Trees </Text> to absorb in a month.</Text>
+        </View>
+      }
+      
       <View style={styles.CardContainer}>
         <View style={styles.Card}>
           <Text style={styles.cardText}>Calculate your Carbon Footprint</Text>
@@ -173,36 +186,10 @@ const MainScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
+      
       <View style={styles.itemContainer}>
         <Text style={styles.heading2}>More with EcoTrack</Text>
         <View style={styles.secondCard}>
-          {/* <View style={styles.row}>
-            <TouchableOpacity
-              style={styles.item}
-              onPress={() => setModalOpen(true)}
-            >
-              <AntDesign size={30} color="black" name="areachart" />
-              <Text style={styles.itemText}>Set Goal</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.item}
-              onPress={() => navigation.navigate("Community")}
-            >
-              <Ionicons size={30} color="black" name="people-sharp" />
-              <Text style={styles.itemText}>Social Community</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.item}
-              onPress={() => navigation.navigate("Emissions")}
-            >
-              <MaterialCommunityIcons
-                size={30}
-                color="black"
-                name="foot-print"
-              />
-              <Text style={styles.itemText}>Emissions</Text>
-            </TouchableOpacity>
-          </View> */}
           <View style={styles.row}>
             <TouchableOpacity
               style={styles.item}
@@ -319,7 +306,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderColor: "black",
     borderWidth: 1,
-    height: 220,
     width: "45%",
     marginHorizontal: 3,
     borderRadius: 10,
@@ -332,6 +318,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "PoppinsMedium",
     marginVertical: 5,
+    paddingHorizontal: 6
   },
   cardBtn: {
     height: 40,
@@ -370,6 +357,28 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "PoppinsRegular",
   },
+  balanceCard: {
+    width: width*0.9,
+    margin: 10,
+    padding: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#34a853",
+    alignItems: "center",
+  },
+  balanceTitle: {
+    fontSize: 18,
+  },
+  balanceAmount: {
+    fontSize: 32,
+    fontWeight: "bold",
+  },
+  balanceDescription: {
+    color: '#34a853',
+    textAlign: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  }
 });
 
 export default MainScreen;
