@@ -132,7 +132,8 @@ const MainScreen = ({ navigation }) => {
     }
   };
 
-  const totalEmissions = Object.values(user?.emissions).reduce((acc, curr) => acc + curr, 0);
+  const hasEmissions = user?.emissions && Object.keys(user.emissions).length > 0;
+  const totalEmissions = Object.values(user?.emissions || {}).reduce((acc, curr) => acc + curr, 0);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -150,13 +151,11 @@ const MainScreen = ({ navigation }) => {
         </View>
       </View>
 
-      { user.emissions && 
-        <View style={styles.balanceCard}>
-          <Text style={styles.balanceTitle}>Monthly Carbon Emission</Text>
-          <Text style={styles.balanceAmount}>{totalEmissions} kg</Text>
-          <Text style={styles.balanceDescription}>This amount of CO2 would require <Text style={{fontWeight: 'bold'}}>{(totalEmissions / 1.83).toFixed(0)} Trees </Text> to absorb in a month.</Text>
-        </View>
-      }
+      <View style={styles.balanceCard}>
+        <Text style={styles.balanceTitle}>Monthly Carbon Emission</Text>
+        <Text style={styles.balanceAmount}>{totalEmissions} kg</Text>
+        {hasEmissions && <Text style={styles.balanceDescription}>This amount of <Text style={{fontWeight: 'bold'}}>CO2</Text> would require <Text style={{fontWeight: 'bold'}}>{(totalEmissions / 1.83).toFixed(0)} Trees</Text> to absorb in a month.</Text>}
+      </View>
       
       <View style={styles.CardContainer}>
         <View style={styles.Card}>
@@ -348,7 +347,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginHorizontal: "2%",
-    paddingVertical: "8%",
+    paddingVertical: "6%",
     borderRadius: 10,
     width: "28%",
   },
