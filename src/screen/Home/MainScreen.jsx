@@ -8,21 +8,20 @@ import {
   StatusBar,
   Platform,
   ScrollView,
-  Dimensions
+  Dimensions,
 } from "react-native";
-import {
-  MaterialCommunityIcons,
-  Entypo,
-} from "@expo/vector-icons";
+import { MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { setEmissions, setGoals } from "../../redux/userSlice";
 import SetGoalModal from "../../components/SetGoalModal";
+import SetGoalModalWithSlider from "../../components/SetGoalModalWithSlider";
 
-const {width} = Dimensions.get('screen');
+const { width } = Dimensions.get("screen");
 
 const MainScreen = ({ navigation }) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [modalWithSLiderOpen, setModalWithSLiderOpen] = useState(false);
   const [currentCategory, setCurrentCategory] = useState(null);
   const [categoriesNeedingGoals, setCategoriesNeedingGoals] = useState([]);
   const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
@@ -132,8 +131,12 @@ const MainScreen = ({ navigation }) => {
     }
   };
 
-  const hasEmissions = user?.emissions && Object.keys(user.emissions).length > 0;
-  const totalEmissions = Object.values(user?.emissions || {}).reduce((acc, curr) => acc + curr, 0);
+  const hasEmissions =
+    user?.emissions && Object.keys(user.emissions).length > 0;
+  const totalEmissions = Object.values(user?.emissions || {}).reduce(
+    (acc, curr) => acc + curr,
+    0
+  );
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -154,9 +157,18 @@ const MainScreen = ({ navigation }) => {
       <View style={styles.balanceCard}>
         <Text style={styles.balanceTitle}>Monthly Carbon Emission</Text>
         <Text style={styles.balanceAmount}>{totalEmissions} kg</Text>
-        {hasEmissions && <Text style={styles.balanceDescription}>This amount of <Text style={{fontWeight: 'bold'}}>CO2</Text> would require <Text style={{fontWeight: 'bold'}}>{(totalEmissions / 1.83).toFixed(0)} Trees</Text> to absorb in a month.</Text>}
+        {hasEmissions && (
+          <Text style={styles.balanceDescription}>
+            This amount of <Text style={{ fontWeight: "bold" }}>CO2</Text> would
+            require{" "}
+            <Text style={{ fontWeight: "bold" }}>
+              {(totalEmissions / 1.83).toFixed(0)} Trees
+            </Text>{" "}
+            to absorb in a month.
+          </Text>
+        )}
       </View>
-      
+
       <View style={styles.CardContainer}>
         <View style={styles.Card}>
           <Text style={styles.cardText}>Calculate your Carbon Footprint</Text>
@@ -185,7 +197,7 @@ const MainScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-      
+
       <View style={styles.itemContainer}>
         <Text style={styles.heading2}>More with EcoTrack</Text>
         <View style={styles.secondCard}>
@@ -194,7 +206,11 @@ const MainScreen = ({ navigation }) => {
               style={styles.item}
               onPress={() => navigation.navigate("GoalsScreen")}
             >
-              <MaterialCommunityIcons name="bullseye-arrow" size={30} color="black" />
+              <MaterialCommunityIcons
+                name="bullseye-arrow"
+                size={30}
+                color="black"
+              />
               <Text style={styles.itemText}>My Goals</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -215,9 +231,26 @@ const MainScreen = ({ navigation }) => {
               />
               <Text style={styles.itemText}>Visualize Data</Text>
             </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.item}
+              onPress={() => setModalWithSLiderOpen(true)}
+            >
+              <MaterialCommunityIcons
+                size={30}
+                color="black"
+                name="database-sync"
+              />
+              <Text style={styles.itemText}>Open Slider Modal</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
+      <SetGoalModalWithSlider
+        isVisible={modalWithSLiderOpen}
+        hideModal={() => setModalWithSLiderOpen(false)}
+        category={currentCategory}
+        onSetGoal={handleSetGoal}
+      />
       <SetGoalModal
         isVisible={modalOpen}
         hideModal={() => setModalOpen(false)}
@@ -317,7 +350,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "PoppinsMedium",
     marginVertical: 5,
-    paddingHorizontal: 6
+    paddingHorizontal: 6,
   },
   cardBtn: {
     height: 40,
@@ -357,7 +390,7 @@ const styles = StyleSheet.create({
     fontFamily: "PoppinsRegular",
   },
   balanceCard: {
-    width: width*0.9,
+    width: width * 0.9,
     margin: 10,
     padding: 20,
     borderRadius: 10,
@@ -373,11 +406,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   balanceDescription: {
-    color: '#34a853',
-    textAlign: 'center',
+    color: "#34a853",
+    textAlign: "center",
     paddingHorizontal: 12,
     paddingVertical: 6,
-  }
+  },
 });
 
 export default MainScreen;

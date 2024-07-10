@@ -60,7 +60,7 @@ const Routes = () => {
           component={Upload}
           options={{
             headerShown: true,
-            title: "Uplaod",
+            title: "Upload",
           }}
         />
 
