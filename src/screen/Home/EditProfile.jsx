@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import {
   View,
@@ -14,7 +14,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import * as ImagePicker from "expo-image-picker";
 import { FontAwesome5 } from "react-native-vector-icons";
-import { useFocusEffect } from "@react-navigation/native";
 
 import { toastShow, uploadImage } from "../../utils/helpers";
 import { refreshUser } from "../../redux/userSlice";
@@ -26,42 +25,8 @@ const EditProfileScreen = ({ navigation }) => {
 
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState(user.profilePic);
   const [imageFromFirebase, setImageFromFirebase] = useState(null);
-
-  // Function to fetch user profile data
-  const getProfile = async () => {
-    try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      const response = await axios.get(
-        `https://ecotrack-dev.vercel.app/api/users/${user._id}`
-      );
-      console.log("response of backend is", response.data);
-      const userData = response.data.userWithoutPassword;
-      console.log("User DATA ", userData);
-      setName(userData.name);
-      setEmail(userData.email);
-      userData.profilePic && setImage(userData.profilePic);
-    } catch (error) {
-      console.error("Error fetching user profile:", error);
-    }
-  };
-
-  // useFocusEffect(() => {
-  //   getProfile();
-  // }, []);
-  useFocusEffect(
-    React.useCallback(() => {
-      getProfile();
-    }, [])
-  );
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -90,13 +55,10 @@ const EditProfileScreen = ({ navigation }) => {
 
       const userData = {
         name,
-
-        // password,
         profilePic: imageFromFirebase ? imageFromFirebase : image,
       };
 
-      console.log("Usr Data ", userData);
-      // "https://ecotrack-dev.vercel.app/api/users/edit",
+      console.log("User Data ", userData);
       const response = await axios.put(
         "https://ecotrack-dev.vercel.app/api/users/edit",
         userData,
@@ -150,7 +112,6 @@ const EditProfileScreen = ({ navigation }) => {
             marginBottom: 6,
             marginTop: 3,
             fontWeight: "600",
-            // textTransform: "capitalize",
           }}
         >
           {email}

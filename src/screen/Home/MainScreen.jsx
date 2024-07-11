@@ -37,8 +37,8 @@ const MainScreen = ({ navigation }) => {
 
       <View style={styles.balanceCard}>
         <Text style={styles.balanceTitle}>Monthly Carbon Emission</Text>
-        <Text style={styles.balanceAmount}>{(user?.totalEmissions).toFixed(0)} kg</Text>
-        {user.totalEmissions > 2 && (
+        <Text style={styles.balanceAmount}>{(user?.totalEmissions)?.toFixed(0)} kg</Text>
+        {user?.totalEmissions > 2 && (
           <Text style={styles.balanceDescription}>
             This amount of <Text style={{ fontWeight: "bold" }}>CO2</Text> would
             require{" "}

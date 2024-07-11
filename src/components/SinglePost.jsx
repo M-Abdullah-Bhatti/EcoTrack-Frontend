@@ -310,7 +310,7 @@ const SinglePost = ({ post, id, setPosts }) => {
             />
 
             <Text style={{ marginLeft: 4 }}>
-              {postLikes.length > 0 && postLikes.length + " Likes"} • {post.comments.length > 0 && post.comments.length + " Comments"}
+              {postLikes.length > 0 && postLikes.length + " Likes"} {post.comments.length > 0 && post.comments.length + " • Comments"}
             </Text>
           </View>
         )}
