@@ -73,7 +73,7 @@ const GoalsStatusScreen = () => {
   const shouldShowSetGoalButton = (category) => {
     const currentEmissions = data[category] || 0;
     return (
-      !isGoalSetForCategory(category) &&
+      // !isGoalSetForCategory(category) &&
       currentEmissions > thresholdValues[category]
     );
   };
@@ -112,9 +112,9 @@ const GoalsStatusScreen = () => {
             {
               console.log(
                 "currentEmissions: ",
-                currentEmissions,
+                thresholdValues[category],
                 category,
-                goal?.emissionsDuringGoalPeriod
+                user?.emissions[category]
               );
             }
 
@@ -124,16 +124,22 @@ const GoalsStatusScreen = () => {
                   <Text style={styles.cardTitle}>{category}</Text>
                   <View style={styles.goal}>
                     <Text style={styles.goalText}>
-                      This Week: {currentEmissions.toFixed(0)} kg
+                      This Month: {user?.emissions[category] || 0} kg
                     </Text>
 
                     <Text style={styles.goalText}>
                       Max Value: {thresholdValues[category]} kg
                     </Text>
                   </View>
+
                   <Button
                     title="Set Goal"
                     onPress={() => handleSetGoal(category)}
+                    disabled={
+                      thresholdValues[category] > user?.emissions[category] || 0
+                        ? true
+                        : false
+                    }
                     style={{ backgroundColor: "green" }}
                   />
                 </View>
