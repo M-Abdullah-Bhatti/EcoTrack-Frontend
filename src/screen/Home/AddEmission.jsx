@@ -177,7 +177,7 @@ const AddEmission = ({ navigation, route }) => {
             <Slider
               style={styles.slider}
               minimumValue={1}
-              maximumValue={1000}
+              maximumValue={500}
               minimumTrackTintColor="#46A667"
               maximumTrackTintColor="#000000"
               thumbTintColor="#46A667"
@@ -234,7 +234,7 @@ const AddEmission = ({ navigation, route }) => {
             <Slider
               style={styles.slider}
               minimumValue={1}
-              maximumValue={250}
+              maximumValue={500}
               minimumTrackTintColor="#46A667"
               maximumTrackTintColor="#000000"
               thumbTintColor="#46A667"
@@ -305,7 +305,7 @@ const AddEmission = ({ navigation, route }) => {
             <Slider
               style={styles.slider}
               minimumValue={1}
-              maximumValue={100}
+              maximumValue={50}
               minimumTrackTintColor="#46A667"
               maximumTrackTintColor="#000000"
               thumbTintColor="#46A667"
@@ -362,7 +362,7 @@ const AddEmission = ({ navigation, route }) => {
             <Slider
               style={styles.slider}
               minimumValue={0}
-              maximumValue={20}
+              maximumValue={10}
               minimumTrackTintColor="#46A667"
               maximumTrackTintColor="#000000"
               thumbTintColor="#46A667"

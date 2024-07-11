@@ -156,7 +156,12 @@ const GoalsStatusScreen = ({ navigation }) => {
 
             return (
               <View key={index} style={styles.card}>
-                <Text style={styles.cardTitle}>{category}</Text>
+                <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                  <Text style={styles.cardTitle}>{category}</Text>
+                  <Text style={[styles.goalText, {fontWeight: 'bold'}]}>
+                    Goal: {target.toFixed(0)} kg
+                  </Text>
+                </View>
                 <View style={styles.progressContainer}>
                   <View
                     style={[
@@ -171,17 +176,13 @@ const GoalsStatusScreen = ({ navigation }) => {
                 </View>
                 <View style={styles.goal}>
                   <Text style={styles.goalText}>
-                    This Week: {currentEmissions.toFixed(0)} kg
+                    This Month: {currentEmissions.toFixed(0)} kg
                   </Text>
                   <Text style={styles.goalText}>
-                    Goal: {target.toFixed(0)} kg
+                    Last Month: {previousEmissions.toFixed(0)}{" "}
+                    kg
                   </Text>
                 </View>
-
-                <Text style={styles.goalText}>
-                  Emissions Before Goal Period: {previousEmissions.toFixed(0)}{" "}
-                  kg
-                </Text>
               </View>
             );
           })}

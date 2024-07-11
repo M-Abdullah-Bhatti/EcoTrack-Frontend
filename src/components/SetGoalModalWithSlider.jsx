@@ -61,9 +61,9 @@ const SetGoalModalWithSlider = ({
 
       console.log("GOAL ADDDEDDDD: ", addedGoal.data);
       dispatch(refreshUser(user._id));
+      refetchAgain();
       hideModal();
       toastShow("Goal added succesfully!");
-      refetchAgain();
     } catch (error) {
       console.error("Error setting goal:", error);
       hideModal();
@@ -124,7 +124,7 @@ const SetGoalModalWithSlider = ({
         </Text>
         <View style={{ width: "100%", marginBottom: 20 }}>
           <Text style={{ marginVertical: 6, marginLeft: 3 }}>
-            {goalTarget}Kg CO2
+            {goalTarget} Kg CO2
           </Text>
           <View
             style={{ flexDirection: "row", justifyContent: "space-around" }}
@@ -135,7 +135,7 @@ const SetGoalModalWithSlider = ({
                 height: 40,
               }}
               minimumValue={1}
-              maximumValue={250}
+              maximumValue={150}
               minimumTrackTintColor="#46A667"
               maximumTrackTintColor="#000000"
               thumbTintColor="#46A667"
