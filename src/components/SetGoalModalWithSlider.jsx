@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { refreshUser } from "../redux/userSlice";
 import baseUrl from "../utils/baseUrl";
+import { toastShow } from "../utils/helpers";
 
 const { width } = Dimensions.get("screen");
 
@@ -21,6 +22,7 @@ const SetGoalModalWithSlider = ({
   category,
   success,
   error,
+  refetchAgain,
 }) => {
   const [goalTarget, setgoalTarget] = useState(0);
 
@@ -60,6 +62,8 @@ const SetGoalModalWithSlider = ({
       console.log("GOAL ADDDEDDDD: ", addedGoal.data);
       dispatch(refreshUser(user._id));
       hideModal();
+      toastShow("Goal added succesfully!");
+      refetchAgain();
     } catch (error) {
       console.error("Error setting goal:", error);
       hideModal();

@@ -20,11 +20,12 @@ const thresholdValues = {
   Electricity: 100,
 };
 
-const GoalsStatusScreen = () => {
+const GoalsStatusScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [data, setData] = useState([]);
+  const [refetch, setIsRefetch] = useState(false);
 
   const { user } = useSelector((state) => state.user);
 
@@ -53,6 +54,9 @@ const GoalsStatusScreen = () => {
     }
   };
 
+  const refetchAgain = () => {
+    navigation.navigate("Main");
+  };
   const handleSetGoal = (category) => {
     setSelectedCategory(category);
     setIsModalVisible(true);
@@ -187,6 +191,7 @@ const GoalsStatusScreen = () => {
         isVisible={isModalVisible}
         category={selectedCategory}
         hideModal={() => setIsModalVisible(false)}
+        refetchAgain={refetchAgain}
         onSave={saveGoal}
         onCancel={() => setIsModalVisible(false)}
       />
