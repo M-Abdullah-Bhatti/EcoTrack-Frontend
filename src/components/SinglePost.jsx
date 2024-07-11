@@ -155,7 +155,9 @@ const SinglePost = ({ post, id, setPosts }) => {
                 config
               );
               toastShow("Post Deleted Successfully");
-              setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
+              setPosts((prevPosts) =>
+                prevPosts.filter((post) => post._id !== postId)
+              );
             } catch (error) {
               console.error("Error deleting post:", error);
             } finally {
@@ -210,7 +212,7 @@ const SinglePost = ({ post, id, setPosts }) => {
             }}
           >
             <Text style={{ fontSize: 13, marginTop: 2, fontWeight: "bold" }}>
-              {post.isTypeAd ? post.user.companyName : post.user.name}
+              {post?.isTypeAd ? post?.user?.companyName : post?.user?.name}
             </Text>
             <Text style={{ fontSize: 11, marginTop: 2 }}>
               {post.isTypeAd
@@ -229,12 +231,14 @@ const SinglePost = ({ post, id, setPosts }) => {
           }
           onRequestClose={hideMenu}
         >
-          {post.user._id === user._id && (
-            <MenuItem onPress={() => handleDeletePost(post._id)}>
+          {post?.user?._id === user?._id && (
+            <MenuItem onPress={() => handleDeletePost(post?._id)}>
               Delete Post
             </MenuItem>
           )}
-          <MenuItem onPress={()=> Alert.alert("Post reported successfully")}>Report Post</MenuItem>
+          <MenuItem onPress={() => Alert.alert("Post reported successfully")}>
+            Report Post
+          </MenuItem>
           <MenuDivider />
         </Menu>
       </View>
@@ -310,7 +314,8 @@ const SinglePost = ({ post, id, setPosts }) => {
             />
 
             <Text style={{ marginLeft: 4 }}>
-              {postLikes.length > 0 && postLikes.length + " Likes"} {post.comments.length > 0 && post.comments.length + " • Comments"}
+              {postLikes.length > 0 && postLikes.length + " Likes"}{" "}
+              {post.comments.length > 0 && post.comments.length + " • Comments"}
             </Text>
           </View>
         )}
@@ -408,7 +413,9 @@ const SinglePost = ({ post, id, setPosts }) => {
                   width: "70%",
                 }}
               >
-                <Text style={{fontSize: 16, fontWeight: '700'}}>{post.user.name}'s Post</Text>
+                <Text style={{ fontSize: 16, fontWeight: "700" }}>
+                  {post.user.name}'s Post
+                </Text>
               </View>
             </TouchableOpacity>
           )}
