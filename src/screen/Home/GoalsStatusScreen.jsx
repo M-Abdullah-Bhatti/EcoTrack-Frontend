@@ -140,7 +140,7 @@ const GoalsStatusScreen = ({ navigation }) => {
                     title="Set Goal"
                     onPress={() => handleSetGoal(category)}
                     disabled={
-                      thresholdValues[category] > user?.emissions[category] || 0
+                      thresholdValues[category] > (user?.emissions[category] || 0)
                         ? true
                         : false
                     }

@@ -9,13 +9,15 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
 import baseUrl from "../../utils/baseUrl";
+import { refreshUser } from "../../redux/userSlice";
 
 const RedemptionsScreen = () => {
   const [vouchers, setVouchers] = useState([]);
+  const dispatch = useDispatch();
 
   const { user, token } = useSelector((state) => state.user);
 
@@ -68,13 +70,12 @@ const RedemptionsScreen = () => {
 
       if (response.ok) {
         console.log("Voucher redeemed successfully!", responseData);
+        dispatch(refreshUser(user._id));
         Alert.alert("Success", "Voucher redeemed successfully!");
       } else {
-        // throw new Error(responseData.message || "Failed to redeem voucher");
         Alert.alert(responseData.message || "Failed to redeem voucher")
       }
     } catch (error) {
-      // console.error("Error redeeming voucher:", error);
       Alert.alert("Error", error.message || "There was an error redeeming the voucher. Please try again later.");
     }
   };

@@ -66,9 +66,8 @@ const EditProfileScreen = ({ navigation }) => {
       );
 
       console.log("User data updated:", response.data);
-      getProfile();
-      navigation.goBack();
       dispatch(refreshUser(user._id));
+      navigation.goBack();
       toastShow("Data updated successfully!");
     } catch (error) {
       if (error.response.data.message) {

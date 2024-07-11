@@ -18,7 +18,7 @@ import { useSelector } from "react-redux";
 
 const UserDashboard = ({ navigation, isGoalScreen }) => {
   const [loading, setLoading] = useState(false);
-  console.log("year", new Date().getFullYear());
+  // console.log("year", new Date().getFullYear());
 
   const { user, token } = useSelector((state) => state.user);
 

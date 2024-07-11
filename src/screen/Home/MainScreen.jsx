@@ -35,7 +35,7 @@ const MainScreen = ({ navigation }) => {
         </View>
       </View>
 
-      <View style={styles.balanceCard}>
+      {user?.emissions && <View style={styles.balanceCard}>
         <Text style={styles.balanceTitle}>Monthly Carbon Emission</Text>
         <Text style={styles.balanceAmount}>{(user?.totalEmissions)?.toFixed(0)} kg</Text>
         {user?.totalEmissions > 2 && (
@@ -48,7 +48,7 @@ const MainScreen = ({ navigation }) => {
             to absorb in a month.
           </Text>
         )}
-      </View>
+      </View>}
 
       <View style={styles.CardContainer}>
         <View style={styles.Card}>

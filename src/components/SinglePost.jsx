@@ -92,7 +92,6 @@ const SinglePost = ({ post, id, setPosts }) => {
       console.log("responseData: ", responseData.post.comments);
       setComments(responseData.post.comments);
       dispatch(refreshUser(user._id));
-
       console.log("Comment added successfully!", responseData);
     } catch (error) {
       console.error("Error adding comment:", error.message);
@@ -315,7 +314,7 @@ const SinglePost = ({ post, id, setPosts }) => {
 
             <Text style={{ marginLeft: 4 }}>
               {postLikes.length > 0 && postLikes.length + " Likes"}{" "}
-              {post.comments.length > 0 && post.comments.length + " • Comments"}
+              {post.comments.length > 0 && " • " + post.comments.length + " Comments"}
             </Text>
           </View>
         )}
@@ -414,7 +413,7 @@ const SinglePost = ({ post, id, setPosts }) => {
                 }}
               >
                 <Text style={{ fontSize: 16, fontWeight: "700" }}>
-                  {post.user.name}'s Post
+                  {post?.user?.name}'s Post
                 </Text>
               </View>
             </TouchableOpacity>
