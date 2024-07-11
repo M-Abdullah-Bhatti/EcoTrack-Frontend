@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -11,132 +11,13 @@ import {
   Dimensions,
 } from "react-native";
 import { MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-import { setEmissions, setGoals } from "../../redux/userSlice";
-import SetGoalModal from "../../components/SetGoalModal";
-import SetGoalModalWithSlider from "../../components/SetGoalModalWithSlider";
+import { useSelector } from "react-redux";
 
 const { width } = Dimensions.get("screen");
 
 const MainScreen = ({ navigation }) => {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalWithSLiderOpen, setModalWithSLiderOpen] = useState(false);
-  const [currentCategory, setCurrentCategory] = useState(null);
-  const [categoriesNeedingGoals, setCategoriesNeedingGoals] = useState([]);
-  const [currentCategoryIndex, setCurrentCategoryIndex] = useState(0);
-
-  const { user, token, goals, emissions } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
-
+  const { user } = useSelector((state) => state.user);
   console.log("HOME USER: ", user);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      try {
-        const emissionData = await axios.get(
-          `https://ecotrack-dev.vercel.app/api/emission/weekly/${user._id}`,
-          config
-        );
-        dispatch(setEmissions(emissionData.data.result));
-      } catch (error) {
-        console.error("Error fetching emissions data:", error);
-      }
-
-      try {
-        const goalsData = await axios.get(
-          `https://ecotrack-dev.vercel.app/api/goal/weekly/${user._id}`,
-          config
-        );
-        dispatch(setGoals(goalsData.data));
-      } catch (error) {
-        console.error("Error fetching goals data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    if (emissions && goals) {
-      checkEmissions();
-    }
-  }, [emissions, goals]);
-
-  const checkEmissions = () => {
-    const goalCategories = goals.map((goal) => goal.category);
-    const newCategoriesNeedingGoals = emissions
-      .map((emission) => emission.category)
-      .filter((category) => !goalCategories.includes(category));
-
-    setCategoriesNeedingGoals(newCategoriesNeedingGoals);
-
-    if (newCategoriesNeedingGoals.length > 0) {
-      setCurrentCategory(newCategoriesNeedingGoals[0]);
-      setModalOpen(true);
-    }
-  };
-
-  const handleSetGoal = async (percentage) => {
-    const category = categoriesNeedingGoals[currentCategoryIndex];
-    const startDate = new Date();
-    const endDate = new Date();
-    endDate.setDate(startDate.getDate() + 7);
-
-    try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      const body = {
-        userId: user._id,
-        category,
-        percentage,
-        startDate,
-        endDate,
-        goalAchieved: false,
-      };
-
-      console.log("ADD GOAL BODY: ", body);
-
-      await axios.post(
-        "https://ecotrack-dev.vercel.app/api/goal/add/",
-        body,
-        config
-      );
-
-      if (currentCategoryIndex < categoriesNeedingGoals.length - 1) {
-        setCurrentCategoryIndex(currentCategoryIndex);
-        setCurrentCategory(categoriesNeedingGoals[currentCategoryIndex]);
-      } else {
-        setModalOpen(false);
-      }
-
-      // Fetch updated goals
-      const updatedGoals = await axios.get(
-        `https://ecotrack-dev.vercel.app/api/goal/weekly/${user._id}`,
-        config
-      );
-      dispatch(setGoals(updatedGoals.data));
-    } catch (error) {
-      console.error("Error setting goal:", error);
-    }
-  };
-
-  const hasEmissions =
-    user?.emissions && Object.keys(user.emissions).length > 0;
-  const totalEmissions = Object.values(user?.emissions || {}).reduce(
-    (acc, curr) => acc + curr,
-    0
-  );
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -156,13 +37,13 @@ const MainScreen = ({ navigation }) => {
 
       <View style={styles.balanceCard}>
         <Text style={styles.balanceTitle}>Monthly Carbon Emission</Text>
-        <Text style={styles.balanceAmount}>{totalEmissions} kg</Text>
-        {hasEmissions && (
+        <Text style={styles.balanceAmount}>{(user?.totalEmissions).toFixed(0)} kg</Text>
+        {user.totalEmissions > 2 && (
           <Text style={styles.balanceDescription}>
             This amount of <Text style={{ fontWeight: "bold" }}>CO2</Text> would
             require{" "}
             <Text style={{ fontWeight: "bold" }}>
-              {(totalEmissions / 1.83).toFixed(0)} Trees
+              {(user.totalEmissions / 1.83).toFixed(0)} Trees
             </Text>{" "}
             to absorb in a month.
           </Text>
@@ -231,32 +112,9 @@ const MainScreen = ({ navigation }) => {
               />
               <Text style={styles.itemText}>Visualize Data</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.item}
-              onPress={() => setModalWithSLiderOpen(true)}
-            >
-              <MaterialCommunityIcons
-                size={30}
-                color="black"
-                name="database-sync"
-              />
-              <Text style={styles.itemText}>Open Slider Modal</Text>
-            </TouchableOpacity>
           </View>
         </View>
       </View>
-      <SetGoalModalWithSlider
-        isVisible={modalWithSLiderOpen}
-        hideModal={() => setModalWithSLiderOpen(false)}
-        category={currentCategory}
-        onSetGoal={handleSetGoal}
-      />
-      <SetGoalModal
-        isVisible={modalOpen}
-        hideModal={() => setModalOpen(false)}
-        category={currentCategory}
-        onSetGoal={handleSetGoal}
-      />
     </ScrollView>
   );
 };

@@ -13,14 +13,17 @@ import { CarbonCalculationAPI } from "../../axios/NetworkCalls";
 import { countries } from "../../data";
 import SelectDropDown from "../../components/Shared/SelectDropDown";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toastShow } from "../../utils/helpers";
 import baseUrl from "../../utils/baseUrl";
+import { refreshUser } from "../../redux/userSlice";
 
 const { width } = Dimensions.get("screen");
 
 const AddEmission = ({ navigation, route }) => {
   const { params } = route;
+
+  const dispatch = useDispatch();
 
   const [distance, setDistance] = useState(0);
   const [electricity, setElectricity] = useState(0);
@@ -132,6 +135,7 @@ const AddEmission = ({ navigation, route }) => {
       })
       .then((res) => {
         if (res?.data?.success) {
+          dispatch(refreshUser(user._id));
           setLoader(false);
           toastShow("Emission added successfully");
           navigation.navigate("Emissions");

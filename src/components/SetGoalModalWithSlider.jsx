@@ -8,6 +8,9 @@ import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import Modal from "react-native-modal";
 import ButtonComponent from "./Shared/ButtonComponent";
 import Slider from "@react-native-community/slider";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { refreshUser } from "../redux/userSlice";
 
 const { width } = Dimensions.get("screen");
 
@@ -15,23 +18,49 @@ const SetGoalModalWithSlider = ({
   isVisible,
   hideModal,
   category,
-  onSetGoal,
   success,
   error,
 }) => {
-  const [selectedPercentage, setSelectedPercentage] = useState(null);
   const [goalTarget, setgoalTarget] = useState(0);
 
-  const handleCheckboxPress = (percentage) => {
-    setSelectedPercentage(percentage);
-  };
+  const dispatch = useDispatch();
+  const {user, token} = useSelector((state)=> state.user);
 
-  const handleSetGoal = () => {
-    if (selectedPercentage !== null) {
-      onSetGoal(selectedPercentage);
-      setSelectedPercentage(null); // Reset the selected percentage after setting the goal
-    } else {
-      alert("Please select a reduction percentage.");
+  const handleSetGoal = async () => {
+    const startDate = new Date();
+    const endDate = new Date();
+    endDate.setMonth(startDate.getMonth() + 1); // Set endDate to one month ahead
+  
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+  
+      const body = {
+        userId: user._id,
+        category,
+        percentage: 0,
+        target: goalTarget,
+        startDate,
+        endDate,
+        goalAchieved: false,
+      };
+  
+      console.log("ADD GOAL BODY: ", body);
+  
+      const addedGoal = await axios.post(
+        "https://ecotrack-dev.vercel.app/api/goal/add/",
+        body,
+        config
+      );
+
+      console.log("GOAL ADDDEDDDD: ", addedGoal.data);
+      dispatch(refreshUser(user._id));
+  
+    } catch (error) {
+      console.error("Error setting goal:", error);
     }
   };
 

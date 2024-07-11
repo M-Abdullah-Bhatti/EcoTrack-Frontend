@@ -225,8 +225,6 @@ const UserDashboard = ({ navigation, isGoalScreen }) => {
       //   });
       // }
     }
-    console.log("barrr data", transformedData);
-
     return transformedData;
   };
 

@@ -7,7 +7,7 @@ export const refreshUser = createAsyncThunk(
   async (userId, thunkAPI) => {
     try {
       const response = await axios.get(`https://ecotrack-dev.vercel.app/api/users/${userId}`);
-      return response.data.userWithoutPassword;
+      return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -67,6 +67,7 @@ const userSlice = createSlice({
       })
       .addCase(refreshUser.fulfilled, (state, action) => {
         state.loading = false;
+        console.log("DISPATCHHH REFRESHHH: ", action.payload)
         state.user = action.payload;
       })
       .addCase(refreshUser.rejected, (state, action) => {
