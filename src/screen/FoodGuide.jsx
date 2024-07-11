@@ -1,4 +1,11 @@
-import { View, SafeAreaView, Text, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
+import {
+  View,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import GuideItem from "../components/GuideItem";
 import { StatusBar } from "expo-status-bar";
@@ -6,29 +13,36 @@ import ChatbotButton from "../components/Shared/ChatbotButton";
 import { actData } from "../data";
 
 const FoodGuide = () => {
-
   const [foodData, setFoodData] = useState([]);
   const [transportationData, setTransportationData] = useState([]);
   const [electricityData, setElectricityData] = useState([]);
   const [mealsData, setMealsData] = useState([]);
+  //test comment
 
   // Set the data for each category
   useEffect(() => {
-    const foodItems = actData.filter(item => item.category === "Food");
+    const foodItems = actData.filter((item) => item.category === "Food");
     setFoodData(foodItems);
-    
-    const transportationItems = actData.filter(item => item.category === "Transportation");
+
+    const transportationItems = actData.filter(
+      (item) => item.category === "Transportation"
+    );
     setTransportationData(transportationItems);
-  
-    const electricityItems = actData.filter(item => item.category === "Electricity");
+
+    const electricityItems = actData.filter(
+      (item) => item.category === "Electricity"
+    );
     setElectricityData(electricityItems);
-  
-    const mealsItems = actData.filter(item => item.category === "Meal");
+
+    const mealsItems = actData.filter((item) => item.category === "Meal");
     setMealsData(mealsItems);
   }, []);
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollViewContent} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      contentContainerStyle={styles.scrollViewContent}
+      showsVerticalScrollIndicator={false}
+    >
       <StatusBar style="dark" />
       <Text style={styles.sectionTitle}>Food</Text>
       {foodData.map((data, index) => (
@@ -59,9 +73,9 @@ const FoodGuide = () => {
 const styles = StyleSheet.create({
   scrollViewContent: {
     flexGrow: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     paddingBottom: 50,
-    backgroundColor: '#fff'
+    backgroundColor: "#fff",
   },
   sectionTitle: {
     textAlign: "center",
@@ -78,7 +92,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 100,
     marginTop: 12,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   seeAllButtonText: {
     fontSize: 18,
